@@ -1,2 +1,2 @@
-%p= client.name
+%p= link_to client.name, client_path(client)
 %p= client.created_at.strftime("%m/%d/%Y at %I:%M%p")

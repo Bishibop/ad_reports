@@ -1,3 +1,5 @@
-= simple_form_for :client, url: :clients do |f|
+= simple_form_for @client do |f|
   = f.input :name
   = f.button :submit
+
+= link_to "Back to your clients", clients_path
