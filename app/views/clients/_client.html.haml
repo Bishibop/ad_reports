@@ -1,3 +1,4 @@
-%p= link_to client.name, client_path(client)
+%p= link_to client.name, client
 %p= client.created_at.strftime("%m/%d/%Y at %I:%M%p")
 %p= link_to 'Edit client', edit_client_path(client)
+%p= link_to 'Delete client', client, method: :delete, data: { confirm: "Are you sure you would like to delete \"#{client.name}\" from your client list?" }
