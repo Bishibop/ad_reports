@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   #   end
 
   resources :clients
+  resources :customers
 
   root 'clients#index'
 end
