@@ -1,2 +1,3 @@
 %p= link_to client.name, client_path(client)
 %p= client.created_at.strftime("%m/%d/%Y at %I:%M%p")
+%p= link_to 'Edit client', edit_client_path(client)

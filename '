@@ -1,5 +1,7 @@
 %h1 Creating a new client
 
-= render 'form'
+= simple_form_for @client do |f|
+  = f.input :name
+  = f.button :submit
 
 = link_to "Back to your clients", clients_path

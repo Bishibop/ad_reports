@@ -1,3 +1,4 @@
 %h1= @client.name
 
-= link_to "Back to your clients", clients_path
+%p= link_to 'Edit client', edit_client_path(@client)
+%p= link_to "Back to your clients", clients_path

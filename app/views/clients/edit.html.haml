@@ -1,0 +1,8 @@
+%h1
+  Editing 
+  = @client.name
+
+= render 'form'
+
+%p= link_to "View client profile", @client
+%p= link_to "Back to all clients", clients_path
