@@ -1,6 +1,6 @@
 %h1 Login
 
-= javascript_include_tag 'https://cdn.auth0.com/js/lock-passwordless-2.2.3.min.js'
+= javascript_include_tag 'https://cdn.auth0.com/js/lock-passwordless-1.0.min.js'
 
 :javascript
   var clientID = 'kO0tWhIUJshfIB37j9fN15XrOPRIo8De';
@@ -9,7 +9,7 @@
   var lock = new Auth0LockPasswordless(clientID, domain);
 
   function open() {
-    lock.emailcode({
+    lock.magiclink({
       callbackURL: 'https://ad-reports-staging.herokuapp.com/auth/auth0/callback',
       authParams: {
         scope: 'openid email'  // Learn about scopes: https://auth0.com/docs/scopes 
@@ -17,4 +17,4 @@
     });
   }
 
-%button{:onclick => "window.open();"} Email Code
+%button{:onclick => "window.open();"} Magic Link
