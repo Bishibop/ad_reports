@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  get 'clients/index'
+
+  get '/auth/auth0/callback' => "auth0#callback"
+
+  get '/auth/failure' => "auth#failure"
 
   # Example resource route with options:
   #   resources :products do
@@ -44,5 +47,5 @@ Rails.application.routes.draw do
   resources :clients
   resources :customers
 
-  root 'customers#index'
+  root 'login#show'
 end
