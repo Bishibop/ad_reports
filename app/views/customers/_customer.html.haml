@@ -1,0 +1,4 @@
+%p= link_to customer.name, customer
+%p= customer.created_at.strftime("%m/%d/%Y at %I:%M%p")
+%p= link_to 'Edit customer', edit_customer_path(customer)
+%p= link_to 'Delete customer', customer, method: :delete, data: { confirm: "Are you sure you would like to delete the customer \"#{customer.name}\"" }

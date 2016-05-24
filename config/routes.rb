@@ -44,5 +44,5 @@ Rails.application.routes.draw do
   resources :clients
   resources :customers
 
-  root 'clients#index'
+  root 'customers#index'
 end
