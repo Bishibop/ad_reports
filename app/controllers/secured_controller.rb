@@ -1,6 +1,6 @@
 class SecuredController < ApplicationController
 
-  #before_action :logged_in_using_omniauth?
+  before_action :logged_in_using_omniauth?
 
   private
 
