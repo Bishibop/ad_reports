@@ -1,4 +1,7 @@
-class ClientsController < SecuredController
+class ClientsController < ApplicationController
+
+  before_action :logged_in_using_omniauth?
+
   def index
     @clients = Client.all
   end
