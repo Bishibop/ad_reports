@@ -15,7 +15,7 @@ lock.magiclink(
   icon: '/assets/netsearch-logo-small.png'
   gravatar: false
   dict:
-    title: "Dashboard Login"
+    title: "Reporting Dashboard Login"
     email:
       headerText: "Enter your email address below, and we will send you a link to sign into your dashboard."
     emailSent:
