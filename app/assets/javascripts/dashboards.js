@@ -1,15 +1,17 @@
-;(function() {
+;(function() { $(document).ready(function() {
 
   // Sorts the Marchex table by the most recent call (5th column)
   $("[data-sort=table]").tablesorter({
     sortList: [[4,1]]
   });
 
+  var $charts = $('.dashboard-chart');
+
   var create_chart = function(selector, defaults, configuration) {
     return new Chart(
       $charts.filter(selector),
       $.extend(true, {}, defaults, configuration)
-    )
+    );
   };
 
   var periodLabels = ['April 28', 'April 29', 'April 30', 'May 1', 'May 2', 'May 3',
@@ -17,8 +19,6 @@
                'May 11', 'May 12', 'May 13', 'May 14', 'May 15', 'May 16',
                'May 17', 'May 18', 'May 19', 'May 20', 'May 21', 'May 22',
                'May 23', 'May 24', 'May 25', 'May 26', 'May 27', 'May 28'];
-
-  var $charts = $('.dashboard-chart');
 
   var chart_defaults = {
     data: {
@@ -380,4 +380,4 @@
       ]
     }
   });
-})();
+})}());

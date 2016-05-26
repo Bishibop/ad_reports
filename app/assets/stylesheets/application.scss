@@ -13,5 +13,8 @@
  */
 
 @import "bootstrap-sprockets";
-@import "bootstrap";
-@import "**/*";
+/*Don't import this! Bootstrap is already being loaded by the bootstrap dashboard theme*/
+/*@import "bootstrap";*/
+@import "dashboards-light";
+@import "dashboards-application";
+@import "dashboards";

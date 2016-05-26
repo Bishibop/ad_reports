@@ -6,9 +6,10 @@ class ApplicationController < ActionController::Base
   private
 
   def logged_in_using_omniauth?
-    unless session[:userinfo].present?
-      redirect_to '/'
-    end
+    true
+    #unless session[:userinfo].present?
+      #redirect_to '/'
+    #end
   end
 
 end
