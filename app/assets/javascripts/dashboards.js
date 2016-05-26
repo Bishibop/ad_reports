@@ -159,6 +159,15 @@
             return data.datasets[0].label + ": $" + tooltipItem.yLabel;
           }
         }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            userCallback: function(value, index, values) {
+              return "$" + value;
+            }
+          }
+        }]
       }
     }
   });
