@@ -1,4 +1,4 @@
-;(function() { $(document).ready(function() {
+;(function() {
 
   // Sorts the Marchex table by the most recent call (5th column)
   $("[data-sort=table]").tablesorter({
@@ -389,4 +389,4 @@
       ]
     }
   });
-})}());
+}());

@@ -19,5 +19,4 @@
 //= require tablesorter.min
 //= require dashboards-toolkit
 //= require dashboards-application
-//= require dashboards
 //= require turbolinks
