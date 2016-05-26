@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   def logged_in_using_omniauth?
     unless session[:userinfo].present?
-      redirect_to '/'
+      redirect_to '/login'
     end
   end
 

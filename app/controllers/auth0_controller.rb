@@ -4,6 +4,8 @@ class Auth0Controller < ApplicationController
     session[:userinfo] = request.env['omniauth.auth']
 
     # Redirect to the URL you want after successful auth
+    # This is where you would "redirect to where you came from" but that's not
+    # working
     redirect_to :dashboard
   end
 

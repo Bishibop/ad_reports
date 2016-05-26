@@ -6,8 +6,11 @@ Rails.application.routes.draw do
 
   get '/dashboard' => "dashboards#netsearch_demo"
 
+  get '/login' => "login#show"
+
   resources :clients
   resources :customers
 
-  root 'login#show'
+  root 'dashboards#netsearch_demo'
+
 end
