@@ -9,3 +9,9 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
+
+# This precompiles controller js and stylesheets so that I can load them on
+# specific pages and after the page loads.
+%w( login ).each do |controller|
+  Rails.application.config.assets.precompile += ["#{controller}.js"]
+end

@@ -14,12 +14,10 @@
 //= require jquery.turbolinks
 //= require bootstrap-sprockets
 //= require jquery_ujs
-//= require turbolinks
 //= require moment.min
 //= require Chart.min
 //= require tablesorter.min
 //= require dashboards-toolkit
 //= require dashboards-application
 //= require dashboards
-//= require_tree .
 //= require turbolinks

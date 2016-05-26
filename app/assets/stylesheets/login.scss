@@ -2,6 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.auth0-lock-close-button {
-  visibility: hidden;
+// You need all of these classes to have higher specificity than the library
+.auth0-lock-container .auth0-lock .auth0-lock-center .auth0-lock-widget {
+  width: 330px;
+
+  .auth0-lock-name {
+    color: #666;
+  }
 }
