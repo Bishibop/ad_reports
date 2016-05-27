@@ -25,8 +25,5 @@ module AdReports
 
     # Config to serve my fonts
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
-
-    #Config to serve static assets (apparently changed in 4.2.X)
-    config.serve_static_files = true
   end
 end
