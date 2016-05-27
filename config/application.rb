@@ -22,6 +22,11 @@ module AdReports
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # Config to serve my fonts
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
+
+    #Config to serve static assets (apparently changed in 4.2.X)
+    config.serve_static_files = true
   end
 end
