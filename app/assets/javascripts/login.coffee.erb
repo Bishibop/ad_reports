@@ -1,18 +1,16 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+
 clientID = '<%= ENV["AUTH0_CLIENT_ID"] %>'
 domain = 'bishibop.auth0.com'
 
 lock = new Auth0LockPasswordless(clientID, domain)
 
 lock.magiclink(
-callbackURL: 'https://<%= ENV["HTTP_HOST"] %><% ENV["AUTH0_CALLBACK_PATH"] %>',
+  callbackURL: '<%= ENV["AUTH0_CALLBACK_PROTOCOL"] %>://<%= ENV["HTTP_HOST"] %><%= ENV["AUTH0_CALLBACK_PATH"] %>'
   authParams:
     scope: 'openid email'
   closable: false
   primaryColor: "#00AEEF"
-  icon: "<%= asset_path('netsearch-logo-small.png') %>"
+  icon: '<%= asset_path("netsearch-logo-small.png") %>'
   gravatar: false
   dict:
     title: "Reporting Dashboard Login"
