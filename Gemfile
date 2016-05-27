@@ -59,3 +59,5 @@ gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'omniauth'
 gem 'omniauth-auth0'
 gem 'jquery-turbolinks'
+
+ruby '2.3.1'
