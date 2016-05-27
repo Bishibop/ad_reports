@@ -11,7 +11,6 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery.turbolinks
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require moment.min
@@ -19,4 +18,3 @@
 //= require tablesorter.min
 //= require dashboards-toolkit
 //= require dashboards-application
-//= require turbolinks
