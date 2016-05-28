@@ -1,6 +1,6 @@
 
 clientID = '<%= ENV["AUTH0_CLIENT_ID"] %>'
-domain = 'bishibop.auth0.com'
+domain = '<%= ENV["AUTH0_DOMAIN"] %>'
 
 lock = new Auth0LockPasswordless(clientID, domain)
 
