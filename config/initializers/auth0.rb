@@ -3,7 +3,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     :auth0,
     ENV["AUTH0_CLIENT_ID"],
     ENV["AUTH0_CLIENT_SECRET"],
-    'bishibop.auth0.com',
+    ENV["AUTH0_DOMAIN"],
     callback_path: ENV["AUTH0_CALLBACK_PATH"]
   )
 end
