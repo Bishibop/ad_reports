@@ -8,8 +8,16 @@
 
 .navbar-nav.logout {
   float: right;
-  li > button {
+
+  button {
+    color: #555;
+    border-color: #555;
+    font-weight: 500;
     margin-top: 0px;
+  }
+
+  button:hover {
+    background-color: #ddd;
   }
 }
 
