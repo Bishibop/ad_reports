@@ -16,6 +16,6 @@ class Auth0Controller < ApplicationController
 
   def logout
     session.delete(:userinfo)
-    redirect_to "https://#{ENV['AUTH0_DOMAIN']}/v2/logout?returnTo=#{ENV['AUTH0_CALLBACK_PROTOCOL']}://ENV["HTTP_HOST"]"
+    redirect_to "https://#{ENV['AUTH0_DOMAIN']}/v2/logout?returnTo=#{ENV['AUTH0_CALLBACK_PROTOCOL']}://#{ENV['HTTP_HOST']}"
   end
 end
