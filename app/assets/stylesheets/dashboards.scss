@@ -2,6 +2,48 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.navbar-nav {
+  text-align: right;
+}
+
+.navbar-nav.logout {
+  float: right;
+  li > button {
+    margin-top: 0px;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-nav.logout > li > button {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 991px) {
+  .navbar-nav.logout {
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 15px;
+  }
+}
+
+.navbar-inverse {
+  background-color: #1a1c22;
+  border-color: #1a1c22;
+
+  .navbar-nav > .active > a, .navbar-nav > .active > a:hover {
+    background-color: #1a1c22;
+  }
+}
+
+.navbar-default {
+  .navbar-brand {
+    padding: 5px 15px;
+
+    img { height: 100%; }
+  }
+}
+
 .dashhead-toolbar {
   margin-top: 0px;
 }
