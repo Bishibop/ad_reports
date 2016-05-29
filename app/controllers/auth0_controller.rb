@@ -13,4 +13,9 @@ class Auth0Controller < ApplicationController
     # show a failure page or redirect to an error page
     @error_msg = request.params['message']
   end
+
+  def logout
+    session.delete(:userinfo)
+    redirect_to "https://bishibop.auth0.com/v2/logout?returnTo=http://localhost:5000"
+  end
 end

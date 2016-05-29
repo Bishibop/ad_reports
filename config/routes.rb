@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/dashboard' => "dashboards#netsearch_demo"
 
   get '/login' => "login#show"
+  delete '/logout' => "auth0#logout"
 
   resources :clients
   resources :customers

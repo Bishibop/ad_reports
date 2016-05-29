@@ -9,20 +9,20 @@
 .navbar-nav.logout {
   float: right;
 
-  button {
-    color: #555;
+  input {
+    color: #555 !important;
     border-color: #555;
     font-weight: 500;
     margin-top: 0px;
   }
 
-  button:hover {
+  input:hover {
     background-color: #ddd;
   }
 }
 
 @media (min-width: 992px) {
-  .navbar-nav.logout > li > button {
+  .navbar-nav.logout {
     margin-top: 8px;
   }
 }
