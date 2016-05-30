@@ -12,6 +12,7 @@ class Auth0Controller < ApplicationController
   def failure
     # show a failure page or redirect to an error page
     @error_msg = request.params['message']
+    redirect_to :login
   end
 
   def logout

@@ -38,4 +38,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Not totally sure what this does. Put it in to prevent OminAuth from
+  # throwing an exception on expired login links.
+  OmniAuth.config.failure_raise_out_environments = []
+
 end
