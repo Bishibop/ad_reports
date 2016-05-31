@@ -1,6 +1,9 @@
 class ClientsController < ApplicationController
 
   before_action :logged_in_using_omniauth?
+  before_action do
+    authorized_for 'god emperor', 'customer'
+  end
 
   def index
     @clients = Client.all

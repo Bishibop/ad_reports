@@ -11,4 +11,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authorized_for(*roles)
+    unless roles.include? session[:userinfo]['role']
+      redirect_to '/login'
+    end
+  end
+
 end
