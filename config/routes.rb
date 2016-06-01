@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   delete '/logout' => "auth0#logout"
 
   resources :clients
-  resources :customers
+  resources :customers do
+    resources :clients, only: [:index, :new, :create]
+  end
 
   root 'dashboards#netsearch_demo'
 

@@ -29,6 +29,8 @@ class CustomersController < ApplicationController
 
   def edit
     @customer = Customer.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render status: 404, text: "Customer not found."
   end
 
   def update
@@ -38,6 +40,8 @@ class CustomersController < ApplicationController
     else
       render :edit
     end
+  rescue ActiveRecord::RecordNotFound
+    render status: 404, text: "Customer not found."
   end
 
   def destroy
@@ -45,6 +49,8 @@ class CustomersController < ApplicationController
     @customer.destroy
 
     redirect_to customers_path
+  rescue ActiveRecord::RecordNotFound
+    render status: 404, text: "Customer not found."
   end
 
   private
