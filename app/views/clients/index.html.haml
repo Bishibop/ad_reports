@@ -1,5 +1,6 @@
 %h1 Clients
 
-%p= link_to "Add a new client", new_client_path
+- if @current_user.is_customer?
+  %p= link_to "Add a new client", new_client_path
 
 = render @clients

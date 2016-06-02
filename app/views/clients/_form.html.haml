@@ -1,3 +1,8 @@
-= simple_form_for @client do |f|
-  = f.input :name
-  = f.button :submit
+- if @current_user.is_admin? && params[:action] == 'new'
+  = simple_form_for [@customer, @client] do |f|
+    = f.input :name
+    = f.button :submit
+- else
+  = simple_form_for @client do |f|
+    = f.input :name
+    = f.button :submit

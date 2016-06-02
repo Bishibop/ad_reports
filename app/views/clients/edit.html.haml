@@ -4,5 +4,9 @@
 
 = render 'form'
 
-%p= link_to "View client profile", @client
-%p= link_to "Back to all clients", clients_path
+%p= link_to "Back to client profile", @client
+- if @current_user.is_admin?
+  %p= link_to "Back to #{@customer.name}", customer_path(@customer)
+  %p= link_to "Back to all clients", clients_path
+- else
+  %p= link_to "Back to your clients", clients_path

@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   resources :clients
   resources :customers do
-    resources :clients, only: [:index, :new, :create]
+    resources :clients, only: [:new, :create]
   end
 
   root 'dashboards#netsearch_demo'

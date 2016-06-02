@@ -3,3 +3,5 @@
 %p= link_to 'Edit customer', edit_customer_path
 %p= link_to 'Delete customer', @customer, method: :delete, data: { confirm: "Are you sure you would like to delete the customer \"#{@customer.name}\"" }
 %p= link_to "Back to your customers", customers_path
+%p= link_to "Add a client", new_customer_client_path(@customer)
+= render @customer.clients
