@@ -9,9 +9,16 @@ Rails.application.routes.draw do
   get '/login' => "login#show"
   delete '/logout' => "auth0#logout"
 
-  resources :clients
+  resources :clients, only: [:new, :create], constraints: lambda { |request|
+      User.new(request.session[:userinfo]).is_customer?
+  }
+
+  resources :clients, except: [:new, :create]
+
   resources :customers do
-    resources :clients, only: [:new, :create]
+    resources :clients, only: [:new, :create], constraints: lambda { |request|
+      User.new(request.session[:userinfo]).is_admin?
+    }
   end
 
   root 'dashboards#netsearch_demo'
