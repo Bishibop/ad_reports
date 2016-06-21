@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621120637) do
+ActiveRecord::Schema.define(version: 20160621121122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20160621120637) do
     t.datetime "updated_at",             null: false
     t.string   "bing_ads_api_key"
     t.string   "bing_ads_refresh_token"
+    t.datetime "bing_ads_expires_at"
   end
 
   add_foreign_key "clients", "customers"
