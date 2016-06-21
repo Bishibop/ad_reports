@@ -3,10 +3,14 @@ class Auth0Controller < ApplicationController
     # This stores all the user information that came from Auth0 and the IdP
     session[:userinfo] = request.env['omniauth.auth']
 
-    # Redirect to the URL you want after successful auth
-    # This is where you would "redirect to where you came from" but that's not
-    # working
-    redirect_to :dashboard
+    # Redirect to the URL you came frome after successful auth
+    login_referer_path = session[:login_referer_path]
+    if login_referer_path.nil?
+      redirect_to :root
+    else
+      session[:login_referer_path] = nil
+      redirect_to login_referer_path
+    end
   end
 
   def failure

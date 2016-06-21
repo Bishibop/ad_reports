@@ -18,3 +18,5 @@
 //= require tablesorter.min
 //= require dashboards-toolkit
 //= require dashboards-application
+
+window.Icarus = {};

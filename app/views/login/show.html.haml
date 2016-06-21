@@ -1,3 +1,10 @@
 
+:javascript
+  window.Icarus.logo_asset_path = '#{asset_path("netsearch-logo-small.png")}';
+  window.Icarus.HTTP_HOST = '#{ENV["HTTP_HOST"]}';
+  window.Icarus.AUTH0_CLIENT_ID = '#{ENV["AUTH0_CLIENT_ID"]}';
+  window.Icarus.AUTH0_DOMAIN = '#{ENV["AUTH0_DOMAIN"]}';
+  window.Icarus.AUTH0_CALLBACK_PROTOCOL = '#{ENV["AUTH0_CALLBACK_PROTOCOL"]}';
+  window.Icarus.AUTH0_CALLBACK_PATH = '#{ENV["AUTH0_CALLBACK_PATH"]}';
 = javascript_include_tag 'https://cdn.auth0.com/js/lock-passwordless-2.2.3.min.js'
 = javascript_include_tag 'login'

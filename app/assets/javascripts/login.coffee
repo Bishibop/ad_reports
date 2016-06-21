@@ -1,16 +1,16 @@
 
-clientID = '<%= ENV["AUTH0_CLIENT_ID"] %>'
-domain = '<%= ENV["AUTH0_DOMAIN"] %>'
+clientID = Icarus.AUTH0_CLIENT_ID
+domain = Icarus.AUTH0_DOMAIN
 
 lock = new Auth0LockPasswordless(clientID, domain)
 
 lock.magiclink(
-  callbackURL: '<%= ENV["AUTH0_CALLBACK_PROTOCOL"] %>://<%= ENV["HTTP_HOST"] %><%= ENV["AUTH0_CALLBACK_PATH"] %>'
+  callbackURL: Icarus.AUTH0_CALLBACK_PROTOCOL + '://' + Icarus.HTTP_HOST + Icarus.AUTH0_CALLBACK_PATH
   authParams:
     scope: 'openid email'
   closable: false
   primaryColor: "#00AEEF"
-  icon: '<%= asset_path("netsearch-logo-small.png") %>'
+  icon: Icarus.logo_asset_path
   gravatar: false
   dict:
     title: "Reporting Dashboard Login"

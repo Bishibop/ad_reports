@@ -12,7 +12,10 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in_using_omniauth?
-    unless session[:userinfo].present?
+    if session[:userinfo].present?
+      # Let them through / Do nothing
+    else
+      session[:login_referer_path] = request.fullpath
       redirect_to '/login'
     end
   end
