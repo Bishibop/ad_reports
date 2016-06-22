@@ -1,3 +1,5 @@
+require 'adwords_api'
+
 class ApiPermissionsController < ApplicationController
   def index
     # This need to be the customer from the users session
