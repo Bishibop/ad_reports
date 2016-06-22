@@ -61,5 +61,7 @@ gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'omniauth'
 gem 'omniauth-auth0'
 gem 'jquery-turbolinks'
+gem 'google-adwords-api'
+gem 'oauth2'
 
 ruby '2.3.1'
