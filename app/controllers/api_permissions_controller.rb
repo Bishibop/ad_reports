@@ -1,5 +1,3 @@
-require 'adwords_api'
-
 class ApiPermissionsController < ApplicationController
   def index
     # This need to be the customer from the users session
@@ -31,7 +29,7 @@ class ApiPermissionsController < ApplicationController
       adwords_access_token: token[:access_token],
       adwords_refresh_token: token[:refresh_token],
       adwords_issued_at: token[:issued_at],
-      adwords_expires_in: token[:expires_in]
+      adwords_expires_in_seconds: token[:expires_in]
     })
 
     redirect_to api_permissions_path
