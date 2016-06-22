@@ -10,3 +10,6 @@
   %p
     - if @customer.bing_ads_api_key.nil?
       (You will be taken to your Bing Ads account to log in and grant authorization. You will then be returned here.)
+  %h4
+    Google AdWords:
+    =link_to "Grant API Access", adwords_initiate_path
