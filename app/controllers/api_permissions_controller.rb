@@ -9,7 +9,9 @@ class ApiPermissionsController < ApplicationController
   end
 
   def adwords_initiate
-    generate_adwords_authenticator.authorize({:oauth2_callback => adwords_callback_url})
+    puts adwords_callback_url
+    authenticator = generate_adwords_authenticator
+    authenticator.authorize({:oauth2_callback => adwords_callback_url})
   end
 
   def adwords_callback
