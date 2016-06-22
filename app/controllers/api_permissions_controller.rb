@@ -27,12 +27,10 @@ class ApiPermissionsController < ApplicationController
         :oauth2_verification_code => params[:code]
       }
     )
-    puts "TOKEN ------- #{token.inspect}"
-    puts token['issued_at'].inspect
-    @customer.update!({
-      adwords_access_token: token['access_token'],
-      adwords_refresh_token: token['refresh_token'],
-      adwords_issued_at: token['issued_at']
+    @customer.update({
+      adwords_access_token: token[:access_token],
+      adwords_refresh_token: token[:refresh_token],
+      adwords_issued_at: token[:issued_at]
     })
 
     redirect_to api_permissions_path
