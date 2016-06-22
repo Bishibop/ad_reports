@@ -28,7 +28,8 @@ class ApiPermissionsController < ApplicationController
       }
     )
     puts "TOKEN ------- #{token.inspect}"
-    @customer.update({
+    puts token['issued_at'].inspect
+    @customer.update!({
       adwords_access_token: token['access_token'],
       adwords_refresh_token: token['refresh_token'],
       adwords_issued_at: token['issued_at']
