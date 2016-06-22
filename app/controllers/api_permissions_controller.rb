@@ -13,7 +13,7 @@ class ApiPermissionsController < ApplicationController
     begin
       generate_adwords_authenticator.authorize({:oauth2_callback => adwords_callback_url})
     rescue AdsCommon::Errors::OAuth2VerificationRequired => e
-      @adwords_register_url = e.oauth_url
+      @adwords_register_url = e.oauth_url.to_s
     end
   end
 
