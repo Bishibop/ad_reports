@@ -27,6 +27,7 @@ class ApiPermissionsController < ApplicationController
         :oauth2_verification_code => params[:code]
       }
     )
+    puts "TOKEN ------- #{token.inspect}"
     @customer.update({
       adwords_access_token: token['access_token'],
       adwords_refresh_token: token['refresh_token'],
