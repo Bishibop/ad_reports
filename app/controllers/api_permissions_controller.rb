@@ -6,13 +6,20 @@ class ApiPermissionsController < ApplicationController
     # But we're not doing that because I only have one customer!
     @customer = Customer.all.first
     @bing_ads_register_url = ENV['BING_API_GRANT_URL'] + '/' + @customer.id.to_s
+
+    # This feels like the wrong way to get the oauth_url
+    # With Bing, there was just a method you used to explicitly request that
+    # url. I should try and find that...Fuck Google's docs. What a joke.
+    begin
+      generate_adwords_authenticator.authorize({:oauth2_callback => adwords_callback_url})
+    rescue AdsCommon::Errors::OAuth2VerificationRequired => e
+      @adwords_register_url = e.oauth_url
+    end
   end
 
-  def adwords_initiate
-    puts adwords_callback_url
-    authenticator = generate_adwords_authenticator
-    authenticator.authorize({:oauth2_callback => adwords_callback_url})
-  end
+  #def adwords_initiate
+    #generate_adwords_authenticator.authorize({:oauth2_callback => adwords_callback_url})
+  #end
 
   def adwords_callback
     token = generate_adwords_authenticator.authorize(
@@ -44,7 +51,7 @@ class ApiPermissionsController < ApplicationController
         :enable_gzip => false
       },
       :library => {
-        :log_level => 'INFO'
+        :log_level => 'DEBUG'
       }
     })
   end
