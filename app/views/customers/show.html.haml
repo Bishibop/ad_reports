@@ -1,4 +1,7 @@
 %h1= @customer.name
+%p
+  Login domain:
+  = @customer.login_domain
 
 %p= link_to 'Edit customer', edit_customer_path
 %p= link_to 'Delete customer', @customer, method: :delete, data: { confirm: "Are you sure you would like to delete the customer \"#{@customer.name}\"" }

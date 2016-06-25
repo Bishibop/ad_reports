@@ -22,7 +22,7 @@ class User
 
   def customer
     if self.is_customer?
-      Customer.find(@user_info['extra']['raw_info']['customer_id'])
+      Customer.find(@user_info['extra']['raw_info']['customerId'])
     else
       raise 'Access Error'
     end
@@ -30,7 +30,7 @@ class User
 
   def client
     if self.is_client?
-      Customer.find(@user_info['extra']['raw_info']['client_id'])
+      Customer.find(@user_info['extra']['raw_info']['clientId'])
     else
       raise 'Access Error'
     end

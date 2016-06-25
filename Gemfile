@@ -63,5 +63,7 @@ gem 'omniauth-auth0'
 gem 'jquery-turbolinks'
 gem 'google-adwords-api'
 gem 'oauth2'
+gem 'interactive_editor'
+gem 'auth0'
 
 ruby '2.3.1'
