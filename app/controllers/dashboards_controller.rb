@@ -6,7 +6,7 @@ class DashboardsController < ApplicationController
     @client = if @current_user.is_admin?
                 Client.find(params[:client_id])
               elsif @current_user.is_customer?
-                @current_user.clients.find(params[:client_id])
+                @current_user.customer.clients.find(params[:client_id])
               elsif @current_user.is_client?
                 @current_user.client
               else
