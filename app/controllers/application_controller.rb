@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_action :assign_current_user
+  before_action :assign_current_user_to_instance
 
   def current_user
     if session[:userinfo]
@@ -15,11 +15,11 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def assign_current_user
+  def assign_current_user_to_instance
     @current_user = current_user
   end
 
-  def must_be_logged_in
+  def authenticate
     if session[:userinfo].present?
       # Let them through / Do nothing
     else
@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def must_be(*roles)
+  def authorized_for(*roles)
     unless @current_user.is_a? *roles
       render status: 403, text: "Access Denied"
     end

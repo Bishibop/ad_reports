@@ -1,4 +1,4 @@
-class RolesConstraint
+class Roles
 
   def initialize(*roles)
     @roles = roles

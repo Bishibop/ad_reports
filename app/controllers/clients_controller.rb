@@ -3,17 +3,17 @@ class ClientsController < ApplicationController
   # Customer.find(params[:customer_id] would be no bueno. Should be
   # current_user.customers.find(params[:customer_id])
 
-  before_action :must_be_logged_in
+  before_action :authenticate
   before_action do
-    must_be :admin, :customer
+    authorized_for :admin, :customer
   end
 
   def index
-    if @current_user.is_admin?
-      @clients = Client.all
-    else
-      @clients = @current_user.customer.clients
-    end
+    @clients = if @current_user.is_admin?
+                 Client.all
+               else
+                 @current_user.customer.clients
+               end
   end
 
   def show
@@ -37,11 +37,11 @@ class ClientsController < ApplicationController
   end
 
   def create
-    if @current_user.is_admin?
-      @client = Customer.find(params[:customer_id]).clients.build(client_params)
-    else
-      @client = @current_user.customer.clients.build(client_params)
-    end
+    @client = if @current_user.is_admin?
+                Customer.find(params[:customer_id]).clients.build(client_params)
+              else
+                @current_user.customer.clients.build(client_params)
+              end
 
     if @client.save
       redirect_to @client
@@ -62,11 +62,11 @@ class ClientsController < ApplicationController
   end
 
   def update
-    if @current_user.is_admin?
-      @client = Client.find(params[:id])
-    else
-      @client = @current_user.customer.clients.find(params[:id])
-    end
+    @client = if @current_user.is_admin?
+                Client.find(params[:id])
+              else
+                @current_user.customer.clients.find(params[:id])
+              end
 
     if @client.update(client_params)
       redirect_to @client
@@ -78,11 +78,11 @@ class ClientsController < ApplicationController
   end
 
   def destroy
-    if @current_user.is_admin?
-      @client = Client.find(params[:id])
-    else
-      @client = @current_user.customer.clients.find(params[:id])
-    end
+    @client = if @current_user.is_admin?
+                Client.find(params[:id])
+              else
+                @current_user.customer.clients.find(params[:id])
+              end
 
     @client.destroy
 

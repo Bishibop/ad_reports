@@ -8,16 +8,18 @@ Rails.application.routes.draw do
 
   get '/api_permissions/adwords/callback' => "api_permissions#adwords_callback", as: :adwords_callback
 
-  constraints RolesConstraint.new(:customer) do
+  constraints Roles.new(:customer) do
     resources :clients, only: [:new, :create]
 
     get '/api_permissions' => "api_permissions#index"
     get '/api_permissions/adwords/initiate' => "api_permissions#adwords_initiate", as: :adwords_initiate
   end
-  resources :clients, except: [:new, :create]
+  resources :clients, except: [:new, :create] do
+    get '/dashboard' => "dashboards#demo", constraints: Roles.new(:admin, :customer)
+  end
 
   resources :customers do
-    constraints RolesConstraint.new(:admin) do
+    constraints Roles.new(:admin) do
       resources :clients, only: [:new, :create]
 
       get '/api_permissions' => "api_permissions#index"
@@ -25,10 +27,10 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/dashboard' => "dashboards#netsearch_demo"
+  get '/dashboard' => "dashboards#demo", constraints: Roles.new(:client)
 
-  get '/' => "customers#index", constraints: RolesConstraint.new(:admin)
-  get '/' => "clients#index", constraints: RolesConstraint.new(:customer)
-  root 'dashboards#netsearch_demo'
+  get '/' => "customers#index", constraints: Roles.new(:admin)
+  get '/' => "clients#index", constraints: Roles.new(:customer)
+  root 'dashboards#demo'
 
 end

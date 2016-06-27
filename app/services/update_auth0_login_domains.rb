@@ -1,7 +1,6 @@
 class UpdateAuth0LoginDomains
 
   def call
-
     admin_emails = ['nwmullen@gmail.com']
 
     customer_domain_id_map = Customer.all.inject({}) do |memo, customer|
