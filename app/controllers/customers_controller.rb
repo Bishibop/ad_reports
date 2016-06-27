@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
 
-  before_action :logged_in_using_omniauth?
+  before_action :must_be_logged_in
   before_action do
     must_be :admin
   end

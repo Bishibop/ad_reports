@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     @current_user = current_user
   end
 
-  def logged_in_using_omniauth?
+  def must_be_logged_in
     if session[:userinfo].present?
       # Let them through / Do nothing
     else

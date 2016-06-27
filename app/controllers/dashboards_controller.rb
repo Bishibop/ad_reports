@@ -1,6 +1,6 @@
 class DashboardsController < ApplicationController
 
-  before_action :logged_in_using_omniauth?
+  before_action :must_be_logged_in
 
   def netsearch_demo
   end

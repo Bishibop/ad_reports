@@ -4,9 +4,14 @@ class RolesConstraint
     @roles = roles
   end
 
+  #def matches?(request)
+    #user = current_user(request)
+    #user.present? && user.is_a?(*@roles)
+  #end
+
   def matches?(request)
     user = current_user(request)
-    user.present? && user.is_a?(*@roles)
+    user.nil? || user.is_a?(*@roles)
   end
 
   def current_user(request)

@@ -3,7 +3,7 @@ class ClientsController < ApplicationController
   # Customer.find(params[:customer_id] would be no bueno. Should be
   # current_user.customers.find(params[:customer_id])
 
-  before_action :logged_in_using_omniauth?
+  before_action :must_be_logged_in
   before_action do
     must_be :admin, :customer
   end
