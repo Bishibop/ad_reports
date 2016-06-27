@@ -15,6 +15,8 @@ class DashboardsController < ApplicationController
   end
 
   def demo
+    @client = Client.new({name: "Acme Corp."})
+    render :show
   end
 
 end
