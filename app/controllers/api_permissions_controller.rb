@@ -1,32 +1,51 @@
 require 'adwords_api'
 
 class ApiPermissionsController < ApplicationController
+  before_action do
+    must_be :admin, :customer
+  end
+
   def index
-    # This need to be the customer from the users session
-    # But we're not doing that because I only have one customer!
-    @customer = Customer.all.first
+    if @current_user.is_admin?
+      @customer = Customer.find(params[:customer_id])
+    else
+      @customer = @current_user.customer
+    end
+
     @bing_ads_register_url = ENV['BING_API_GRANT_URL'] + '/' + @customer.id.to_s
   end
 
   def adwords_initiate
+
+    if @current_user.is_admin?
+      callback_url = customer_adwords_callback_url(params[:customer_id])
+    else
+      callback_url = adwords_callback_url
+    end
+
     # This is totally the wrong way to get the oauth_url.
     # With Bing, there was just a method you used to explicitly request that
     # url. I should try and find that...Fuck Google's docs. What a joke.
     begin
-      generate_adwords_authenticator.authorize({:oauth2_callback => adwords_callback_url})
+      generate_adwords_authenticator.authorize({:oauth2_callback => callback_url})
     rescue AdsCommon::Errors::OAuth2VerificationRequired => e
       redirect_to e.oauth_url.to_s
     end
   end
 
   def adwords_callback
-    @customer = Customer.all.first
-    token = generate_adwords_authenticator.authorize(
-      {
-        :oauth2_callback => adwords_callback_url,
-        :oauth2_verification_code => params[:code]
-      }
-    )
+
+    if @current_user.is_admin?
+      @customer = Customer.find(params[:customer_id])
+    else
+      @customer = @current_user.customer
+    end
+
+    token = generate_adwords_authenticator.authorize({
+      :oauth2_callback => adwords_callback_url,
+      :oauth2_verification_code => params[:code]
+    })
+
     @customer.update({
       adwords_access_token: token[:access_token],
       adwords_refresh_token: token[:refresh_token],
@@ -46,7 +65,7 @@ class ApiPermissionsController < ApplicationController
           :oauth2_client_id => ENV['ADWORDS_CLIENT_ID'],
           :oauth2_client_secret => ENV['ADWORDS_CLIENT_SECRET'],
           :oauth2_access_type => 'offline',
-          :developer_token => 'WxKuWXEK11iPJE3JN5PL3Q',
+          :developer_token => ENV['ADWORDS_DEVELOPER_TOKEN'],
           :user_agent => 'Icarus Reporting'
       },
       :service => {

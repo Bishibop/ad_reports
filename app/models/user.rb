@@ -20,6 +20,10 @@ class User
     self.role == 'client'
   end
 
+  def is_a? *roles
+    roles.map(&:to_s).include? self.role
+  end
+
   def customer
     if self.is_customer?
       Customer.find(@user_info['extra']['raw_info']['customerId'])

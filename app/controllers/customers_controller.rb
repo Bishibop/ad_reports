@@ -2,7 +2,7 @@ class CustomersController < ApplicationController
 
   before_action :logged_in_using_omniauth?
   before_action do
-    authorized_for 'admin'
+    must_be :admin
   end
 
   def index

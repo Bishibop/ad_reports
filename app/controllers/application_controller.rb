@@ -5,10 +5,18 @@ class ApplicationController < ActionController::Base
 
   before_action :assign_current_user
 
+  def current_user
+    if session[:userinfo]
+      User.new(session[:userinfo])
+    else
+      nil
+    end
+  end
+
   private
 
   def assign_current_user
-    @current_user = User.new(session[:userinfo])
+    @current_user = current_user
   end
 
   def logged_in_using_omniauth?
@@ -20,9 +28,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def authorized_for(*roles)
-    unless roles.include? @current_user.role
-      render status: 404, text: "Page not found"
+  def must_be(*roles)
+    unless @current_user.is_a? *roles
+      render status: 403, text: "Access Denied"
     end
   end
 
