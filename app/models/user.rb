@@ -34,7 +34,7 @@ class User
 
   def client
     if self.is_client?
-      Customer.find(@user_info['extra']['raw_info']['clientId'])
+      Client.find(@user_info['extra']['raw_info']['clientId'])
     else
       raise 'Access Error'
     end
