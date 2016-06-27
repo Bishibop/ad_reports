@@ -19,7 +19,9 @@
 .container-fluid.container-fluid-spacious
   .dashhead.m-t-md
     .dashhead-titles
-      %h2.dashhead-title Acme Inc. PPC Dashboard
+      %h2.dashhead-title
+        =@client.name
+        PPC Dashboard
     .btn-toolbar.dashhead-toolbar
       .btn-toolbar-item.input-with-icon
         %input.form-control{"data-provide" => "datepicker", :type => "text", :value => "01/01/15 - 01/08/15"}

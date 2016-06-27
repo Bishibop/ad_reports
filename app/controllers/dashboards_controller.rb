@@ -1,8 +1,8 @@
 class DashboardsController < ApplicationController
 
-  before_action :authenticate
+  before_action :authenticate, except: :demo
 
-  def demo
+  def show
     @client = if @current_user.is_admin?
                 Client.find(params[:client_id])
               elsif @current_user.is_customer?
@@ -12,6 +12,9 @@ class DashboardsController < ApplicationController
               else
                 #Do nothing
               end
+  end
+
+  def demo
   end
 
 end
