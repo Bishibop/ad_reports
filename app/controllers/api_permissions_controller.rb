@@ -24,12 +24,12 @@ class ApiPermissionsController < ApplicationController
     # This is totally the wrong way to get the oauth_url.
     # With Bing, there was just a method you used to explicitly request that
     # url. I should try and find that...Fuck Google's docs. What a joke.
-    begin
-      generate_adwords_authenticator.authorize({:oauth2_callback => adwords_callback_url})
-      #redirect_to generate_adwords_authenticator.update!({:oauth2_callback => adwords_callback_url}).authorization_uri.to_s
-    rescue AdsCommon::Errors::OAuth2VerificationRequired => e
-      redirect_to e.oauth_url.to_s
-    end
+    #begin
+      #generate_adwords_authenticator.authorize({:oauth2_callback => adwords_callback_url})
+    #rescue AdsCommon::Errors::OAuth2VerificationRequired => e
+      #redirect_to e.oauth_url.to_s
+    #end
+    redirect_to generate_adwords_authenticator.update!({:oauth2_callback => adwords_callback_url}).authorization_uri.to_s
   end
 
   def adwords_callback
