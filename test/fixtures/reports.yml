@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cost: 1
+  impressions: 1
+  click_through_rate: 1.5
+  clicks: 1
+  all_conversions: 1
+  all_conversion_rate: MyString
+  : 1.5
+  cost_per_all_conversion: 1
+  conversions: 1
+  conversion_rate: 1.5
+  cost_per_conversions: 1
+  average_cost_per_click: 1
+  average_position: 1.5
+  client_id: 
+
+two:
+  cost: 1
+  impressions: 1
+  click_through_rate: 1.5
+  clicks: 1
+  all_conversions: 1
+  all_conversion_rate: MyString
+  : 1.5
+  cost_per_all_conversion: 1
+  conversions: 1
+  conversion_rate: 1.5
+  cost_per_conversions: 1
+  average_cost_per_click: 1
+  average_position: 1.5
+  client_id: 

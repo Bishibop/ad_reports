@@ -1,6 +1,6 @@
 class UpdateAuth0LoginDomains
 
-  def call
+  def self.call
     admin_emails = ['nwmullen@gmail.com']
 
     customer_domain_id_map = Customer.all.inject({}) do |memo, customer|
@@ -21,4 +21,5 @@ class UpdateAuth0LoginDomains
       "script": "function (user, context, callback) {\n  global.adminEmails = #{admin_emails.to_json};\n  global.customerDomainIdMap = #{customer_domain_id_map.to_json};\n  global.clientDomainIdMap = #{client_domain_id_map.to_json};\n\n  callback(null, user, context);\n}"
     })
   end
+
 end

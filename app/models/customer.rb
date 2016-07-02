@@ -3,6 +3,6 @@ class Customer < ActiveRecord::Base
   validates :name, presence: true, length: { minimum: 5 }
   validates :login_domain, presence: true, format: { without: /\s/ }
   after_commit do
-    UpdateAuth0LoginDomains.new.call
+    UpdateAuth0LoginDomains.call
   end
 end
