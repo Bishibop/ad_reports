@@ -36,20 +36,18 @@ class GetClientAdwordsReportForDay
 
     report_definition = {
       selector: {
-        fields: [
-          'Cost',
-          'Impressions',
-          'Ctr',
-          'Clicks',
-          'AllConversions',
-          'AllConversionRate',
-          'CostPerAllConversion',
-          'Conversions',
-          'ConversionRate',
-          'CostPerConversion',
-          'AverageCpc',
-          'AveragePosition'
-        ],
+        fields: [ 'Cost',
+                  'Impressions',
+                  'Ctr',
+                  'Clicks',
+                  'AllConversions',
+                  'AllConversionRate',
+                  'CostPerAllConversion',
+                  'Conversions',
+                  'ConversionRate',
+                  'CostPerConversion',
+                  'AverageCpc',
+                  'AveragePosition' ],
         date_range: {
           min: date.strftime("%Y%m%d"),
           max: date.strftime("%Y%m%d")
@@ -78,20 +76,7 @@ class GetClientAdwordsReportForDay
 
     report_array = CSV.parse(csv_report, converters: [:numeric, :percent_to_float])[0]
 
-    metric_names = [ :cost,
-                     :impressions,
-                     :click_through_rate,
-                     :clicks,
-                     :all_conversions,
-                     :all_conversion_rate,
-                     :cost_per_all_conversion,
-                     :conversions,
-                     :conversion_rate,
-                     :cost_per_conversion,
-                     :average_cost_per_click,
-                     :average_position ]
-
-    report_attributes = metric_names.zip(report_array).to_h
+    report_attributes = Report.metric_names.zip(report_array).to_h
 
     existing_report = client.reports.find_by(date: date)
 

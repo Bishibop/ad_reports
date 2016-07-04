@@ -12,6 +12,18 @@ class DashboardsController < ApplicationController
               else
                 #Do nothing
               end
+    @reports = @client.reports
+
+    @metrics = Report.metric_names.inject({}) do |memo, name|
+      memo[name] = @reports.map(&name)
+      memo
+    end
+
+    # rekey metrics hash with camelcase for conventional javascript
+    @metrics.keys.each do |key|
+      @metrics[key.to_s.camelize(:lower)] = @metrics[key]
+      @metrics.delete(key)
+    end
   end
 
   def demo

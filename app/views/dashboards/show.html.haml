@@ -416,5 +416,7 @@
                 %td ANSWER
                 %td.play-button.text-xs-center
                   %span.icon.icon-controller-play
+:javascript
+  window.Icarus.metrics = #{@metrics.to_json};
 %link{:href => "https://fonts.googleapis.com/css?family=Roboto:301,400,500,700,400italic", :rel => "stylesheet"}
 = javascript_include_tag 'dashboards'
