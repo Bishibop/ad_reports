@@ -1,5 +1,31 @@
 ;(function() {
 
+  // Sets up the datepicker
+  $('input.date-picker').daterangepicker(
+    {
+      locale: {
+        format: 'MMM DD, YYYY'
+      },
+      startDate: moment().subtract(1, 'months'),
+      endDate: moment(),
+      opens: 'left',
+      ranges: {
+        "Today":          [ moment(), moment() ],
+        "Week to date":   [ moment().startOf('week'), moment() ],
+        "Last week":      [ moment().subtract(1, 'week').startOf('week'),
+                            moment().startOf('week').subtract(1, 'day') ],
+        "Month to date":  [ moment().startOf('month'), moment() ],
+        "Last month":     [ moment().subtract(1, 'month').startOf('month'),
+                            moment().startOf('month').subtract(1, 'day') ],
+        "Last 30 days":   [ moment().subtract(30, 'days'), moment().subtract(1, 'days') ]
+      }
+
+    },
+    function(start, end, label) {
+      // When you pick your range
+    }
+  );
+
   // Sorts the Marchex table by the most recent call (5th column)
   $("[data-sort=table]").tablesorter({
     sortList: [[4,1]]

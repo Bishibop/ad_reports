@@ -14,6 +14,7 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require moment.min
+//= require daterangepicker
 //= require Chart.min
 //= require tablesorter.min
 //= require dashboards-toolkit

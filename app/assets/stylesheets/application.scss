@@ -13,6 +13,7 @@
  */
 
 @import "bootstrap-sprockets";
+@import "daterangepicker";
 /*Don't import this! Bootstrap is already being loaded by the bootstrap dashboard theme*/
 /*@import "bootstrap";*/
 @import "dashboards-light";

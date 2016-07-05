@@ -23,8 +23,9 @@
         =@client.name
         PPC Dashboard
     .btn-toolbar.dashhead-toolbar
-      .btn-toolbar-item.input-with-icon
-        %input.form-control{"data-provide" => "datepicker", :type => "text", :value => "01/01/15 - 01/08/15"}
+      .btn-toolbar-item
+        .input-with-icon
+          %input.date-picker.form-control{:type => "text"}
           %span.icon.icon-calendar
   .hr-divider.m-t-lg.m-b-md
     %h3.hr-divider-content.hr-divider-heading Financial Metrics

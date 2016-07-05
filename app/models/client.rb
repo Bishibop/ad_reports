@@ -1,6 +1,6 @@
 class Client < ActiveRecord::Base
   belongs_to :customer
-  has_many :reports
+  has_many :reports, -> { order(date: :desc)}
 
   validates :name, presence: true, length: { minimum: 5 }
   validates :login_domain, presence: true, format: { without: /\s/ }
