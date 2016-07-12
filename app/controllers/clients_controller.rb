@@ -46,6 +46,7 @@ class ClientsController < ApplicationController
     if @client.save
       redirect_to @client
     else
+      @customer = Customer.find(params[:customer_id])
       render :new
     end
   end
