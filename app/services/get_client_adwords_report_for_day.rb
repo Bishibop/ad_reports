@@ -80,12 +80,15 @@ class GetClientAdwordsReportForDay
 
     # Can I have the model handle all of this? Like, what happens if I try and
     # just create a report with a preexisting date?
+    # Or move this logic up into the date range report getting, so it won't
+    # even make the request to google if It already has a report for the day
     existing_report = client.adwords_reports.find_by(date: date)
     if existing_report.nil?
       client.adwords_reports.create(date: date, **report_attributes)
     else
       # Why are you updating anything here? If it already exists then it's not
-      # going to change, right?
+      # going to change, right? BUT IT WILL. IF YOU GET A NEW REPORT FOR THE DAY OR
+      # FOR A PREVIOUS DAY THAT YOU GOT HALFWAY THOUGH THAT DAY
       existing_report.update(report_attributes)
       existing_report
     end
