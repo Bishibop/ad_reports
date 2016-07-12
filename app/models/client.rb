@@ -4,6 +4,5 @@ class Client < ActiveRecord::Base
 
   validates :name, presence: true, length: { minimum: 5 }
   validates :login_domain, presence: true, format: { without: /\s/ }
-  validates :adwords_cid, uniqueness: true
 
 end
