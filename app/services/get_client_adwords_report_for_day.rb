@@ -78,8 +78,9 @@ class GetClientAdwordsReportForDay
 
     report_attributes = AdwordsReport.metric_names.zip(report_array).to_h
 
+    # Can I have the model handle all of this? Like, what happens if I try and
+    # just create a report with a preexisting date?
     existing_report = client.adwords_reports.find_by(date: date)
-
     if existing_report.nil?
       client.adwords_reports.create(date: date, **report_attributes)
     else

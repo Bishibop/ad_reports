@@ -2,6 +2,7 @@ class AdwordsReport < ActiveRecord::Base
   belongs_to :client
 
   validates :date, uniqueness: true
+  validates :date, presence: true
 
   METRIC_NAMES = [ :cost,
                    :impressions,
