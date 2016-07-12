@@ -17,7 +17,7 @@ class DashboardsController < ApplicationController
                 #Do nothing
               end
 
-    reports = @client.adwords_reports
+    adwords_reports = @client.adwords_reports
 
     @metrics = AdwordsReport.metric_names.inject({}) do |memo, name|
       memo[name] = adwords_reports.map(&name)
