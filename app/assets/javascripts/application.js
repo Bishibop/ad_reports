@@ -12,10 +12,11 @@
 //
 //= require jquery
 //= require bootstrap-sprockets
+//= require underscore
 //= require jquery_ujs
 //= require moment.min
 //= require daterangepicker
-//= require Chart.min
+//= require Chart
 //= require tablesorter.min
 //= require dashboards-toolkit
 //= require dashboards-application

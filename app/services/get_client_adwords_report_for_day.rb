@@ -76,13 +76,15 @@ class GetClientAdwordsReportForDay
 
     report_array = CSV.parse(csv_report, converters: [:numeric, :percent_to_float])[0]
 
-    report_attributes = Report.metric_names.zip(report_array).to_h
+    report_attributes = AdwordsReport.metric_names.zip(report_array).to_h
 
-    existing_report = client.reports.find_by(date: date)
+    existing_report = client.adwords_reports.find_by(date: date)
 
     if existing_report.nil?
-      client.reports.create(source: "adwords", date: date, **report_attributes)
+      client.adwords_reports.create(date: date, **report_attributes)
     else
+      # Why are you updating anything here? If it already exists then it's not
+      # going to change, right?
       existing_report.update(report_attributes)
       existing_report
     end

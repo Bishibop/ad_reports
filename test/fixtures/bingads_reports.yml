@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cost: 1.5
+  impressions: 1
+  click_through_rate: 1.5
+  clicks: 1
+  conversions: 1
+  cost_per_conversion: 1.5
+  average_cost_per_click: 1.5
+  average_position: 1.5
+  conversion_rate: 1.5
+  client_id: 
+
+two:
+  cost: 1.5
+  impressions: 1
+  click_through_rate: 1.5
+  clicks: 1
+  conversions: 1
+  cost_per_conversion: 1.5
+  average_cost_per_click: 1.5
+  average_position: 1.5
+  conversion_rate: 1.5
+  client_id: 

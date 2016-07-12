@@ -1,11 +1,7 @@
-class Report < ActiveRecord::Base
+class AdwordsReport < ActiveRecord::Base
   belongs_to :client
 
   validates :date, uniqueness: true
-  validates :source, inclusion: {
-    in: ['adwords', 'bing'],
-    message: "%{value} must be 'adwords' or 'bing'."
-  }
 
   METRIC_NAMES = [ :cost,
                    :impressions,

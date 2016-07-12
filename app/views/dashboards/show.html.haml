@@ -21,7 +21,7 @@
     .dashhead-titles
       %h2.dashhead-title
         =@client.name
-        PPC Dashboard
+        \- PPC Dashboard
     .btn-toolbar.dashhead-toolbar
       .btn-toolbar-item
         .input-with-icon
@@ -31,35 +31,35 @@
     %h3.hr-divider-content.hr-divider-heading Financial Metrics
   .row.statcards.financial-metrics
     .col-md-6.m-b-md
-      .statcard
-        .p-a.leads
+      .statcard.leads-widget
+        .p-a.total-leads
           %span.statcard-desc Total Leads
           %h2.statcard-number
-            51
-            %small.label.label-success 5%
+            %span.chart-summary-metric 51
+            -#%small.label.label-success 5%
         .p-a.forms
           %span.statcard-desc Forms
           %h2.statcard-number
             %span.label &nbsp;
-            30
+            %span.chart-summary-metric 30
         .p-a.calls
           %span.statcard-desc Calls
           %h2.statcard-number
             %span.label &nbsp;
-            21
+            %span.chart-summary-metric 21
         %canvas.dashboard-chart.ex-bar-graph.leads-chart{:width => "378",
           :height => "94",
           :style => "width: 189px; height: 47px;"}
     .col-md-6.m-b-md
-      .statcard
+      .statcard.cost-widget
         .p-a.cost
           %span.statcard-desc Cost
           %h2.statcard-number
-            $2,539.32
-            %small.label.label-danger 1.3%
+            %span.chart-summary-metric $2,539.32
+            -#%small.label.label-danger 1.3%
         .p-a.cost-per-lead
           %span.statcard-desc Cost per Lead
-          %h2.statcard-number $49.79
+          %h2.statcard-number.chart-summary-metric $49.79
         %canvas.dashboard-chart.ex-line-graph.cost-chart{:width => "378",
           :height => "94",
           :style => "width: 189px; height: 47px;"}
@@ -67,34 +67,34 @@
     %h3.hr-divider-content.hr-divider-heading Funnel Metrics
   .row.statcards.funnel-metrics
     .col-md-3.m-b-md
-      .statcard
+      .statcard.impressions-widget
         .p-a
           %span.statcard-desc Impressions
-          %h2.statcard-number 8,511
+          %h2.statcard-number.chart-summary-metric 8,511
         %canvas.dashboard-chart.ex-line-graph.impressions-chart{:width => "378",
           :height => "94",
           :style => "width: 189px; height: 47px;"}
     .col-md-3.m-b-md
-      .statcard
+      .statcard.click-through-rate-widget
         .p-a
           %span.statcard-desc Click Through Rate
-          %h2.statcard-number 5.38%
+          %h2.statcard-number.chart-summary-metric 5.38%
         %canvas.dashboard-chart.ex-line-graph.click-through-rate-chart{:width => "378",
           :height => "94",
           :style => "width: 189px; height: 47px;"}
     .col-md-3.m-b-md
-      .statcard
+      .statcard.clicks-widget
         .p-a
           %span.statcard-desc Clicks
-          %h2.statcard-number 458
+          %h2.statcard-number.chart-summary-metric 458
         %canvas.dashboard-chart.ex-line-graph.clicks-chart{:width => "378",
           :height => "94",
           :style => "width: 189px; height: 47px;"}
     .col-md-3.m-b-md
-      .statcard
+      .statcard.conversion-rate-widget
         .p-a
           %span.statcard-desc Conversion Rate
-          %h2.statcard-number 11.13%
+          %h2.statcard-number.chart-summary-metric 11.13%
         %canvas.dashboard-chart.ex-line-graph.conversion-rate-chart{:width => "378",
           :height => "94",
           :style => "width: 189px; height: 47px;"}
