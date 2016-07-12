@@ -89,7 +89,7 @@
       "Last 30 days":   [ moment().subtract(30, 'days'),
                           moment().subtract(1, 'day') ],
 
-      "Year to date":   [ moment().subtract(1, 'year'), moment() ]
+      "Year to date":   [ moment().startOf('year'), moment() ]
     }
   }, dateRangePickerCallback);
 

@@ -34,7 +34,7 @@ class DashboardsController < ApplicationController
 
     # calculate daily conversion rate
     @metrics[:conversion_rate] = @metrics[:conversions].zip(@metrics[:clicks]).map do |pair|
-      (pair[0].to_f * 100 / (pair[1].nonzero? || 1).round(2)
+      (pair[0].to_f * 100 / (pair[1].nonzero? || 1)).round(2)
     end
 
     # rekey metrics hash with camelcase for conventional javascript
