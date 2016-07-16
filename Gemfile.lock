@@ -254,6 +254,7 @@ DEPENDENCIES
   google-adwords-api
   haml
   haml-rails
+  httparty
   interactive_editor
   jbuilder (~> 2.0)
   jquery-rails

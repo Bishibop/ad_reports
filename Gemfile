@@ -65,5 +65,6 @@ gem 'google-adwords-api'
 gem 'oauth2'
 gem 'interactive_editor'
 gem 'auth0'
+gem 'httparty'
 
 ruby '2.3.1'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160712031047) do
+ActiveRecord::Schema.define(version: 20160716223618) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,13 +56,14 @@ ActiveRecord::Schema.define(version: 20160712031047) do
   add_index "bingads_reports", ["client_id"], name: "index_bingads_reports_on_client_id", using: :btree
 
   create_table "clients", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string   "name",               null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "customer_id"
-    t.string   "login_domain", null: false
+    t.string   "login_domain",       null: false
     t.string   "adwords_cid"
     t.string   "bing_ads_aid"
+    t.string   "marchex_account_id"
   end
 
   add_index "clients", ["customer_id"], name: "index_clients_on_customer_id", using: :btree
@@ -82,7 +83,27 @@ ActiveRecord::Schema.define(version: 20160712031047) do
     t.string   "login_domain",                null: false
   end
 
+  create_table "marchex_call_records", force: :cascade do |t|
+    t.datetime "datetime"
+    t.string   "playback_url"
+    t.string   "classification"
+    t.string   "status"
+    t.integer  "duration"
+    t.string   "phone_number"
+    t.string   "campaign"
+    t.string   "caller_name"
+    t.string   "group"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "client_id"
+    t.string   "marchex_call_id", null: false
+  end
+
+  add_index "marchex_call_records", ["client_id"], name: "index_marchex_call_records_on_client_id", using: :btree
+  add_index "marchex_call_records", ["marchex_call_id", "client_id"], name: "index_marchex_call_records_on_marchex_call_id_and_client_id", unique: true, using: :btree
+
   add_foreign_key "adwords_reports", "clients"
   add_foreign_key "bingads_reports", "clients"
   add_foreign_key "clients", "customers"
+  add_foreign_key "marchex_call_records", "clients"
 end
