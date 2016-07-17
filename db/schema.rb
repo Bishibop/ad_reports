@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160716223618) do
+ActiveRecord::Schema.define(version: 20160717232138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,19 +84,20 @@ ActiveRecord::Schema.define(version: 20160716223618) do
   end
 
   create_table "marchex_call_records", force: :cascade do |t|
-    t.datetime "datetime"
     t.string   "playback_url"
-    t.string   "classification"
+    t.string   "dna_classification"
     t.string   "status"
     t.integer  "duration"
     t.string   "phone_number"
     t.string   "campaign"
     t.string   "caller_name"
-    t.string   "group"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "client_id"
-    t.string   "marchex_call_id", null: false
+    t.string   "marchex_call_id",    null: false
+    t.string   "group_name"
+    t.string   "pretty_duration"
+    t.datetime "start_time"
   end
 
   add_index "marchex_call_records", ["client_id"], name: "index_marchex_call_records_on_client_id", using: :btree
