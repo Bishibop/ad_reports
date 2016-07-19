@@ -17,9 +17,23 @@ class DashboardsController < ApplicationController
                 #Do nothing
               end
 
-    adwords_reports = @client.adwords_reports.where(date: 1.year.ago.to_date..Date.today)
-    bingads_reports = @client.bingads_reports.where(date: 1.year.ago.to_date..Date.today)
+    # Get your ad reports
+    dashboard_date_range = 1.year.ago.ago(1.day).to_date..Date.today
+    adwords_reports = @client.adwords_reports.where(date: dashboard_date_range)
+    bingads_reports = @client.bingads_reports.where(date: dashboard_date_range)
+    # You need to add a limit here on how many records you pick out.
+    marchex_records = @client.marchex_call_records.to_a
+    # All Calls
+    grouped_marchex_records = marchex_records.group_by{ |r| r.start_time.in_time_zone("Eastern Time (US & Canada)").to_date }
+    #grouped_marchex_records = marchex_records.uniq{|r| r.phone_number}
+                                                    #.group_by{|r| r.start_time.in_time_zone("Eastern Time (US & Canada)").to_date}
 
+    # Remaps 
+    #date_totalled_call_conversions = Hash[grouped_marchex_records.map do |date, records|
+      #[date, records.count]
+    #end]
+
+    # Transform those reports into metrics hashes
     adwords_metrics = AdwordsReport.metric_names.inject({}) do |memo, name|
       memo[name] = adwords_reports.map(&name)
       memo
@@ -29,24 +43,34 @@ class DashboardsController < ApplicationController
       memo
     end
 
-    # turn adwords micros units into dollars
+    # Turn adwords micros-dollars into regular-dollars
     [:cost, :cost_per_all_conversion, :cost_per_conversion].each do |key|
       adwords_metrics[key].map! { |cost| (cost / 1000000.0).round(2) }
     end
 
-    # zip sum base metrics
-    @metrics = [:cost, :impressions, :clicks, :conversions].inject({}) do |memo, name|
+    # Zip sum base metrics over Adwords and Bing
+    @metrics = [:cost, :impressions, :clicks, :form_conversions].inject({}) do |memo, name|
       memo[name] = adwords_metrics[name].zip(bingads_metrics[name]).map do |pair|
         pair[0] + pair[1]
       end
       memo
     end
 
-    # For some reason the costs had the whole float bullshit. I think from the
-    # previous addition (of two floats)
+    # Adds in the marchex call leads
+    @metrics[:call_conversions] = dashboard_date_range.map do |date|
+      grouped_marchex_records.fetch(date, []).count
+    end
+
+    # zip sums total conversions
+    @metrics[:conversions] = @metrics[:form_conversions].zip(@metrics[:call_conversions])
+                                                        .map do |pair|
+                                                          pair[0] + pair[1]
+                                                        end
+
+    # Clear out float tails on the cost metric
     @metrics[:cost].map! {|cost| cost.round(2)}
 
-    # calculate meta metrics from base metrics
+    # Calculate meta metrics from base metrics
     @metrics[:average_cost_per_click] = @metrics[:cost].zip(@metrics[:clicks]).map do |pair|
       if pair[1].zero?
         0.00
@@ -77,11 +101,7 @@ class DashboardsController < ApplicationController
       end
     end
 
-    # add in zeros for #call_conversions as a holding metric
-    @metrics[:call_conversions] = Array.new(adwords_reports.size) { |i| 0 }
-
-
-    # rekey metrics hash with camelcase for conventional javascript
+    # Re-key metrics hash with camelcase for conventional javascript
     @metrics.keys.each do |key|
       @metrics[key.to_s.camelize(:lower)] = @metrics[key]
       @metrics.delete(key)

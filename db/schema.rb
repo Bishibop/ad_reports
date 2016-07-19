@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160717232138) do
+ActiveRecord::Schema.define(version: 20160719155005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20160717232138) do
     t.integer  "all_conversions"
     t.float    "all_conversion_rate"
     t.integer  "cost_per_all_conversion"
-    t.integer  "conversions"
+    t.integer  "form_conversions"
     t.float    "conversion_rate"
     t.integer  "cost_per_conversion"
     t.integer  "average_cost_per_click"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20160717232138) do
     t.integer  "impressions"
     t.float    "click_through_rate"
     t.integer  "clicks"
-    t.integer  "conversions"
+    t.integer  "form_conversions"
     t.float    "cost_per_conversion"
     t.float    "average_cost_per_click"
     t.float    "average_position"

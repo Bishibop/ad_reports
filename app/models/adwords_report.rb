@@ -11,7 +11,7 @@ class AdwordsReport < ActiveRecord::Base
                    :all_conversions,
                    :all_conversion_rate,
                    :cost_per_all_conversion,
-                   :conversions,
+                   :form_conversions,
                    :conversion_rate,
                    :cost_per_conversion,
                    :average_cost_per_click,

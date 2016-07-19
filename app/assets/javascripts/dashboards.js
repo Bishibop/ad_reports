@@ -240,7 +240,7 @@
           $(pair[0]).text(pair[1]);
         });
     },
-    metricsLabels: ['callConversions', 'conversions']
+    metricsLabels: ['callConversions', 'formConversions']
   });
 
   var costChart = createChart('.cost-chart', lineDefaults, {
@@ -275,7 +275,7 @@
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
       var cost = sum(this.data.datasets[0].data);
-      var leads = sum(dateRangeMetrics.conversions.concat(dateRangeMetrics.callConversions));
+      var leads = sum(dateRangeMetrics.conversions);
       var costPerLead = cost / leads;
 
       _($('.cost-widget .chart-summary-metric'))
@@ -398,7 +398,7 @@
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
       var clicks = sum(dateRangeMetrics.clicks);
-      var conversions = sum(dateRangeMetrics.conversions.concat(dateRangeMetrics.callConversions));
+      var conversions = sum(dateRangeMetrics.conversions);
       var conversionRate = conversions / clicks;
       $('.conversion-rate-widget .chart-summary-metric').text((conversionRate * 100).toFixed(2) + "%")
       //_($('.clicks-widget .chart-summary-metric'))

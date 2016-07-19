@@ -76,6 +76,7 @@ class GetClientAdwordsReportForDay
 
     report_array = CSV.parse(csv_report, converters: [:numeric, :percent_to_float])[0]
 
+    # this is really fragile.
     report_attributes = AdwordsReport.metric_names.zip(report_array).to_h
 
     # Can I have the model handle all of this? Like, what happens if I try and
