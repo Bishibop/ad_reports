@@ -21,17 +21,17 @@ class DashboardsController < ApplicationController
     dashboard_date_range = 1.year.ago.ago(1.day).to_date..Date.today
     adwords_reports = @client.adwords_reports.where(date: dashboard_date_range)
     bingads_reports = @client.bingads_reports.where(date: dashboard_date_range)
+    # You need to add a limit here on how many records you pick out.
     marchex_records = @client.marchex_call_records.to_a
+    # All Calls
+    grouped_marchex_records = marchex_records.group_by{ |r| r.start_time.in_time_zone("Eastern Time (US & Canada)").to_date }
+    #grouped_marchex_records = marchex_records.uniq{|r| r.phone_number}
+                                                    #.group_by{|r| r.start_time.in_time_zone("Eastern Time (US & Canada)").to_date}
 
-    calls = marchex_records.group_by do |r|
-      r.start_time.in_time_zone("Eastern Time (US & Canada)").to_date
-    end
-    qualified_calls = marchex_records
-      .select { |r| r.duration >= 60 }
-      .uniq { |r| r.phone_number }
-      .group_by do |r|
-        r.start_time.in_time_zone("Eastern Time (US & Canada)").to_date
-      end
+    # Remaps 
+    #date_totalled_call_conversions = Hash[grouped_marchex_records.map do |date, records|
+      #[date, records.count]
+    #end]
 
     # Transform those reports into metrics hashes
     adwords_metrics = AdwordsReport.metric_names.inject({}) do |memo, name|
@@ -58,20 +58,14 @@ class DashboardsController < ApplicationController
 
     # Adds in the marchex call leads
     @metrics[:call_conversions] = dashboard_date_range.map do |date|
-      calls.fetch(date, []).count
-    end
-    @metrics[:qualified_calls] = dashboard_date_range.collect do |date|
-      qualified_calls.fetch(date, []).count
+      grouped_marchex_records.fetch(date, []).count
     end
 
     # zip sums total conversions
-    @metrics[:conversions] =
-      @metrics[:form_conversions].zip(@metrics[:call_conversions])
-                                 .collect { |pair| pair[0] + pair[1] }
-
-    @metrics[:qualified_conversions] =
-      @metrics[:form_conversions].zip(@metrics[:qualified_calls])
-                                 .collect { |pair| pair[0] + pair[1] }
+    @metrics[:conversions] = @metrics[:form_conversions].zip(@metrics[:call_conversions])
+                                                        .map do |pair|
+                                                          pair[0] + pair[1]
+                                                        end
 
     # Clear out float tails on the cost metric
     @metrics[:cost].map! {|cost| cost.round(2)}
@@ -84,9 +78,6 @@ class DashboardsController < ApplicationController
         (pair[0] / pair[1]).round(2)
       end
     end
-    #need another one of these for qualified leads
-    #actually, I need neither. I calculate these in the js. Have to since you
-    #can't sum this over the daterange.
     @metrics[:cost_per_conversion] = @metrics[:cost].zip(@metrics[:conversions]).map do |pair|
       if pair[1].zero?
         0.00
@@ -101,15 +92,8 @@ class DashboardsController < ApplicationController
         ((pair[0].to_f / pair[1]) * 100).round(2)
       end
     end
-    # need another one of these for qualified leads
     @metrics[:conversion_rate] = @metrics[:conversions].zip(@metrics[:clicks]).map do |pair|
-      if pair[1].zero?
-        0.00
-      else
-        ((pair[0].to_f / pair[1]) * 100).round(2)
-      end
-    end
-    @metrics[:qualified_conversion_rate] = @metrics[:qualified_conversions].zip(@metrics[:clicks]).map do |pair|
+      #(pair[0].to_f * 100 / (pair[1].nonzero? || 1)).round(2)
       if pair[1].zero?
         0.00
       else

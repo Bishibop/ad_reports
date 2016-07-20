@@ -30,8 +30,13 @@
   .hr-divider.m-t-lg.m-b-md
     %h3.hr-divider-content.hr-divider-heading Financial Metrics
   .row.statcards.financial-metrics
-    .col-md-10.m-b-md.col-md-offset-1
+    .col-md-6.m-b-md
       .statcard.leads-widget
+        .p-a.total-leads
+          %span.statcard-desc Total Leads
+          %h2.statcard-number
+            %span.chart-summary-metric 0
+            -#%small.label.label-success 5%
         .p-a.forms
           %span.statcard-desc Forms
           %h2.statcard-number
@@ -42,44 +47,17 @@
           %h2.statcard-number
             %span.label &nbsp;
             %span.chart-summary-metric 0
-        .p-a.qualified-calls
-          %span.statcard-desc Qualified Calls
-          %h2.statcard-number
-            %span.label &nbsp;
-            %span.chart-summary-metric 0
-        .p-a.qualified-leads.pull-right.text-right
-          %span.statcard-desc Qualified Leads
-          %h2.statcard-number
-            %span.label &nbsp;
-            +
-            %span.label &nbsp;
-            \=
-            %span.chart-summary-metric 0
-            -#%small.label.label-success 5%
-        .p-a.total-leads.pull-right.text-right
-          %span.statcard-desc Total Leads
-          %h2.statcard-number
-            %span.label &nbsp;
-            +
-            %span.label &nbsp;
-            \=
-            %span.chart-summary-metric 0
-            -#%small.label.label-success 5%
         %canvas.dashboard-chart.ex-bar-graph.leads-chart{:width => "378",
           :height => "94",
           :style => "width: 189px; height: 47px;"}
-  .row.statcards.financial-metrics
-    .col-md-10.m-b-md.col-md-offset-1
+    .col-md-6.m-b-md
       .statcard.cost-widget
         .p-a.cost
           %span.statcard-desc Cost
           %h2.statcard-number
             %span.chart-summary-metric $0.00
             -#%small.label.label-danger 1.3%
-        .p-a.cost-per-qualified-lead.pull-right.text-right
-          %span.statcard-desc Cost per Qualified Lead
-          %h2.statcard-number.chart-summary-metric $0.00
-        .p-a.cost-per-lead.pull-right.text-right
+        .p-a.cost-per-lead
           %span.statcard-desc Cost per Lead
           %h2.statcard-number.chart-summary-metric $0.00
         %canvas.dashboard-chart.ex-line-graph.cost-chart{:width => "378",
@@ -114,15 +92,9 @@
           :style => "width: 189px; height: 47px;"}
     .col-md-3.m-b-md
       .statcard.conversion-rate-widget
-        .p-a.conversion-rate
+        .p-a
           %span.statcard-desc Conversion Rate
           %h2.statcard-number.chart-summary-metric 0.00%
-        .p-a.qualified-conversion-rate
-          %span.statcard-desc (Qualified)
-          %h2.statcard-number
-            (
-            %span.chart-summary-metric> 0.00%
-            )
         %canvas.dashboard-chart.ex-line-graph.conversion-rate-chart{:width => "378",
           :height => "94",
           :style => "width: 189px; height: 47px;"}
