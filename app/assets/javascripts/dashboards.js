@@ -51,7 +51,7 @@
                                                           dateRangeInitialEndDate);
 
   var dateRangePickerCallback = function(startDate, endDate, label) {
-    var dateRangeMetrics = selectMetricsForDateRange(startDate, endDate);
+    var selectedMetrics = selectMetricsForDateRange(startDate, endDate);
     var periodLabels = generatePeriodLabels(startDate, endDate);
     _([ leadsChart,
         costChart,
@@ -60,7 +60,7 @@
         clicksChart,
         conversionRateChart ]
      ).map(function(chart) {
-        updateChart(chart, dateRangeMetrics, periodLabels);
+        updateChart(chart, selectedMetrics, periodLabels);
      });
   };
 
@@ -203,17 +203,27 @@
     data: {
       datasets: [
         {
-          label: 'Calls',
-          backgroundColor: '#1ca8dd',
-          // Need this, otherwise something is changing the color on hover
-          hoverBackgroundColor: '#1ca8dd',
-          data: []
-        },
-        {
           label: 'Forms',
           backgroundColor: '#E64759',
           // Need this, otherwise something is changing the color on hover
           hoverBackgroundColor: '#E64759',
+          data: []
+        },
+        {
+          label: 'All Calls',
+          backgroundColor: '#ffffff',
+          // Need this, otherwise something is changing the color on hover
+          hoverBackgroundColor: '#ffffff',
+          borderWidth: 1,
+          borderColor: '#1ca8dd',
+          borderDash: [2, 2],
+          data: []
+        },
+        {
+          label: 'Qualified Calls',
+          backgroundColor: '#1ca8dd',
+          // Need this, otherwise something is changing the color on hover
+          hoverBackgroundColor: '#1ca8dd',
           data: []
         }
       ]
@@ -221,7 +231,7 @@
     options: {
       tooltips: {
         // Combines the tooltips of the different datasets (Forms and Calls)
-        mode: 'label'
+        mode: 'label',
       },
       scales: {
         xAxes: [{
@@ -231,16 +241,20 @@
       }
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var callLeads = sum(this.data.datasets[0].data);
-      var formLeads = sum(this.data.datasets[1].data);
+      var formLeads = sum(this.data.datasets[0].data);
+      var callLeads = sum(this.data.datasets[1].data);
+      var qualifiedCalls = sum(this.data.datasets[2].data);
       var totalLeads = callLeads + formLeads;
+      var qualifiedLeads = qualifiedCalls + formLeads;
       _($('.leads-widget .chart-summary-metric'))
-        .zip([totalLeads, formLeads, callLeads])
+      // Note that qualifiedLeads and totalLeads are transposed from what's
+      // on the page. This has to do with how float: right works.
+        .zip([formLeads, callLeads, qualifiedCalls, qualifiedLeads, totalLeads])
         .map(function(pair) {
           $(pair[0]).text(pair[1]);
         });
     },
-    metricsLabels: ['callConversions', 'formConversions']
+    metricsLabels: ['formConversions', 'callConversions', 'qualifiedCalls']
   });
 
   var costChart = createChart('.cost-chart', lineDefaults, {
@@ -265,7 +279,7 @@
       scales: {
         yAxes: [{
           ticks: {
-            beginAtZero: false,
+            beginAtZero: true,
             userCallback: function(value, index, values) {
               return "$" + value;
             }
@@ -275,11 +289,13 @@
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
       var cost = sum(this.data.datasets[0].data);
-      var leads = sum(dateRangeMetrics.conversions);
-      var costPerLead = cost / leads;
+      var totalLeads = sum(dateRangeMetrics.conversions);
+      var qualifiedLeads = sum(dateRangeMetrics.qualifiedConversions);
+      var costPerLead = cost / totalLeads;
+      var costPerQualifiedLead = cost / qualifiedLeads;
 
       _($('.cost-widget .chart-summary-metric'))
-        .zip([cost, costPerLead])
+        .zip([cost, costPerQualifiedLead, costPerLead])
         .map(function(pair) {
           $(pair[0]).text('$' + pair[1].toFixed(2));
         });
@@ -375,6 +391,10 @@
         {
           label: 'Conversion Rate',
           data: []
+        },
+        {
+          label: 'Qualified Conversion Rate',
+          data: []
         }
       ]
     },
@@ -399,15 +419,17 @@
     updateSummaryMetrics: function(dateRangeMetrics) {
       var clicks = sum(dateRangeMetrics.clicks);
       var conversions = sum(dateRangeMetrics.conversions);
+      var qualifiedConversions = sum(dateRangeMetrics.qualifiedConversions);
       var conversionRate = conversions / clicks;
-      $('.conversion-rate-widget .chart-summary-metric').text((conversionRate * 100).toFixed(2) + "%")
-      //_($('.clicks-widget .chart-summary-metric'))
-        //.zip([clicks])
-        //.map(function(pair) {
-          //$(pair[0]).text(pair[1]);
-        //});
+      var qualifiedConversionRate = qualifiedConversions / clicks;
+      //$('.conversion-rate-widget .chart-summary-metric').text((conversionRate * 100).toFixed(2) + "%")
+      _($('.conversion-rate-widget .chart-summary-metric'))
+        .zip([conversionRate, qualifiedConversionRate])
+        .map(function(pair) {
+          $(pair[0]).text((pair[1] * 100).toFixed(2) + "%");
+        });
     },
-    metricsLabels: 'conversionRate'
+    metricsLabels: [ 'conversionRate', 'qualifiedConversionRate' ]
   });
 
   var google_ad_position_chart = createChart('.google-ad-position-chart', sparkLineDefaults, {
