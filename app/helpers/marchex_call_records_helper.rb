@@ -1,0 +1,2 @@
+module MarchexCallRecordsHelper
+end

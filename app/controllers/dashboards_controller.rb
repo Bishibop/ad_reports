@@ -21,17 +21,21 @@ class DashboardsController < ApplicationController
     dashboard_date_range = 1.year.ago.ago(1.day).to_date..Date.today
     adwords_reports = @client.adwords_reports.where(date: dashboard_date_range)
     bingads_reports = @client.bingads_reports.where(date: dashboard_date_range)
-    # You need to add a limit here on how many records you pick out.
-    marchex_records = @client.marchex_call_records.to_a
     # All Calls
-    grouped_marchex_records = marchex_records.group_by{ |r| r.start_time.in_time_zone("Eastern Time (US & Canada)").to_date }
-    #grouped_marchex_records = marchex_records.uniq{|r| r.phone_number}
-                                                    #.group_by{|r| r.start_time.in_time_zone("Eastern Time (US & Canada)").to_date}
+    @marchex_calls = @client.marchex_call_records.pluck(:caller_name,
+                                                        :phone_number,
+                                                        :campaign,
+                                                        :group_name,
+                                                        :start_time,
+                                                        :pretty_duration,
+                                                        :status,
+                                                        :playback_url)
 
-    # Remaps 
-    #date_totalled_call_conversions = Hash[grouped_marchex_records.map do |date, records|
-      #[date, records.count]
-    #end]
+    @marchex_calls.map! do |record|
+      record[4] = record[4].in_time_zone("Eastern Time (US & Canada)")
+      record
+    end
+    grouped_marchex_calls = @marchex_calls.group_by{ |record| record[4].to_date }
 
     # Transform those reports into metrics hashes
     adwords_metrics = AdwordsReport.metric_names.inject({}) do |memo, name|
@@ -58,7 +62,7 @@ class DashboardsController < ApplicationController
 
     # Adds in the marchex call leads
     @metrics[:call_conversions] = dashboard_date_range.map do |date|
-      grouped_marchex_records.fetch(date, []).count
+      grouped_marchex_calls.fetch(date, []).count
     end
 
     # zip sums total conversions

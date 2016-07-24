@@ -51,7 +51,7 @@
                                                           dateRangeInitialEndDate);
 
   var dateRangePickerCallback = function(startDate, endDate, label) {
-    var dateRangeMetrics = selectMetricsForDateRange(startDate, endDate);
+    var selectedMetrics = selectMetricsForDateRange(startDate, endDate);
     var periodLabels = generatePeriodLabels(startDate, endDate);
     _([ leadsChart,
         costChart,
@@ -60,7 +60,7 @@
         clicksChart,
         conversionRateChart ]
      ).map(function(chart) {
-        updateChart(chart, dateRangeMetrics, periodLabels);
+        updateChart(chart, selectedMetrics, periodLabels);
      });
   };
 
@@ -535,9 +535,85 @@
   // Updates the initialized, but empty charts with the initial, pre-selected date range
   dateRangePickerCallback(dateRangeInitialStartDate, dateRangeInitialEndDate);
 
-  // Sorts the Marchex table by the most recent call (5th column)
-  $("[data-sort=table]").tablesorter({
-    sortList: [[4,1]]
+  // Sets up Marchex Call Log table
+  $("#marchex_calls").dataTable({
+    data: Icarus.marchexCalls,
+    deferRender: true,
+    lengthChange: false,
+    //pageLength: 20,
+    order: [[4, 'desc']],
+    scrollX: false,
+    autoWidth: false,
+    responsive: {
+      details: {
+        type: 'inline',
+        //target: 0
+      }
+    },
+    columnDefs: [
+      {
+        targets: 0,
+        sClass: 'text-nowrap',
+        responsivePriority: 0,
+        render: function(data, type, row) {
+          if (data) {
+            return data;
+          } else {
+            return "(No name on file)";
+          }
+        }
+      },
+      {
+        targets: 1,
+        sClass: 'text-nowrap',
+        responsivePriority: 4,
+        render: function(data, type, row) {
+          if (data.length == 10) {
+            return '('+data.slice(0,3)+') '+data.slice(3,6)+'-'+data.slice(6);
+          } else {
+            return data;
+          }
+        }
+      },
+      {
+        targets: 2,
+        sClass: 'text-nowrap',
+        responsivePriority: 3,
+      },
+      {
+        targets: 3,
+        sClass: 'text-nowrap',
+        responsivePriority: 5,
+      },
+      {
+        targets: 4,
+        sClass: 'text-nowrap',
+        responsivePriority: 1,
+        render: function(data, type, row) {
+          return moment(data).format('MMM Do, H:mm a');
+        }
+      },
+      {
+        targets: 5,
+        responsivePriority: 2,
+      },
+      {
+        targets: 6,
+        responsivePriority: 6,
+      },
+      {
+        targets: 7,
+        sClass: 'text-xs-center',
+        responsivePriority: 7,
+        render: function(data, type, row) {
+          if (data) {
+            return '<audio controls src="'+data+'" type="audio/mp3" preload="none">';
+          } else {
+            return "No Recording";
+          }
+        }
+      }
+    ]
   });
 
 }());

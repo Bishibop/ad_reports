@@ -17,7 +17,8 @@
 //= require moment.min
 //= require daterangepicker
 //= require Chart
-//= require tablesorter.min
+//= require dataTables/jquery.dataTables
+//= require dataTables.responsive.min
 //= require dashboards-toolkit
 //= require dashboards-application
 

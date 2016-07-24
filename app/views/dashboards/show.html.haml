@@ -316,7 +316,7 @@
     .col-md-12.m-b-md.p-x-lg
       .table-full
         .table-responsive
-          %table.table{ "data-sort" => :table }
+          %table.table#marchex_calls
             %thead
               %th.header Caller Name
               %th.header Phone Number
@@ -327,6 +327,56 @@
               %th.header Status
               %th.header.text-xs-center Recording
             %tbody
+              %tr
+                %td John Doe
+                %td 555 123-1234
+                %td Search
+                %td RDAPPC - 1.27
+                %td May 12th 3:04pm
+                %td 00:01:56
+                %td ANSWER
+                %td.play-button.text-xs-center
+                  %span.icon.icon-controller-play
+              %tr
+                %td John Doe
+                %td 555 123-1234
+                %td Search
+                %td RDAPPC - 1.27
+                %td May 12th 3:04pm
+                %td 00:01:56
+                %td ANSWER
+                %td.play-button.text-xs-center
+                  %span.icon.icon-controller-play
+              %tr
+                %td John Doe
+                %td 555 123-1234
+                %td Search
+                %td RDAPPC - 1.27
+                %td May 12th 3:04pm
+                %td 00:01:56
+                %td ANSWER
+                %td.play-button.text-xs-center
+                  %span.icon.icon-controller-play
+              %tr
+                %td John Doe
+                %td 555 123-1234
+                %td Search
+                %td RDAPPC - 1.27
+                %td May 12th 3:04pm
+                %td 00:01:56
+                %td ANSWER
+                %td.play-button.text-xs-center
+                  %span.icon.icon-controller-play
+              %tr
+                %td John Doe
+                %td 555 123-1234
+                %td Search
+                %td RDAPPC - 1.27
+                %td May 12th 3:04pm
+                %td 00:01:56
+                %td ANSWER
+                %td.play-button.text-xs-center
+                  %span.icon.icon-controller-play
               %tr
                 %td John Doe
                 %td 555 123-1234
@@ -419,5 +469,6 @@
                   %span.icon.icon-controller-play
 :javascript
   window.Icarus.metrics = #{@metrics.to_json};
+  window.Icarus.marchexCalls = #{@marchex_calls.to_json}
 %link{:href => "https://fonts.googleapis.com/css?family=Roboto:301,400,500,700,400italic", :rel => "stylesheet"}
 = javascript_include_tag 'dashboards'
