@@ -48,24 +48,35 @@ class DashboardsController < ApplicationController
     end
 
     # Turn adwords micros-dollars into regular-dollars
-    [:cost, :cost_per_all_conversion, :cost_per_conversion].each do |key|
+    [ :cost,
+      :cost_per_all_conversion,
+      :cost_per_conversion,
+      :average_cost_per_click ].each do |key|
       adwords_metrics[key].map! { |cost| (cost / 1000000.0).round(2) }
     end
 
-    # Zip sum base metrics over Adwords and Bing
-    @metrics = [:cost, :impressions, :clicks, :form_conversions].inject({}) do |memo, name|
-      memo[name] = adwords_metrics[name].zip(bingads_metrics[name]).map do |pair|
-        pair[0] + pair[1]
-      end
-      memo
+    # Initialize your empty metrics object to pass into the javascript
+    @metrics = {}
+
+    # Pass through Adwords and Bing base metrics
+    [:average_position, :average_cost_per_click, :clicks, :cost, :impressions, :form_conversions, :click_through_rate, :conversion_rate].each do |key|
+      @metrics[key.to_s.prepend("adwords_")] = adwords_metrics[key]
+      @metrics[key.to_s.prepend("bingads_")] = bingads_metrics[key]
     end
 
-    # Adds in the marchex call leads
+    # Sum Adwords and Bing base metrics
+    [:cost, :impressions, :clicks, :form_conversions].each do |name|
+      @metrics[name] = adwords_metrics[name].zip(bingads_metrics[name]).map do |pair|
+        pair[0] + pair[1]
+      end
+    end
+
+    # Add in the marchex call leads
     @metrics[:call_conversions] = dashboard_date_range.map do |date|
       grouped_marchex_calls.fetch(date, []).count
     end
 
-    # zip sums total conversions
+    # zip sum total conversions
     @metrics[:conversions] = @metrics[:form_conversions].zip(@metrics[:call_conversions])
                                                         .map do |pair|
                                                           pair[0] + pair[1]
@@ -74,7 +85,7 @@ class DashboardsController < ApplicationController
     # Clear out float tails on the cost metric
     @metrics[:cost].map! {|cost| cost.round(2)}
 
-    # Calculate meta metrics from base metrics
+    # Calculate meta-metrics from base metrics
     @metrics[:average_cost_per_click] = @metrics[:cost].zip(@metrics[:clicks]).map do |pair|
       if pair[1].zero?
         0.00
@@ -97,7 +108,6 @@ class DashboardsController < ApplicationController
       end
     end
     @metrics[:conversion_rate] = @metrics[:conversions].zip(@metrics[:clicks]).map do |pair|
-      #(pair[0].to_f * 100 / (pair[1].nonzero? || 1)).round(2)
       if pair[1].zero?
         0.00
       else

@@ -99,53 +99,45 @@
           :height => "94",
           :style => "width: 189px; height: 47px;"}
   .hr-divider.m-t-lg.m-b-md
-    %h3.hr-divider-content.hr-divider-heading Google Ad Network
-  .row.statcards.ad-network-metrics.google-ad-network
+    %h3.hr-divider-content.hr-divider-heading Adwords Ad Network
+  .row.statcards.ad-network-metrics.adwords-ad-network
     .col-sm-3.m-b-md
-      .statcard.statcard-primary
+      .statcard.statcard-primary.adwords-ad-position-widget
         .p-a
           %span.statcard-desc Average Ad Position
-          %h2.statcard-number
-            1.00
-            %small.delta-indicator.delta-positive 0%
+          %h2.statcard-number.chart-summary-metric 1.00
           %hr.statcard-hr.m-b-0
-        %canvas.dashboard-chart.sparkline.google-ad-position-chart{:width => "111",
+        %canvas.dashboard-chart.sparkline.adwords-ad-position-chart{:width => "111",
           :height => "27",
           :style => "width: 111px; height: 27px;"}
     .col-sm-3.m-b-md
-      .statcard.statcard-primary
+      .statcard.statcard-primary.adwords-cpc-widget
         .p-a
           %span.statcard-desc Cost per Click
-          %h2.statcard-number
-            $0.00
-            %small.delta-indicator.delta-negative 0%
+          %h2.statcard-number.chart-summary-metric $0.00
           %hr.statcard-hr.m-b-0
-        %canvas.dashboard-chart.sparkline.google-cpc-chart{:width => "111",
+        %canvas.dashboard-chart.sparkline.adwords-cpc-chart{:width => "111",
           :height => "27",
           :style => "width: 111px; height: 27px;"}
     .col-sm-3.m-b-md
-      .statcard.statcard-primary
-        .p-a
-          %span.statcard-desc Conversion Rate
-          %h2.statcard-number
-            0.00%
-            %small.delta-indicator.delta-negative 0%
-          %hr.statcard-hr.m-b-0
-        %canvas.dashboard-chart.sparkline.google-conversion-rate-chart{:width => "111",
-          :height => "27",
-          :style => "width: 111px; height: 27px;"}
-    .col-sm-3.m-b-md
-      .statcard.statcard-primary
+      .statcard.statcard-primary.adwords-ctr-widget
         .p-a
           %span.statcard-desc Click Through Rate
-          %h2.statcard-number
-            0.00%
-            %small.delta-indicator.delta-positive 0%
+          %h2.statcard-number.chart-summary-metric 0.00%
           %hr.statcard-hr.m-b-0
-        %canvas.dashboard-chart.sparkline.google-ctr-chart{:width => "111",
+        %canvas.dashboard-chart.sparkline.adwords-ctr-chart{:width => "111",
           :height => "27",
           :style => "width: 111px; height: 27px;"}
-  .row.ad-network-keywords.google-ad-network
+    .col-sm-3.m-b-md
+      .statcard.statcard-primary.adwords-conversion-rate-widget
+        .p-a
+          %span.statcard-desc Conversion Rate
+          %h2.statcard-number.chart-summary-metric 0.00%
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.adwords-conversion-rate-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+  .row.ad-network-keywords.adwords-ad-network
     .col-md-6.m-b-md
       .list-group
         %h4.list-group-header
@@ -206,52 +198,44 @@
           6. +split +wood
   .hr-divider.m-t-lg.m-b-md
     %h3.hr-divider-content.hr-divider-heading Bing-Yahoo! Ad Network
-  .row.statcards.ad-network-metrics.bing-ad-network
+  .row.statcards.ad-network-metrics.bingads-ad-network
     .col-sm-3.m-b-md
-      .statcard.statcard-info
+      .statcard.statcard-info.bingads-ad-position-widget
         .p-a
           %span.statcard-desc Average Ad Position
-          %h2.statcard-number
-            1.00
-            %small.delta-indicator.delta-positive 0%
+          %h2.statcard-number.chart-summary-metric 1.00
           %hr.statcard-hr.m-b-0
-        %canvas.dashboard-chart.sparkline.bing-ad-position-chart{:width => "111",
+        %canvas.dashboard-chart.sparkline.bingads-ad-position-chart{:width => "111",
           :height => "27",
           :style => "width: 111px; height: 27px;"}
     .col-sm-3.m-b-md
-      .statcard.statcard-info
+      .statcard.statcard-info.bingads-cpc-widget
         .p-a
           %span.statcard-desc Cost per Click
-          %h2.statcard-number
-            $0.00
-            %small.delta-indicator.delta-negative 0%
+          %h2.statcard-number.chart-summary-metric $0.00
           %hr.statcard-hr.m-b-0
-        %canvas.dashboard-chart.sparkline.bing-cpc-chart{:width => "111",
+        %canvas.dashboard-chart.sparkline.bingads-cpc-chart{:width => "111",
           :height => "27",
           :style => "width: 111px; height: 27px;"}
     .col-sm-3.m-b-md
-      .statcard.statcard-info
-        .p-a
-          %span.statcard-desc Conversion Rate
-          %h2.statcard-number
-            0.00%
-            %small.delta-indicator.delta-negative 0%
-          %hr.statcard-hr.m-b-0
-        %canvas.dashboard-chart.sparkline.bing-conversion-rate-chart{:width => "111",
-          :height => "27",
-          :style => "width: 111px; height: 27px;"}
-    .col-sm-3.m-b-md
-      .statcard.statcard-info
+      .statcard.statcard-info.bingads-ctr-widget
         .p-a
           %span.statcard-desc Click Through Rate
-          %h2.statcard-number
-            0.00%
-            %small.delta-indicator.delta-positive 0%
+          %h2.statcard-number.chart-summary-metric 0.00%
           %hr.statcard-hr.m-b-0
-        %canvas.dashboard-chart.sparkline.bing-ctr-chart{:width => "111",
+        %canvas.dashboard-chart.sparkline.bingads-ctr-chart{:width => "111",
           :height => "27",
           :style => "width: 111px; height: 27px;"}
-  .row.ad-network-keywords.bing-ad-network
+    .col-sm-3.m-b-md
+      .statcard.statcard-info.bingads-conversion-rate-widget
+        .p-a
+          %span.statcard-desc Conversion Rate
+          %h2.statcard-number.chart-summary-metric 0.00%
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.bingads-conversion-rate-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+  .row.ad-network-keywords.bingads-ad-network
     .col-md-6.m-b-md
       .list-group
         %h4.list-group-header

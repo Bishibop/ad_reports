@@ -1,19 +1,135 @@
 ;(function() {
-    var sum = function(numberArray) {
-      return _(numberArray).reduce(function(memo, num) {
-        return memo + num;
-      }, 0);
+  var sum = function(numberArray) {
+    return _(numberArray).reduce(function(memo, num) {
+      return memo + num;
+    }, 0);
+  }
+
+
+  // -- BEGIN CALL TABLE SETUP
+
+  // Sets up Marchex Call Log table
+  var marchexCallTable = $("#marchex_calls").DataTable({
+    data: Icarus.marchexCalls,
+    deferRender: true,
+    lengthChange: false,
+    //pageLength: 20,
+    order: [[4, 'desc']],
+    scrollX: false,
+    autoWidth: false,
+    responsive: {
+      details: {
+        type: 'inline',
+        //target: 0
+      }
+    },
+    columnDefs: [
+      {
+        targets: 0,
+        sClass: 'text-nowrap',
+        responsivePriority: 0,
+        render: function(data, type, row) {
+          if (data) {
+            return data;
+          } else {
+            return "(No name on file)";
+          }
+        }
+      },
+      {
+        targets: 1,
+        sClass: 'text-nowrap',
+        responsivePriority: 4,
+        render: function(data, type, row) {
+          if ( type === 'display' ) {
+            if (data.length === 10) {
+              return '('+data.slice(0,3)+') '+data.slice(3,6)+'-'+data.slice(6);
+            } else {
+              return data;
+            }
+          } else {
+            return data;
+          }
+        }
+      },
+      {
+        targets: 2,
+        sClass: 'text-nowrap',
+        responsivePriority: 3,
+      },
+      {
+        targets: 3,
+        sClass: 'text-nowrap',
+        responsivePriority: 5,
+      },
+      {
+        targets: 4,
+        sClass: 'text-nowrap',
+        responsivePriority: 1,
+        render: function(data, type, row) {
+          if ( type === 'display' ) {
+            return moment(data).format('hh:mm a, MMM Do');
+          } else {
+            return data;
+          }
+        }
+      },
+      {
+        targets: 5,
+        responsivePriority: 2,
+      },
+      {
+        targets: 6,
+        responsivePriority: 6,
+      },
+      {
+        targets: 7,
+        sClass: 'text-xs-center',
+        responsivePriority: 7,
+        render: function(data, type, row) {
+          if (data) {
+            return '<audio controls src="'+data+'" type="audio/mp3" preload="none">';
+          } else {
+            return "No Recording";
+          }
+        }
+      }
+    ]
+  });
+
+  // Date filter function. Slow.
+  $.fn.dataTable.ext.search.push(
+    function( settings, renderData, dataIndex, originalData ) {
+      var rowDateTime = moment(renderData[4]);
+      if ( rowDateTime.isAfter(marchexCallTable.startDate)
+           &&
+           rowDateTime.isBefore(marchexCallTable.endDate.endOf('day')) )
+        return true;
+      else {
+        return false;
+      }
     }
+  );
+
+  // Have the call log only search on "enter"
+  $('#marchex_calls_filter input').unbind().on('keyup', function(e) {
+    if (e.keyCode === 13) {
+      marchexCallTable.search(this.value).draw();
+    }
+  });
+
+  // -- END CALL TABLE SETUP
 
 
+  // -- BEGIN DATEPICKER SETUP
+
+  // Given a pair of dates, returns the corresponding metrics subsection
   var selectMetricsForDateRange = function(startDate, endDate) {
-    //console.log('dates being passed in', startDate, endDate);
     // You MUST call #startOf('day') when calling #diff. If you do not, you get
     // random (about 1 / 40) off-by-one errors. Additionally, you must call
-    // startOf on the other operand to standardize the input ranges.
+    // startOf on the second operand to standardize the input ranges.
     var startIndex = moment().startOf('day').diff(startDate.startOf('day'), 'days');
     var endIndex = moment().startOf('day').diff(endDate.startOf('day'), 'days');
-    //console.log('calculated indexs', startIndex, endIndex);
     return _.mapObject(Icarus.metrics, function(metricsArray, metricsName) {
       // These are negative because the most recent data is at the end.
       // Subtraction accounts for non-inclusive slice.
@@ -45,23 +161,29 @@
     chart.updateSummaryMetrics(dateRangeMetrics);
   };
 
+  // Setting initial date range and associated sub-metrics
   var dateRangeInitialStartDate = moment().startOf('month');
   var dateRangeInitialEndDate = moment();
   var dateRangeInitialMetrics = selectMetricsForDateRange(dateRangeInitialStartDate,
                                                           dateRangeInitialEndDate);
 
+  // Setting initial dates for Marchex Call Table filter function
+  marchexCallTable.startDate = dateRangeInitialStartDate;
+  marchexCallTable.endDate = dateRangeInitialEndDate;
+
   var dateRangePickerCallback = function(startDate, endDate, label) {
     var selectedMetrics = selectMetricsForDateRange(startDate, endDate);
     var periodLabels = generatePeriodLabels(startDate, endDate);
-    _([ leadsChart,
-        costChart,
-        impressionsChart,
-        clickThroughRateChart,
-        clicksChart,
-        conversionRateChart ]
-     ).map(function(chart) {
+    _(charts).map(function(chart) {
         updateChart(chart, selectedMetrics, periodLabels);
      });
+     marchexCallTable.startDate = startDate;
+     marchexCallTable.endDate = endDate;
+     // If you call #draw naked, it noticibly holds up the datepicker selection and
+     // chart animation. This lets that clear before filtering the dates. Still
+     // a pause in scroll responsiveness though. Call table really should be
+     // ajaxed rather than being passed all the call records.
+     _.delay(marchexCallTable.draw, 500);
   };
 
   $('input.date-picker').daterangepicker({
@@ -93,6 +215,10 @@
     }
   }, dateRangePickerCallback);
 
+  // -- END DATEPICKER SETUP
+
+
+  // -- BEGIN CHARTS SETUP
 
   // Selects all of the chart elements
   var $charts = $('.dashboard-chart');
@@ -234,11 +360,10 @@
       var callLeads = sum(this.data.datasets[0].data);
       var formLeads = sum(this.data.datasets[1].data);
       var totalLeads = callLeads + formLeads;
-      _($('.leads-widget .chart-summary-metric'))
-        .zip([totalLeads, formLeads, callLeads])
-        .map(function(pair) {
-          $(pair[0]).text(pair[1]);
-        });
+      var $summaryMetrics = $('.leads-widget .chart-summary-metric')
+      $($summaryMetrics[0]).text(totalLeads);
+      $($summaryMetrics[1]).text(formLeads);
+      $($summaryMetrics[2]).text(callLeads);
     },
     metricsLabels: ['callConversions', 'formConversions']
   });
@@ -277,12 +402,9 @@
       var cost = sum(this.data.datasets[0].data);
       var leads = sum(dateRangeMetrics.conversions);
       var costPerLead = cost / leads;
-
-      _($('.cost-widget .chart-summary-metric'))
-        .zip([cost, costPerLead])
-        .map(function(pair) {
-          $(pair[0]).text('$' + pair[1].toFixed(2));
-        });
+      var $summaryMetrics = $('.cost-widget .chart-summary-metric')
+      $($summaryMetrics[0]).text('$' + cost.toFixed(2));
+      $($summaryMetrics[1]).text('$' + costPerLead.toFixed(2));
     },
     metricsLabels: 'cost'
   });
@@ -298,12 +420,7 @@
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
       var impressions = sum(this.data.datasets[0].data);
-
-      _($('.impressions-widget .chart-summary-metric'))
-        .zip([impressions])
-        .map(function(pair) {
-          $(pair[0]).text(pair[1]);
-        });
+      $('.impressions-widget .chart-summary-metric').text(impressions);
     },
     metricsLabels: 'impressions'
   });
@@ -338,13 +455,9 @@
     updateSummaryMetrics: function(dateRangeMetrics) {
       var clicks = sum(dateRangeMetrics.clicks);
       var impressions = sum(dateRangeMetrics.impressions);
-      var clickThroughRate = clicks / impressions;
-
-      _($('.click-through-rate-widget .chart-summary-metric'))
-        .zip([clickThroughRate])
-        .map(function(pair) {
-          $(pair[0]).text((pair[1] * 100).toFixed(2) + "%");
-        });
+      var clickThroughRate = 100 * clicks / impressions;
+      $('.click-through-rate-widget .chart-summary-metric')
+        .text(clickThroughRate.toFixed(2) + "%");
     },
     metricsLabels: 'clickThroughRate'
   });
@@ -360,11 +473,7 @@
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
       var clicks = sum(this.data.datasets[0].data);
-      _($('.clicks-widget .chart-summary-metric'))
-        .zip([clicks])
-        .map(function(pair) {
-          $(pair[0]).text(pair[1]);
-        });
+      $('.clicks-widget .chart-summary-metric').text(clicks);
     },
     metricsLabels: 'clicks'
   });
@@ -399,221 +508,177 @@
     updateSummaryMetrics: function(dateRangeMetrics) {
       var clicks = sum(dateRangeMetrics.clicks);
       var conversions = sum(dateRangeMetrics.conversions);
-      var conversionRate = conversions / clicks;
-      $('.conversion-rate-widget .chart-summary-metric').text((conversionRate * 100).toFixed(2) + "%")
-      //_($('.clicks-widget .chart-summary-metric'))
-        //.zip([clicks])
-        //.map(function(pair) {
-          //$(pair[0]).text(pair[1]);
-        //});
+      var conversionRate = 100 * conversions / clicks;
+      $('.conversion-rate-widget .chart-summary-metric')
+        .text(conversionRate.toFixed(2) + "%");
     },
     metricsLabels: 'conversionRate'
   });
 
-  var google_ad_position_chart = createChart('.google-ad-position-chart', sparkLineDefaults, {
+  var adwordsAdPositionChart = createChart('.adwords-ad-position-chart', sparkLineDefaults, {
+    data: {
+      datasets: [
+        {
+          label: 'Average Ad Position',
+          data: []
+        }
+      ]
+    },
+    updateSummaryMetrics: function(dateRangeMetrics) {
+      var impressions = dateRangeMetrics.adwordsImpressions;
+      var averagePositions = dateRangeMetrics.adwordsAveragePosition;
+      var scaledImpressions = _.zip(impressions, averagePositions).map(function(pair) {
+        return pair[0] * pair[1];
+      });
+      var averagePosition = sum(scaledImpressions) / sum(impressions);
+      $('.adwords-ad-position-widget .chart-summary-metric')
+        .text(averagePosition.toFixed(2));
+    },
+    metricsLabels: 'adwordsAveragePosition'
+  });
+
+  var adwordsCostPerClickChart = createChart('.adwords-cpc-chart', sparkLineDefaults, {
+    data: {
+      datasets: [
+        {
+          label: 'Cost per Click',
+          data: []
+        }
+      ]
+    },
+    updateSummaryMetrics: function(dateRangeMetrics) {
+      var clicks = sum(dateRangeMetrics.adwordsClicks);
+      var cost = sum(dateRangeMetrics.adwordsCost);
+      var costPerClick = cost / clicks;
+      $('.adwords-cpc-widget .chart-summary-metric')
+        .text('$' + costPerClick.toFixed(2));
+    },
+    metricsLabels: 'adwordsAverageCostPerClick'
+  });
+
+  var adwordsClickThroughRateChart = createChart('.adwords-ctr-chart', sparkLineDefaults, {
+    data: {
+      datasets: [
+        {
+          label: 'Click Through Rate',
+          data: []
+        }
+      ]
+    },
+    updateSummaryMetrics: function(dateRangeMetrics) {
+      var clicks = sum(dateRangeMetrics.adwordsClicks);
+      var impressions = sum(dateRangeMetrics.adwordsImpressions);
+      var clickThroughRate = 100 * clicks / impressions;
+      $('.adwords-ctr-widget .chart-summary-metric')
+        .text(clickThroughRate.toFixed(2) + "%");
+    },
+    metricsLabels: 'adwordsClickThroughRate'
+  });
+
+  var adwordsConversionRateChart = createChart('.adwords-conversion-rate-chart',
+                                               sparkLineDefaults, {
+    data: {
+      datasets: [
+        {
+          label: 'Conversion Rate',
+          data: []
+        }
+      ]
+    },
+    updateSummaryMetrics: function(dateRangeMetrics) {
+      var clicks = sum(dateRangeMetrics.adwordsClicks);
+      var formConversions = sum(dateRangeMetrics.adwordsFormConversions);
+      var conversionRate = 100 * formConversions / clicks;
+      $('.adwords-conversion-rate-widget .chart-summary-metric')
+        .text(conversionRate.toFixed(2) + "%");
+    },
+    metricsLabels: 'adwordsConversionRate'
+  });
+
+  var bingadsAdPositionChart = createChart('.bingads-ad-position-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
           label: 'Ad Position',
-          data: [ 1.2, 1.3, 1.3, 1.1, 1, 1.3,
-                  1.4, 1, 1.6, 1.7, 1.3, 1.3,
-                  1.2, 1.5, 1.1, 1, 1.3, 1.3,
-                  1.2, 1.2, 1.2, 1.2, 1.3, 1.3,
-                  1.6, 1.1, 1.4, 1.1, 1.3, 1.2, 1.3 ]
+          data: []
         }
       ]
-    }
+    },
+    updateSummaryMetrics: function(dateRangeMetrics) {
+      var impressions = dateRangeMetrics.bingadsImpressions;
+      var averagePositions = dateRangeMetrics.bingadsAveragePosition;
+      var scaledImpressions = _.zip(impressions, averagePositions).map(function(pair) {
+        return pair[0] * pair[1];
+      });
+      var averagePosition = sum(scaledImpressions) / sum(impressions);
+      $('.bingads-ad-position-widget .chart-summary-metric')
+        .text(averagePosition.toFixed(2));
+    },
+    metricsLabels: 'bingadsAveragePosition'
   });
 
-  var google_cpc_chart = createChart('.google-cpc-chart', sparkLineDefaults, {
+  var bingadsCostPerClickChart = createChart('.bingads-cpc-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
           label: 'Cost per Click',
-          data: [ 1.2, 1.3, 1.3, 1.1, 1, 1.3,
-                  1.4, 1, 1.6, 1.7, 1.3, 1.3,
-                  1.2, 1.5, 1.1, 1, 1.3, 1.3,
-                  1.2, 1.2, 1.2, 1.2, 1.3, 1.3,
-                  1.6, 1.1, 1.4, 1.1, 1.3, 1.2, 1.3 ]
+          data: []
         }
       ]
-    }
+    },
+    updateSummaryMetrics: function(dateRangeMetrics) {
+      var clicks = sum(dateRangeMetrics.bingadsClicks);
+      var cost = sum(dateRangeMetrics.bingadsCost);
+      var costPerClick = cost / clicks;
+      $('.bingads-cpc-widget .chart-summary-metric')
+        .text('$' + costPerClick.toFixed(2));
+    },
+    metricsLabels: 'bingadsAverageCostPerClick'
   });
 
-  var google_conversion_rate_chart = createChart('.google-conversion-rate-chart',
-                                                  sparkLineDefaults, {
+  var bingadsClickThroughRateChart = createChart('.bingads-ctr-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
           label: 'Cost per Click',
-          data: [ 1.2, 1.3, 1.3, 1.1, 1, 1.3,
-                  1.4, 1, 1.6, 1.7, 1.3, 1.3,
-                  1.2, 1.5, 1.1, 1, 1.3, 1.3,
-                  1.2, 1.2, 1.2, 1.2, 1.3, 1.3,
-                  1.6, 1.1, 1.4, 1.1, 1.3, 1.2, 1.3 ]
+          data: []
         }
       ]
-    }
+    },
+    updateSummaryMetrics: function(dateRangeMetrics) {
+      var clicks = sum(dateRangeMetrics.bingadsClicks);
+      var impressions = sum(dateRangeMetrics.bingadsImpressions);
+      var clickThroughRate = 100 * clicks / impressions;
+      $('.bingads-ctr-widget .chart-summary-metric')
+        .text(clickThroughRate.toFixed(2) + "%");
+    },
+    metricsLabels: 'bingadsClickThroughRate'
   });
 
-  var google_ctr_chart = createChart('.google-ctr-chart', sparkLineDefaults, {
+  var bingadsConversionRateChart = createChart('.bingads-conversion-rate-chart',
+                                               sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Cost per Click',
-          data: [ 1.2, 1.3, 1.3, 1.1, 1, 1.3,
-                  1.4, 1, 1.6, 1.7, 1.3, 1.3,
-                  1.2, 1.5, 1.1, 1, 1.3, 1.3,
-                  1.2, 1.2, 1.2, 1.2, 1.3, 1.3,
-                  1.6, 1.1, 1.4, 1.1, 1.3, 1.2, 1.3 ]
+          label: 'Conversion Rate',
+          data: []
         }
       ]
-    }
+    },
+    updateSummaryMetrics: function(dateRangeMetrics) {
+      var clicks = sum(dateRangeMetrics.bingadsClicks);
+      var formConversions = sum(dateRangeMetrics.bingadsFormConversions);
+      var conversionRate = 100 * formConversions / clicks;
+      $('.bingads-conversion-rate-widget .chart-summary-metric')
+        .text(conversionRate.toFixed(2) + "%");
+    },
+    metricsLabels: 'bingadsConversionRate'
   });
 
-  var bing_ad_position_chart = createChart('.bing-ad-position-chart', sparkLineDefaults, {
-    data: {
-      datasets: [
-        {
-          label: 'Ad Position',
-          data: [ 1.2, 1.3, 1.3, 1.1, 1, 1.3,
-                  1.4, 1, 1.6, 1.7, 1.3, 1.3,
-                  1.2, 1.5, 1.1, 1, 1.3, 1.3,
-                  1.2, 1.2, 1.2, 1.2, 1.3, 1.3,
-                  1.6, 1.1, 1.4, 1.1, 1.3, 1.2, 1.3 ]
-        }
-      ]
-    }
-  });
+  // -- END CHARTS SETUP
 
-  var bing_cpc_chart = createChart('.bing-cpc-chart', sparkLineDefaults, {
-    data: {
-      datasets: [
-        {
-          label: 'Cost per Click',
-          data: [ 1.2, 1.3, 1.3, 1.1, 1, 1.3,
-                  1.4, 1, 1.6, 1.7, 1.3, 1.3,
-                  1.2, 1.5, 1.1, 1, 1.3, 1.3,
-                  1.2, 1.2, 1.2, 1.2, 1.3, 1.3,
-                  1.6, 1.1, 1.4, 1.1, 1.3, 1.2, 1.3 ]
-        }
-      ]
-    }
-  });
-
-  var bing_conversion_rate_chart = createChart('.bing-conversion-rate-chart',
-                                                  sparkLineDefaults, {
-    data: {
-      datasets: [
-        {
-          label: 'Cost per Click',
-          data: [ 1.2, 1.3, 1.3, 1.1, 1, 1.3,
-                  1.4, 1, 1.6, 1.7, 1.3, 1.3,
-                  1.2, 1.5, 1.1, 1, 1.3, 1.3,
-                  1.2, 1.2, 1.2, 1.2, 1.3, 1.3,
-                  1.6, 1.1, 1.4, 1.1, 1.3, 1.2, 1.3 ]
-        }
-      ]
-    }
-  });
-
-  var bing_ctr_chart = createChart('.bing-ctr-chart', sparkLineDefaults, {
-    data: {
-      datasets: [
-        {
-          label: 'Cost per Click',
-          data: [ 1.2, 1.3, 1.3, 1.1, 1, 1.3,
-                  1.4, 1, 1.6, 1.7, 1.3, 1.3,
-                  1.2, 1.5, 1.1, 1, 1.3, 1.3,
-                  1.2, 1.2, 1.2, 1.2, 1.3, 1.3,
-                  1.6, 1.1, 1.4, 1.1, 1.3, 1.2, 1.3 ]
-        }
-      ]
-    }
-  });
 
   // Updates the initialized, but empty charts with the initial, pre-selected date range
   dateRangePickerCallback(dateRangeInitialStartDate, dateRangeInitialEndDate);
-
-  // Sets up Marchex Call Log table
-  $("#marchex_calls").dataTable({
-    data: Icarus.marchexCalls,
-    deferRender: true,
-    lengthChange: false,
-    //pageLength: 20,
-    order: [[4, 'desc']],
-    scrollX: false,
-    autoWidth: false,
-    responsive: {
-      details: {
-        type: 'inline',
-        //target: 0
-      }
-    },
-    columnDefs: [
-      {
-        targets: 0,
-        sClass: 'text-nowrap',
-        responsivePriority: 0,
-        render: function(data, type, row) {
-          if (data) {
-            return data;
-          } else {
-            return "(No name on file)";
-          }
-        }
-      },
-      {
-        targets: 1,
-        sClass: 'text-nowrap',
-        responsivePriority: 4,
-        render: function(data, type, row) {
-          if (data.length == 10) {
-            return '('+data.slice(0,3)+') '+data.slice(3,6)+'-'+data.slice(6);
-          } else {
-            return data;
-          }
-        }
-      },
-      {
-        targets: 2,
-        sClass: 'text-nowrap',
-        responsivePriority: 3,
-      },
-      {
-        targets: 3,
-        sClass: 'text-nowrap',
-        responsivePriority: 5,
-      },
-      {
-        targets: 4,
-        sClass: 'text-nowrap',
-        responsivePriority: 1,
-        render: function(data, type, row) {
-          return moment(data).format('MMM Do, H:mm a');
-        }
-      },
-      {
-        targets: 5,
-        responsivePriority: 2,
-      },
-      {
-        targets: 6,
-        responsivePriority: 6,
-      },
-      {
-        targets: 7,
-        sClass: 'text-xs-center',
-        responsivePriority: 7,
-        render: function(data, type, row) {
-          if (data) {
-            return '<audio controls src="'+data+'" type="audio/mp3" preload="none">';
-          } else {
-            return "No Recording";
-          }
-        }
-      }
-    ]
-  });
 
 }());

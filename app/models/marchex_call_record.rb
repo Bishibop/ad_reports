@@ -7,16 +7,16 @@ class MarchexCallRecord < ActiveRecord::Base
   # this should be on the client as well
   def self.get_client_records_for_period(client, start_datetime, end_datetime)
 
-    puts "Requesting call records..."
+    puts "\nRequesting Marchex Call Records for #{client.name} - #{start_datetime} to #{end_datetime}"
     response = self.api_request('call.search',
                                 [ client.marchex_account_id,
                                   { start: start_datetime.iso8601,
                                     end: end_datetime.iso8601,
                                     exact_times: true,
                                     extended: true } ] )
-    puts "API request complete."
+    puts "\tAPI request complete."
 
-    puts "Initializing records..."
+    puts "\tInitializing records..."
     call_records = response.parsed_response["result"].map do |api_result|
       call_record = client.marchex_call_records
                      .where(marchex_call_id: api_result['call_id'])
@@ -32,15 +32,16 @@ class MarchexCallRecord < ActiveRecord::Base
       call_record.status =              api_result['call_status']
       call_record
     end
-    puts "Records initialized."
+    puts "\tRecords initialized."
 
     self.get_and_assign_playback_urls(call_records)
 
-    puts "Saving records..."
+    puts "\tSaving records..."
     self.transaction do
       call_records.each(&:save!)
     end
-    puts "Records saved."
+    puts "\tRecords saved."
+    puts "Marchex Call Records request complete.\n\n"
     client
   end
 
@@ -58,10 +59,10 @@ class MarchexCallRecord < ActiveRecord::Base
   def self.get_and_assign_playback_urls(call_records)
 
     counter = 1
-    puts "Slicing records."
+    puts "\tSlicing records."
     call_records.map(&:marchex_call_id).each_slice(150) do |records_slice|
 
-      puts "Making playback-url API request for slice #{counter}..."
+      puts "\tMaking playback-url API request for slice #{counter}..."
       response = self.api_request('call.audio.url', [records_slice, 'mp3'])
 
       response.parsed_response['result'].each do |api_result|
@@ -70,7 +71,7 @@ class MarchexCallRecord < ActiveRecord::Base
         end
         selected_record.playback_url = api_result['url']
       end
-      puts "Completed playback-url API request for slice #{counter}."
+      puts "\tCompleted playback-url API request for slice #{counter}."
 
       counter += 1
 

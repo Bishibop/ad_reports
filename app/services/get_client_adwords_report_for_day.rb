@@ -85,8 +85,10 @@ class GetClientAdwordsReportForDay
     # even make the request to google if It already has a report for the day
     existing_report = client.adwords_reports.find_by(date: date)
     if existing_report.nil?
+      puts "\tCreating Adwords Report for #{client.name} - #{date}"
       client.adwords_reports.create(date: date, **report_attributes)
     else
+      puts "\tUpdating Adwords Report for #{client.name} - #{date}"
       # Why are you updating anything here? If it already exists then it's not
       # going to change, right? BUT IT WILL. IF YOU GET A NEW REPORT FOR THE DAY OR
       # FOR A PREVIOUS DAY THAT YOU GOT HALFWAY THOUGH THAT DAY

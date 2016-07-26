@@ -9,6 +9,7 @@ class BingadsReport < ActiveRecord::Base
                    :click_through_rate,
                    :clicks,
                    :form_conversions,
+                   :conversion_rate,
                    :average_cost_per_click,
                    :average_position ]
 
