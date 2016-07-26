@@ -5,7 +5,11 @@ namespace :reports do
 
     # Some kind of hack to allow for argments
     ARGV.each {|a| task a.to_sym do ; end}
-    number_of_days = ARGV[1].to_i - 1
+    if ARGV[1]
+      number_of_days = ARGV[1].to_i - 1
+    else
+      number_of_days = 1
+    end
 
     GetClientAdwordsReportsForDateRange.call(mcgeorges,
                                              number_of_days.days.ago.to_date,
