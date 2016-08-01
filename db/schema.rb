@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160719155005) do
+ActiveRecord::Schema.define(version: 20160730082244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "adwords_reports", force: :cascade do |t|
     t.integer  "cost"
@@ -33,6 +34,8 @@ ActiveRecord::Schema.define(version: 20160719155005) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.date     "date",                    null: false
+    t.hstore   "keyword_conversions"
+    t.hstore   "query_clicks"
   end
 
   add_index "adwords_reports", ["client_id"], name: "index_adwords_reports_on_client_id", using: :btree

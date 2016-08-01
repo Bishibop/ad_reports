@@ -8,7 +8,7 @@ class ApiPermissionsController < ApplicationController
   end
 
   def index
-    if @current_user.is_admin?
+    if @current_user.admin?
       @customer = Customer.find(params[:customer_id])
       @adwords_initiate_url = customer_adwords_initiate_url(@customer)
       @bing_ads_initiate_url = ENV['BING_API_GRANT_URL'] + '/admin/' + @customer.id.to_s
@@ -22,7 +22,7 @@ class ApiPermissionsController < ApplicationController
 
   def adwords_initiate
 
-    session[:adwords_registration_customer_id] = params[:customer_id] if @current_user.is_admin?
+    session[:adwords_registration_customer_id] = params[:customer_id] if @current_user.admin?
 
     # This is totally the wrong way to get the oauth_url.
     # With Bing, there was just a method you used to explicitly request that
@@ -36,7 +36,7 @@ class ApiPermissionsController < ApplicationController
 
   def adwords_callback
 
-    if @current_user.is_admin?
+    if @current_user.admin?
       @customer = Customer.find(session[:adwords_registration_customer_id])
       session[:adwords_registration_customer_id] = nil
       redirect_path = customer_api_permissions_path(@customer)

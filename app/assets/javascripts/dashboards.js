@@ -171,7 +171,7 @@
   marchexCallTable.startDate = dateRangeInitialStartDate;
   marchexCallTable.endDate = dateRangeInitialEndDate;
 
-  var dateRangePickerCallback = function(startDate, endDate, label) {
+  var onDatePick = function(startDate, endDate, label) {
     var selectedMetrics = selectMetricsForDateRange(startDate, endDate);
     var periodLabels = generatePeriodLabels(startDate, endDate);
     _(charts).map(function(chart) {
@@ -184,6 +184,7 @@
      // a pause in scroll responsiveness though. Call table really should be
      // ajaxed rather than being passed all the call records.
      _.delay(marchexCallTable.draw, 500);
+     getAdNetworkMetrics(startDate, endDate);
   };
 
   $('input.date-picker').daterangepicker({
@@ -213,7 +214,7 @@
 
       "Year to date":   [ moment().startOf('year'), moment() ]
     }
-  }, dateRangePickerCallback);
+  }, onDatePick);
 
   // -- END DATEPICKER SETUP
 
@@ -678,7 +679,50 @@
   // -- END CHARTS SETUP
 
 
+  // -- BEGIN AD NETWORK SETUP
+
+  var updateAdNetwork = function(searchMappings, selector) {
+    var countTotal = sum(_.values(searchMappings));
+    _($(selector)).zip(_.pairs(searchMappings)).map(function(pair, index) {
+      var $spans = $(pair[0]).find('span');
+      var kqStr, count;
+      // Accounts for when there are fewer than 6 keyword mappings.
+      if (pair[1] !== undefined) {
+        kqStr = index + 1 + ". " + pair[1][0];
+        count = pair[1][1];
+      } else {
+        kqStr = '-----';
+        count = 0;
+      }
+      // denominator + 0.1 is to account for 0/0 -> NaN.
+      $($spans[0]).css('width', (100 * count/(countTotal + 0.1)).toFixed(0) + "%");
+      $($spans[1]).text(count);
+      $($spans[2]).text(kqStr);
+    });
+  };
+
+  var getAdNetworkMetrics = function(startDate, endDate) {
+    var base_url = window.location.href;
+    if (base_url.slice(-1) === '\\') {
+      base_url = base_url.slice(0, -1);
+    }
+    var resource_url = base_url
+      + "/ad_network_metrics?start="
+      + startDate.format("D-M-YYYY")
+      + "&end="
+      + endDate.format("D-M-YYYY");
+
+    $.get(resource_url, function(adNetworkMetrics) {
+      updateAdNetwork(adNetworkMetrics.adwordsKeywordConversions,
+                      '.adwords-ad-network .keyword-conversions .list-group-item');
+      updateAdNetwork(adNetworkMetrics.adwordsQueryClicks,
+                      '.adwords-ad-network .query-clicks .list-group-item');
+    });
+  }
+
+  // -- END AD NETWORK SETUP
+
   // Updates the initialized, but empty charts with the initial, pre-selected date range
-  dateRangePickerCallback(dateRangeInitialStartDate, dateRangeInitialEndDate);
+  onDatePick(dateRangeInitialStartDate, dateRangeInitialEndDate);
 
 }());

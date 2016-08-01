@@ -9,7 +9,7 @@ class ClientsController < ApplicationController
   end
 
   def index
-    @clients = if @current_user.is_admin?
+    @clients = if @current_user.admin?
                  Client.all
                else
                  @current_user.customer.clients
@@ -17,7 +17,7 @@ class ClientsController < ApplicationController
   end
 
   def show
-    if @current_user.is_admin?
+    if @current_user.admin?
       @client = Client.find(params[:id])
       @customer = @client.customer
     else
@@ -28,7 +28,7 @@ class ClientsController < ApplicationController
   end
 
   def new
-    if @current_user.is_admin?
+    if @current_user.admin?
       @customer = Customer.find(params[:customer_id])
       @client = @customer.clients.build
     else
@@ -37,7 +37,7 @@ class ClientsController < ApplicationController
   end
 
   def create
-    @client = if @current_user.is_admin?
+    @client = if @current_user.admin?
                 Customer.find(params[:customer_id]).clients.build(client_params)
               else
                 @current_user.customer.clients.build(client_params)
@@ -52,7 +52,7 @@ class ClientsController < ApplicationController
   end
 
   def edit
-    if @current_user.is_admin?
+    if @current_user.admin?
       @client = Client.find(params[:id])
       @customer = @client.customer
     else
@@ -63,7 +63,7 @@ class ClientsController < ApplicationController
   end
 
   def update
-    @client = if @current_user.is_admin?
+    @client = if @current_user.admin?
                 Client.find(params[:id])
               else
                 @current_user.customer.clients.find(params[:id])
@@ -79,7 +79,7 @@ class ClientsController < ApplicationController
   end
 
   def destroy
-    @client = if @current_user.is_admin?
+    @client = if @current_user.admin?
                 Client.find(params[:id])
               else
                 @current_user.customer.clients.find(params[:id])
@@ -87,7 +87,7 @@ class ClientsController < ApplicationController
 
     @client.destroy
 
-    if @current_user.is_admin?
+    if @current_user.admin?
       redirect_to @client.customer
     else
       redirect_to clients_path

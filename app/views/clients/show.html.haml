@@ -4,7 +4,7 @@
 
 %p= link_to 'Edit client', edit_client_path
 %p= link_to 'Delete client', @client, method: :delete, data: { confirm: "Are you sure you would like to delete \"#{@client.name}\" from your client list?" }
-- if @current_user.is_admin?
+- if @current_user.admin?
   %p= link_to "Back to #{@customer.name}", customer_path(@customer)
   %p= link_to "Back to all clients", clients_path
 - else

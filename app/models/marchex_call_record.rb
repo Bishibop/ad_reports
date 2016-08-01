@@ -4,6 +4,8 @@ class MarchexCallRecord < ActiveRecord::Base
   validates_presence_of :marchex_call_id
   validates_uniqueness_of :marchex_call_id, scope: :client_id
 
+  default_scope { order(:start_time) }
+
   # this should be on the client as well
   def self.get_client_records_for_period(client, start_datetime, end_datetime)
 

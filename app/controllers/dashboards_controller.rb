@@ -4,18 +4,7 @@ class DashboardsController < ApplicationController
 
   def show
 
-    # this should be pushed into the user class. something like
-    # @current_user.active_client. Or maybe #role_based_client. Would be great if
-    # this works the same across controllers. Otherwise...meh.
-    @client = if @current_user.is_admin?
-                Client.find(params[:client_id])
-              elsif @current_user.is_customer?
-                @current_user.customer.clients.find(params[:client_id])
-              elsif @current_user.is_client?
-                @current_user.client
-              else
-                #Do nothing
-              end
+    @client = @current_user.current_client(params)
 
     # Get your ad reports
     dashboard_date_range = 1.year.ago.ago(1.day).to_date..Date.today
@@ -127,4 +116,9 @@ class DashboardsController < ApplicationController
     render :show
   end
 
+  def ad_network_metrics
+    @client = @current_user.current_client(params)
+    dashboard_date_range = Date.parse(params[:start])..Date.parse(params[:end])
+    render json: @client.adwords_reports.top_ad_network_metrics(6, dashboard_date_range)
+  end
 end

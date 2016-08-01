@@ -4,6 +4,8 @@ class BingadsReport < ActiveRecord::Base
   validates :date, uniqueness: true
   validates :date, presence: true
 
+  default_scope { order(:date) }
+
   METRIC_NAMES = [ :cost,
                    :impressions,
                    :click_through_rate,

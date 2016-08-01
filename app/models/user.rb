@@ -8,15 +8,15 @@ class User
     @user_info['extra']['raw_info']['role']
   end
 
-  def is_admin?
+  def admin?
     self.role == 'admin'
   end
 
-  def is_customer?
+  def customer?
     self.role == 'customer'
   end
 
-  def is_client?
+  def client?
     self.role == 'client'
   end
 
@@ -25,15 +25,19 @@ class User
   end
 
   def customer
-    if self.is_customer?
+    if self.customer?
       Customer.find(@user_info['extra']['raw_info']['customerId'])
     else
       raise 'Access Error'
     end
   end
 
-  def client
-    if self.is_client?
+  def current_client(params)
+    if self.admin?
+      Client.find(params[:client_id])
+    elsif self.customer?
+      self.customer.clients.find(params[:client_id])
+    elsif self.client?
       Client.find(@user_info['extra']['raw_info']['clientId'])
     else
       raise 'Access Error'

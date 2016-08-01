@@ -1,4 +1,4 @@
-- if @current_user.is_admin? && params[:action] == 'new'
+- if @current_user.admin? && params[:action] == 'new'
   = simple_form_for [@customer, @client] do |f|
     = f.input :name
     = f.input :login_domain
