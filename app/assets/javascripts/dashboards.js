@@ -184,7 +184,7 @@
      // a pause in scroll responsiveness though. Call table really should be
      // ajaxed rather than being passed all the call records.
      _.delay(marchexCallTable.draw, 500);
-     getAdNetworkMetrics(startDate, endDate);
+     getSearchMetrics(startDate, endDate);
   };
 
   $('input.date-picker').daterangepicker({
@@ -696,12 +696,16 @@
       }
       // denominator + 0.1 is to account for 0/0 -> NaN.
       $($spans[0]).css('width', (100 * count/(countTotal + 0.1)).toFixed(0) + "%");
-      $($spans[1]).text(count);
+      if (count === 0) {
+        $($spans[1]).text('-');
+      } else {
+        $($spans[1]).text(count);
+      }
       $($spans[2]).text(kqStr);
     });
   };
 
-  var getAdNetworkMetrics = function(startDate, endDate) {
+  var getSearchMetrics = function(startDate, endDate) {
     var base_url = window.location.href;
     if (base_url.slice(-1) === '\\') {
       base_url = base_url.slice(0, -1);
