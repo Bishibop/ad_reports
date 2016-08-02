@@ -18,7 +18,7 @@ namespace :reports do
     AdwordsReportRequest.call(mcgeorges,
                               [:keywords, :queries],
                               mcgeorges.adwords_reports.first.date,
-                              Date.today).call
+                              Date.today)
 
   end
 
