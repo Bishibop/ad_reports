@@ -16,7 +16,7 @@ namespace :reports do
   task request_all_keyword_conversions: :environment do
     puts
     AdwordsReportRequest.new(mcgeorges,
-                             [:keywords],
+                             [:keywords, :queries],
                              mcgeorges.adwords_reports.first.date,
                              Date.today).call
 
