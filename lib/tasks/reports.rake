@@ -13,12 +13,12 @@ namespace :reports do
   end
 
   desc "Get keyword_conversions for all Adwords reports."
-  task request_all_keyword_conversions: :environment do
+  task request_all_search_metrics: :environment do
     puts
-    AdwordsReportRequest.new(mcgeorges,
-                             [:keywords, :queries],
-                             mcgeorges.adwords_reports.first.date,
-                             Date.today).call
+    AdwordsReportRequest.call(mcgeorges,
+                              [:keywords, :queries],
+                              mcgeorges.adwords_reports.first.date,
+                              Date.today).call
 
   end
 
