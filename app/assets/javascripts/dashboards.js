@@ -681,7 +681,7 @@
 
   // -- BEGIN AD NETWORK SETUP
 
-  var updateAdNetwork = function(searchMappings, selector) {
+  var updateSearchMetrics = function(searchMappings, selector) {
     var countTotal = sum(_.values(searchMappings));
     _($(selector)).zip(_.pairs(searchMappings)).map(function(pair, index) {
       var $spans = $(pair[0]).find('span');
@@ -695,6 +695,7 @@
         count = 0;
       }
       // denominator + 0.1 is to account for 0/0 -> NaN.
+      console.log(count, countTotal);
       $($spans[0]).css('width', (100 * count/(countTotal + 0.1)).toFixed(0) + "%");
       if (count === 0) {
         $($spans[1]).text('-');
@@ -707,20 +708,22 @@
 
   var getSearchMetrics = function(startDate, endDate) {
     var base_url = window.location.href;
-    if (base_url.slice(-1) === '\\') {
+    if (base_url.slice(-1) === '/') {
       base_url = base_url.slice(0, -1);
     }
     var resource_url = base_url
-      + "/ad_network_metrics?start="
+      + "/search_metrics?start="
       + startDate.format("D-M-YYYY")
       + "&end="
       + endDate.format("D-M-YYYY");
 
-    $.get(resource_url, function(adNetworkMetrics) {
-      updateAdNetwork(adNetworkMetrics.adwordsKeywordConversions,
-                      '.adwords-ad-network .keyword-conversions .list-group-item');
-      updateAdNetwork(adNetworkMetrics.adwordsQueryClicks,
-                      '.adwords-ad-network .query-clicks .list-group-item');
+    $.get(resource_url, function(searchMetrics) {
+      updateSearchMetrics(searchMetrics.adwordsKeywordConversions,
+                          '.adwords-ad-network .keyword-conversions .list-group-item');
+      updateSearchMetrics(searchMetrics.adwordsQueryClicks,
+                          '.adwords-ad-network .query-clicks .list-group-item');
+      updateSearchMetrics(searchMetrics.bingadsQueryClicks,
+                          '.bingads-ad-network .query-clicks .list-group-item');
     });
   }
 

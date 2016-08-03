@@ -116,9 +116,9 @@ class DashboardsController < ApplicationController
     render :show
   end
 
-  def ad_network_metrics
+  def search_metrics
     @client = @current_user.current_client(params)
     dashboard_date_range = Date.parse(params[:start])..Date.parse(params[:end])
-    render json: @client.adwords_reports.top_ad_network_metrics(6, dashboard_date_range)
+    render json: @client.top_search_metrics(6, dashboard_date_range)
   end
 end

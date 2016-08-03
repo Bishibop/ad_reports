@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :clients, except: [:new, :create] do
     constraints Roles.new(:admin, :customer) do
       get '/dashboard' => "dashboards#show"
-      get '/dashboard/ad_network_metrics' => "dashboards#ad_network_metrics"
+      get '/dashboard/search_metrics' => "dashboards#search_metrics"
     end
   end
 
@@ -33,7 +33,7 @@ Rails.application.routes.draw do
 
   constraints Roles.new(:client) do
     get '/dashboard' => "dashboards#show"
-    get '/dashboard/ad_network_metrics' => "dashboards#ad_network_metrics"
+    get '/dashboard/search_metrics' => "dashboards#search_metrics"
   end
 
   get '/dashboard_demo' => "dashboards#demo"

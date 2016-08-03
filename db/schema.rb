@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160730082244) do
+ActiveRecord::Schema.define(version: 20160803081050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20160730082244) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.date     "date",                   null: false
+    t.hstore   "query_clicks"
   end
 
   add_index "bingads_reports", ["client_id"], name: "index_bingads_reports_on_client_id", using: :btree
