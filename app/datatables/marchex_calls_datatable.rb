@@ -4,8 +4,6 @@ class MarchexCallsDatatable
   def initialize(view, client)
     @view = view
     @client = client
-    puts "various params data"
-    puts params
   end
 
   def as_json(options = {})
@@ -45,6 +43,7 @@ private
                        .in_time_zone
                        .end_of_day
 
+      puts ["TIMES", start_time, end_time]
       @client.marchex_call_records.where(start_time: start_time..end_time)
                                   .reorder("#{sort_column} #{sort_direction}")
                                   .page(page)

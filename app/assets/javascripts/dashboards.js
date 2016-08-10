@@ -176,7 +176,6 @@
      });
     marchexCallTable.startDate = startDate;
     marchexCallTable.endDate = endDate;
-    marchexCallTable.ajax.reload();
     // If you call these naked, it stutters the chart animation.
     // This lets that clear before filtering the dates.
     _.delay(function() {
