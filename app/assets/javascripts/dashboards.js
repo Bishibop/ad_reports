@@ -11,7 +11,7 @@
   // Sets up Marchex Call Log table
   var marchexCallTable = $('#marchex_calls').DataTable({
     pagingType: 'full_numbers',
-    processing: true,
+    //processing: true,
     serverSide: true,
     ajax: {
       url: $('#marchex_calls').data('source'),
@@ -36,8 +36,8 @@
     language: {
       processing: "Fetching calls...",
       emptyTable: "No call data available.",
-      info: "Showing _START_ to _END_ of _TOTAL_ calls.",
-      infoEmpty: "Showing 0 to 0 of 0 calls.",
+      info: "Showing _START_ to _END_ of _TOTAL_ calls",
+      infoEmpty: "Showing 0 to 0 of 0 calls",
       infoFiltered: "(filtered from _MAX_ total calls)."
     },
     columnDefs: [
