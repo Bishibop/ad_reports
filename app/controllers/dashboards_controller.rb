@@ -11,20 +11,11 @@ class DashboardsController < ApplicationController
     adwords_reports = @client.adwords_reports.where(date: dashboard_date_range)
     bingads_reports = @client.bingads_reports.where(date: dashboard_date_range)
     # All Calls
-    @marchex_calls = @client.marchex_call_records.pluck(:caller_name,
-                                                        :phone_number,
-                                                        :campaign,
-                                                        :group_name,
-                                                        :start_time,
-                                                        :pretty_duration,
-                                                        :status,
-                                                        :playback_url)
+    @marchex_calls = @client.marchex_call_records.pluck(:start_time)
 
-    @marchex_calls.map! do |record|
-      record[4] = record[4].in_time_zone("Eastern Time (US & Canada)")
-      record
+    grouped_marchex_calls = @marchex_calls.group_by do |record|
+      record.in_time_zone("Eastern Time (US & Canada)").to_date
     end
-    grouped_marchex_calls = @marchex_calls.group_by{ |record| record[4].to_date }
 
     # Transform those reports into metrics hashes
     adwords_metrics = AdwordsReport.metric_names.inject({}) do |memo, name|

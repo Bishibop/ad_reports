@@ -9,18 +9,28 @@
   // -- BEGIN CALL TABLE SETUP
 
   // Sets up Marchex Call Log table
-  var marchexCallTable = $("#marchex_calls").DataTable({
-    data: Icarus.marchexCalls,
+  var marchexCallTable = $('#marchex_calls').DataTable({
+    pagingType: 'full_numbers',
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: $('#marchex_calls').data('source'),
+      data: function( d ) {
+        d.startDate = marchexCallTable.startDate.format("YYYY-M-D");
+        d.endDate = marchexCallTable.endDate.format("YYYY-M-D");
+      }
+    },
+    deferLoading: 0,
     deferRender: true,
     lengthChange: false,
-    //pageLength: 20,
+    pageLength: 20,
+    searching: false,
     order: [[4, 'desc']],
     scrollX: false,
     autoWidth: false,
     responsive: {
       details: {
-        type: 'inline',
-        //target: 0
+        type: 'inline'
       }
     },
     columnDefs: [
@@ -86,6 +96,7 @@
         targets: 7,
         sClass: 'text-xs-center',
         responsivePriority: 7,
+        orderable: false,
         render: function(data, type, row) {
           if (data) {
             return '<audio controls src="'+data+'" type="audio/mp3" preload="none">';
@@ -97,26 +108,12 @@
     ]
   });
 
-  // Date filter function. Slow.
-  $.fn.dataTable.ext.search.push(
-    function( settings, renderData, dataIndex, originalData ) {
-      var rowDateTime = moment(renderData[4]);
-      if ( rowDateTime.isAfter(marchexCallTable.startDate)
-           &&
-           rowDateTime.isBefore(marchexCallTable.endDate.endOf('day')) )
-        return true;
-      else {
-        return false;
-      }
-    }
-  );
-
   // Have the call log only search on "enter"
-  $('#marchex_calls_filter input').unbind().on('keyup', function(e) {
-    if (e.keyCode === 13) {
-      marchexCallTable.search(this.value).draw();
-    }
-  });
+  //$('#marchex_calls_filter input').unbind().on('keyup', function(e) {
+    //if (e.keyCode === 13) {
+      //marchexCallTable.search(this.value).draw();
+    //}
+  //});
 
   // -- END CALL TABLE SETUP
 
@@ -177,14 +174,15 @@
     _(charts).map(function(chart) {
         updateChart(chart, selectedMetrics, periodLabels);
      });
-     marchexCallTable.startDate = startDate;
-     marchexCallTable.endDate = endDate;
-     // If you call #draw naked, it noticibly holds up the datepicker selection and
-     // chart animation. This lets that clear before filtering the dates. Still
-     // a pause in scroll responsiveness though. Call table really should be
-     // ajaxed rather than being passed all the call records.
-     _.delay(marchexCallTable.draw, 500);
-     getSearchMetrics(startDate, endDate);
+    marchexCallTable.startDate = startDate;
+    marchexCallTable.endDate = endDate;
+    marchexCallTable.ajax.reload();
+    // If you call these naked, it stutters the chart animation.
+    // This lets that clear before filtering the dates.
+    _.delay(function() {
+      requestSearchMetrics(startDate, endDate);
+      marchexCallTable.ajax.reload();
+    }, 500);
   };
 
   $('input.date-picker').daterangepicker({
@@ -695,7 +693,6 @@
         count = 0;
       }
       // denominator + 0.1 is to account for 0/0 -> NaN.
-      console.log(count, countTotal);
       $($spans[0]).css('width', (100 * count/(countTotal + 0.1)).toFixed(0) + "%");
       if (count === 0) {
         $($spans[1]).text('-');
@@ -706,7 +703,7 @@
     });
   };
 
-  var getSearchMetrics = function(startDate, endDate) {
+  var requestSearchMetrics = function(startDate, endDate) {
     var base_url = window.location.href;
     if (base_url.slice(-1) === '/') {
       base_url = base_url.slice(0, -1);

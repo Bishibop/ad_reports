@@ -1,15 +1,72 @@
 class MarchexCallsDatatable
-      #create  app/controllers/marchex_call_records_controller.rb
-      #invoke  haml
-      #create    app/views/marchex_call_records
-      #invoke  test_unit
-      #create    test/controllers/marchex_call_records_controller_test.rb
-      #invoke  helper
-      #create    app/helpers/marchex_call_records_helper.rb
-      #invoke    test_unit
-      #invoke  assets
-      #invoke    coffee
-      #create      app/assets/javascripts/marchex_call_records.coffee
-      #invoke    scss
-      #create      app/assets/stylesheets/marchex_call_records.scss
+  delegate :params, to: :@view
+
+  def initialize(view, client)
+    @view = view
+    @client = client
+    puts "various params data"
+    puts params
+  end
+
+  def as_json(options = {})
+    {
+      draw: params[:draw].to_i,
+      recordsTotal: @client.marchex_call_records.count,
+      recordsFiltered: marchex_calls.total_entries,
+      data: data
+    }
+  end
+
+private
+
+  def data
+    marchex_calls.map do |call|
+      [ call.caller_name,
+        call.phone_number,
+        call.campaign,
+        call.group_name,
+        call.start_time,
+        call.pretty_duration,
+        call.status,
+        call.playback_url ]
+    end
+  end
+
+  def marchex_calls
+    @marchex_calls ||= fetch_marchex_calls
+  end
+
+  def fetch_marchex_calls
+    Time.use_zone("Eastern Time (US & Canada)") do
+      start_time = Time.strptime(params[:startDate], "%F")
+                       .in_time_zone
+                       .beginning_of_day
+      end_time   = Time.strptime(params[:endDate], "%F")
+                       .in_time_zone
+                       .end_of_day
+
+      @client.marchex_call_records.where(start_time: start_time..end_time)
+                                  .reorder("#{sort_column} #{sort_direction}")
+                                  .page(page)
+                                  .per_page(per_page)
+    end
+  end
+
+  def page
+    params[:start].to_i/per_page + 1
+  end
+
+  def per_page
+    params[:length].to_i > 0 ? params[:length].to_i : 20
+  end
+
+  def sort_column
+    columns = %w[caller_name phone_number campaign group_name start_time duration status]
+    puts ["SORT COLUMN", params[:order]['0']['column'].to_i]
+    columns[params[:order]['0']['column'].to_i]
+  end
+
+  def sort_direction
+    params[:order]['0']['dir'] == 'desc' ? 'DESC' : 'ASC'
+  end
 end

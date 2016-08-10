@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  private
+private
 
   def assign_current_user_to_instance
     @current_user = current_user
