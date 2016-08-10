@@ -36,14 +36,13 @@ private
 
   def fetch_marchex_calls
     Time.use_zone("Eastern Time (US & Canada)") do
-      start_time = Time.strptime(params[:startDate], "%F")
+      start_time = Time.zone.parse(params[:startDate])
                        .in_time_zone
                        .beginning_of_day
-      end_time   = Time.strptime(params[:endDate], "%F")
+      end_time   = Time.zone.parse(params[:endDate])
                        .in_time_zone
                        .end_of_day
 
-      puts ["TIMES", start_time, end_time]
       @client.marchex_call_records.where(start_time: start_time..end_time)
                                   .reorder("#{sort_column} #{sort_direction}")
                                   .page(page)
@@ -61,7 +60,6 @@ private
 
   def sort_column
     columns = %w[caller_name phone_number campaign group_name start_time duration status]
-    puts ["SORT COLUMN", params[:order]['0']['column'].to_i]
     columns[params[:order]['0']['column'].to_i]
   end
 
