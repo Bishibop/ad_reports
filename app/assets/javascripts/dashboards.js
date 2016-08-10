@@ -33,6 +33,13 @@
         type: 'inline'
       }
     },
+    language: {
+      processing: "Fetching calls...",
+      emptyTable: "No call data available.",
+      info: "Showing _START_ to _END_ of _TOTAL_ calls.",
+      infoEmpty: "Showing 0 to 0 of 0 calls.",
+      infoFiltered: "(filtered from _MAX_ total calls)."
+    },
     columnDefs: [
       {
         targets: 0,

@@ -125,14 +125,9 @@
   }
 }
 
-/*.marchex-call-tracking {*/
-  /*.play-button.icon {*/
-    /*border-style: solid;*/
-    /*border-width: 1px;*/
-    /*border-radius: 3px;*/
-    /*padding-top: 4px;*/
-    /*padding-bottom: 4px;*/
-    /*padding-left: 10px;*/
-    /*padding-right: 8px;*/
-  /*}*/
-/*}*/
+.table-responsive .dataTables_wrapper .dataTables_processing {
+  top: 0%;
+  margin-top: 0px;
+  height: 100%;
+  padding-top: 200px;
+}
