@@ -23,7 +23,7 @@
     deferLoading: 0,
     deferRender: true,
     lengthChange: false,
-    pageLength: 20,
+    pageLength: 10,
     searching: false,
     order: [[4, 'desc']],
     scrollX: false,
