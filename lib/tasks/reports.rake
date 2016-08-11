@@ -3,13 +3,15 @@ namespace :reports do
   desc "Get adwords reports and marchex call records. To be run daily."
   task daily_request: :environment do
     puts
-    AdwordsReportRequest.call(mcgeorges,
-                              [:metrics, :keywords, :queries],
-                              3.days.ago.to_date,
-                              Date.today)
-    MarchexCallRecord.get_client_records_for_period(mcgeorges,
-                                                    3.days.ago.to_date,
-                                                    Date.today)
+    Time.use_zone("Eastern Time (US & Canada)") do
+      AdwordsReportRequest.call(mcgeorges,
+                                [:metrics, :keywords, :queries],
+                                9.days.ago.to_date,
+                                Time.zone.today)
+      MarchexCallRecord.get_client_records_for_period(mcgeorges,
+                                                      9.days.ago.to_date,
+                                                      Time.zone.today)
+    end
   end
 
   desc "Get keyword_conversions for all Adwords reports."
@@ -18,7 +20,7 @@ namespace :reports do
     AdwordsReportRequest.call(mcgeorges,
                               [:keywords, :queries],
                               mcgeorges.adwords_reports.first.date,
-                              Date.today)
+                              Time.zone.today)
 
   end
 

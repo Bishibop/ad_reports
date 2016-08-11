@@ -7,7 +7,9 @@ class DashboardsController < ApplicationController
     @client = @current_user.current_client(params)
 
     # Get your ad reports
-    dashboard_date_range = 1.year.ago.ago(1.day).to_date..Date.today
+    dashboard_date_range = Time.use_zone("Eastern Time (US & Canada)") do
+      1.year.ago.ago(1.day).to_date..Time.zone.today
+    end
     adwords_reports = @client.adwords_reports.where(date: dashboard_date_range)
     bingads_reports = @client.bingads_reports.where(date: dashboard_date_range)
     # All Calls
