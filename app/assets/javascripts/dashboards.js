@@ -675,7 +675,9 @@
       var formConversions = sum(dateRangeMetrics.bingadsFormConversions);
       var conversionRate = 100 * formConversions / clicks;
       $('.bingads-conversion-rate-widget .chart-summary-metric')
-        .text(conversionRate.toFixed(2) + "%");
+        .text("----");
+        // Replaced with dashes because conversion rate is always 0 for Bing
+        //.text(conversionRate.toFixed(2) + "%");
     },
     metricsLabels: 'bingadsConversionRate'
   });
