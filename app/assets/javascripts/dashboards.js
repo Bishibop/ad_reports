@@ -352,7 +352,8 @@
     options: {
       tooltips: {
         // Combines the tooltips of the different datasets (Forms and Calls)
-        mode: 'label'
+        mode: 'label',
+        caretSize: 10
       },
       scales: {
         xAxes: [{
