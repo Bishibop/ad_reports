@@ -3,7 +3,7 @@
     return _(numberArray).reduce(function(memo, num) {
       return memo + num;
     }, 0);
-  }
+  };
 
 
   // -- BEGIN CALL TABLE SETUP
@@ -365,7 +365,7 @@
       var callLeads = sum(this.data.datasets[0].data);
       var formLeads = sum(this.data.datasets[1].data);
       var totalLeads = callLeads + formLeads;
-      var $summaryMetrics = $('.leads-widget .chart-summary-metric')
+      var $summaryMetrics = $('.leads-widget .chart-summary-metric');
       $($summaryMetrics[0]).text(totalLeads);
       $($summaryMetrics[1]).text(formLeads);
       $($summaryMetrics[2]).text(callLeads);
@@ -407,7 +407,7 @@
       var cost = sum(this.data.datasets[0].data);
       var leads = sum(dateRangeMetrics.conversions);
       var costPerLead = cost / leads;
-      var $summaryMetrics = $('.cost-widget .chart-summary-metric')
+      var $summaryMetrics = $('.cost-widget .chart-summary-metric');
       $($summaryMetrics[0]).text('$' + cost.toFixed(2));
       $($summaryMetrics[1]).text('$' + costPerLead.toFixed(2));
     },
@@ -716,11 +716,11 @@
     if (base_url.slice(-1) === '/') {
       base_url = base_url.slice(0, -1);
     }
-    var resource_url = base_url
-      + "/search_metrics?start="
-      + startDate.format("D-M-YYYY")
-      + "&end="
-      + endDate.format("D-M-YYYY");
+    var resource_url = base_url +
+      "/search_metrics?start=" +
+      startDate.format("D-M-YYYY") +
+      "&end=" +
+      endDate.format("D-M-YYYY");
 
     $.get(resource_url, function(searchMetrics) {
       updateSearchMetrics(searchMetrics.adwordsKeywordConversions,
@@ -730,7 +730,7 @@
       updateSearchMetrics(searchMetrics.bingadsQueryClicks,
                           '.bingads-ad-network .query-clicks .list-group-item');
     });
-  }
+  };
 
   // -- END AD NETWORK SETUP
 
