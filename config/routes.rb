@@ -15,8 +15,8 @@ Rails.application.routes.draw do
     get '/api_permissions/adwords/initiate' => "api_permissions#adwords_initiate", as: :adwords_initiate
   end
 
-  resources :customers do
-    constraints Roles.new(:admin) do
+  constraints Roles.new(:admin) do
+    resources :customers do
       resources :clients, only: [:new, :create]
 
       get '/api_permissions' => "api_permissions#index"
@@ -24,17 +24,18 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :clients, except: [:new, :create] do
-    constraints Roles.new(:admin, :customer) do
+  constraints Roles.new(:admin, :customer) do
+    resources :clients, except: [:new, :create] do
       get '/dashboard' => "dashboards#show"
       get '/dashboard/search_metrics' => "dashboards#search_metrics"
+      get '/marchex_call_records' => "marchex_call_records#index"
     end
-    get '/marchex_call_records' => "marchex_call_records#index"
   end
 
   constraints Roles.new(:client) do
     get '/dashboard' => "dashboards#show"
     get '/dashboard/search_metrics' => "dashboards#search_metrics"
+    get '/marchex_call_records' => "marchex_call_records#index"
   end
 
   get '/dashboard_demo' => "dashboards#demo"
