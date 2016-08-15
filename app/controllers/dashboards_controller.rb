@@ -14,7 +14,7 @@ class DashboardsController < ApplicationController
     @marchex_calls = @client.marchex_call_records.pluck(:start_time)
 
     grouped_marchex_calls = @marchex_calls.group_by do |record|
-      record.in_time_zone("Eastern Time (US & Canada)").to_date
+      record.to_date
     end
 
     # Transform those reports into metrics hashes
