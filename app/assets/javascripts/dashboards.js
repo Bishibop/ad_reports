@@ -558,6 +558,15 @@
         }
       ]
     },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            min: 1
+          }
+        }]
+      }
+    },
     updateSummaryMetrics: function(dateRangeMetrics) {
       var impressions = dateRangeMetrics.adwordsImpressions;
       var averagePositions = dateRangeMetrics.adwordsAveragePosition;
@@ -637,6 +646,15 @@
           data: []
         }
       ]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            min: 1
+          }
+        }]
+      }
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
       var impressions = dateRangeMetrics.bingadsImpressions;
