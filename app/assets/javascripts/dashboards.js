@@ -562,6 +562,7 @@
       scales: {
         yAxes: [{
           ticks: {
+            suggestedMax: 2,
             min: 1
           }
         }]
@@ -651,6 +652,7 @@
       scales: {
         yAxes: [{
           ticks: {
+            suggestedMax: 2,
             min: 1
           }
         }]
