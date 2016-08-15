@@ -4,7 +4,7 @@ class DashboardsController < ApplicationController
 
   def show
 
-    @client = @current_user.current_client(params)
+    @client = @current_user.client(params)
 
     # Get your ad reports
     dashboard_date_range = 1.year.ago.ago(1.day).to_date..Time.zone.today
@@ -108,7 +108,7 @@ class DashboardsController < ApplicationController
   end
 
   def search_metrics
-    @client = @current_user.current_client(params)
+    @client = @current_user.client(params)
     dashboard_date_range = Date.parse(params[:start])..Date.parse(params[:end])
     render json: @client.top_search_metrics(6, dashboard_date_range)
   end

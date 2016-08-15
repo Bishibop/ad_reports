@@ -32,7 +32,7 @@ class User
     end
   end
 
-  def current_client(params)
+  def client(params)
     if self.admin?
       Client.find(params[:client_id])
     elsif self.customer?
