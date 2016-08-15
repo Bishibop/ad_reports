@@ -11,7 +11,7 @@ class Roles
 
   def matches?(request)
     user = current_user(request)
-    user.nil? || user.is_a?(*@roles)
+    user.nil? || user.authorized_as?(*@roles)
   end
 
   def current_user(request)

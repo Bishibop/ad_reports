@@ -20,7 +20,7 @@ class User
     self.role == 'client'
   end
 
-  def is_a? *roles
+  def authorized_as? *roles
     roles.map(&:to_s).include? self.role
   end
 

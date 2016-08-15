@@ -29,7 +29,7 @@ private
   end
 
   def authorized_for(*roles)
-    unless @current_user.is_a? *roles
+    unless @current_user.authorized_as?(*roles)
       render status: 403, text: "Access Denied"
     end
   end
