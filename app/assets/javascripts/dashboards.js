@@ -300,6 +300,28 @@
     }
   });
 
+  var funnelDefaults = $.extend(true, {}, lineDefaults, {
+    options: {
+      scales: {
+        xAxes: [{
+          ticks: {
+            userCallback: function(value, index, values) {
+              if (values.length > 25 && values.length < 33) {
+                if ((index + 1) % 2) {
+                  return value;
+                } else {
+                  // return nothing
+                }
+              } else {
+                return value;
+              }
+            }
+          }
+        }]
+      }
+    }
+  });
+
   var sparkLineDefaults = $.extend(true, {}, chartDefaults, {
     type: 'line',
     data: {
@@ -415,7 +437,7 @@
     metricsLabels: 'cost'
   });
 
-  var impressionsChart = createChart('.impressions-chart', lineDefaults, {
+  var impressionsChart = createChart('.impressions-chart', funnelDefaults, {
     data: {
       datasets: [
         {
@@ -442,7 +464,7 @@
     metricsLabels: 'impressions'
   });
 
-  var clickThroughRateChart = createChart('.click-through-rate-chart', lineDefaults, {
+  var clickThroughRateChart = createChart('.click-through-rate-chart', funnelDefaults, {
     data: {
       datasets: [
         {
@@ -479,7 +501,7 @@
     metricsLabels: 'clickThroughRate'
   });
 
-  var clicksChart = createChart('.clicks-chart', lineDefaults, {
+  var clicksChart = createChart('.clicks-chart', funnelDefaults, {
     data: {
       datasets: [
         {
@@ -495,7 +517,7 @@
     metricsLabels: 'clicks'
   });
 
-  var conversionRateChart = createChart('.conversion-rate-chart', lineDefaults, {
+  var conversionRateChart = createChart('.conversion-rate-chart', funnelDefaults, {
     data: {
       datasets: [
         {
