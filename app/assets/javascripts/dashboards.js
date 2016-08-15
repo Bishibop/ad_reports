@@ -719,9 +719,9 @@
     }
     var resource_url = base_url +
       "/search_metrics?start=" +
-      startDate.format("D-M-YYYY") +
+      startDate.format("YYYY-M-D") +
       "&end=" +
-      endDate.format("D-M-YYYY");
+      endDate.format("YYYY-M-D");
 
     $.get(resource_url, function(searchMetrics) {
       updateSearchMetrics(searchMetrics.adwordsKeywordConversions,
