@@ -6,11 +6,14 @@ class Roles
 
   #def matches?(request)
     #user = current_user(request)
-    #user.present? && user.is_a?(*@roles)
+    #user.present? && user.authorized_for?(*@roles)
   #end
 
   def matches?(request)
     user = current_user(request)
+    # We match on nil? to allow logged out users to match the url and then get
+    # bounced to authentication in the controller. Otherwise, they would just
+    # get a "no route" error for pages they should be able to go to.
     user.nil? || user.authorized_as?(*@roles)
   end
 

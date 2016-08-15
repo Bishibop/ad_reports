@@ -424,6 +424,17 @@
         }
       ]
     },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            userCallback: function(value, index, values) {
+              return ( value / 1000 ) + "k";
+            }
+          }
+        }]
+      }
+    },
     updateSummaryMetrics: function(dateRangeMetrics) {
       var impressions = sum(this.data.datasets[0].data);
       $('.impressions-widget .chart-summary-metric').text(impressions);
