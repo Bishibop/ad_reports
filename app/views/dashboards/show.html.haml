@@ -66,38 +66,42 @@
   .hr-divider.m-t-lg.m-b-md
     %h3.hr-divider-content.hr-divider-heading Funnel Metrics
   .row.statcards.funnel-metrics
-    .col-md-3.m-b-md
-      .statcard.impressions-widget
-        .p-a
-          %span.statcard-desc Impressions
-          %h2.statcard-number.chart-summary-metric 0
-        %canvas.dashboard-chart.ex-line-graph.impressions-chart{:width => "378",
-          :height => "94",
-          :style => "width: 189px; height: 47px;"}
-    .col-md-3.m-b-md
-      .statcard.click-through-rate-widget
-        .p-a
-          %span.statcard-desc Click Through Rate
-          %h2.statcard-number.chart-summary-metric 0.00%
-        %canvas.dashboard-chart.ex-line-graph.click-through-rate-chart{:width => "378",
-          :height => "94",
-          :style => "width: 189px; height: 47px;"}
-    .col-md-3.m-b-md
-      .statcard.clicks-widget
-        .p-a
-          %span.statcard-desc Clicks
-          %h2.statcard-number.chart-summary-metric 0
-        %canvas.dashboard-chart.ex-line-graph.clicks-chart{:width => "378",
-          :height => "94",
-          :style => "width: 189px; height: 47px;"}
-    .col-md-3.m-b-md
-      .statcard.conversion-rate-widget
-        .p-a
-          %span.statcard-desc Conversion Rate
-          %h2.statcard-number.chart-summary-metric 0.00%
-        %canvas.dashboard-chart.ex-line-graph.conversion-rate-chart{:width => "378",
-          :height => "94",
-          :style => "width: 189px; height: 47px;"}
+    .col-lg-12
+      .row
+        .col-md-6.m-b-md
+          .statcard.impressions-widget
+            .p-a
+              %span.statcard-desc Impressions
+              %h2.statcard-number.chart-summary-metric 0
+            %canvas.dashboard-chart.ex-line-graph.impressions-chart{:width => "378",
+              :height => "94",
+              :style => "width: 189px; height: 47px;"}
+        .col-md-6.m-b-md
+          .statcard.click-through-rate-widget
+            .p-a
+              %span.statcard-desc Click Through Rate
+              %h2.statcard-number.chart-summary-metric 0.00%
+            %canvas.dashboard-chart.ex-line-graph.click-through-rate-chart{:width => "378",
+              :height => "94",
+              :style => "width: 189px; height: 47px;"}
+    .col-lg-12
+      .row
+        .col-md-6.m-b-md
+          .statcard.clicks-widget
+            .p-a
+              %span.statcard-desc Clicks
+              %h2.statcard-number.chart-summary-metric 0
+            %canvas.dashboard-chart.ex-line-graph.clicks-chart{:width => "378",
+              :height => "94",
+              :style => "width: 189px; height: 47px;"}
+        .col-md-6.m-b-md
+          .statcard.conversion-rate-widget
+            .p-a
+              %span.statcard-desc Conversion Rate
+              %h2.statcard-number.chart-summary-metric 0.00%
+            %canvas.dashboard-chart.ex-line-graph.conversion-rate-chart{:width => "378",
+              :height => "94",
+              :style => "width: 189px; height: 47px;"}
   .hr-divider.m-t-lg.m-b-md
     %h3.hr-divider-content.hr-divider-heading Google Ad Network
   .row.statcards.ad-network-metrics.adwords-ad-network
