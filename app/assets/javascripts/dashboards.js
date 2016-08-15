@@ -264,12 +264,7 @@
           },
           ticks: {
             fontSize: 14,
-            fontColor: 'rgba(0,0,0,.4)',
-            //maxRotation: 0,
-            //userCallback: function(value, index, values) {
-              //var calculated_value = (index + 1) % 3 ? '' : value;
-              //return calculated_value;
-            //}
+            fontColor: 'rgba(0,0,0,.4)'
           }
         }],
         yAxes: [{
@@ -411,7 +406,7 @@
       tooltips: {
         callbacks: {
           label: function(tooltipItem, data) {
-            return data.datasets[0].label + ": $" + tooltipItem.yLabel;
+            return data.datasets[0].label + ": $" + tooltipItem.yLabel.toFixed(2);
           }
         }
       },
