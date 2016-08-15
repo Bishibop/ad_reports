@@ -19,22 +19,20 @@ class MarchexCallRecord < ActiveRecord::Base
     puts "\tAPI request complete."
 
     puts "\tInitializing records..."
-    call_records = Time.use_zone("Eastern Time (US & Canada)") do
-      response.parsed_response["result"].map do |api_result|
-        call_record = client.marchex_call_records
-                      .where(marchex_call_id: api_result['call_id'])
-                      .first_or_initialize
-        call_record.caller_name =         api_result['caller_name']
-        call_record.phone_number =        api_result['caller_number']
-        call_record.start_time =          Time.zone.parse(api_result['call_start'])
-        call_record.campaign =            api_result['c_name']
-        call_record.group_name =          api_result['g_name']
-        call_record.duration =            api_result['call_duration']
-        call_record.pretty_duration =     api_result['duration']
-        call_record.dna_classification =  api_result['dna_class']
-        call_record.status =              api_result['call_status']
-        call_record
-      end
+    call_records = response.parsed_response["result"].map do |api_result|
+      call_record = client.marchex_call_records
+                    .where(marchex_call_id: api_result['call_id'])
+                    .first_or_initialize
+      call_record.caller_name =         api_result['caller_name']
+      call_record.phone_number =        api_result['caller_number']
+      call_record.start_time =          Time.zone.parse(api_result['call_start'])
+      call_record.campaign =            api_result['c_name']
+      call_record.group_name =          api_result['g_name']
+      call_record.duration =            api_result['call_duration']
+      call_record.pretty_duration =     api_result['duration']
+      call_record.dna_classification =  api_result['dna_class']
+      call_record.status =              api_result['call_status']
+      call_record
     end
     puts "\tRecords initialized."
 
