@@ -20,7 +20,7 @@ private
   def data
     marchex_calls.map do |call|
       [ call.caller_name,
-        call.phone_number,
+        call.caller_number,
         call.campaign,
         call.group_name,
         call.start_time,
@@ -53,7 +53,7 @@ private
   end
 
   def sort_column
-    columns = %w[caller_name phone_number campaign group_name start_time duration status]
+    columns = %w[caller_name caller_number campaign group_name start_time duration status]
     columns[params[:order]['0']['column'].to_i]
   end
 

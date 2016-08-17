@@ -24,7 +24,7 @@ class MarchexCallRecord < ActiveRecord::Base
                     .where(marchex_call_id: api_result['call_id'])
                     .first_or_initialize
       call_record.caller_name =         api_result['caller_name']
-      call_record.phone_number =        api_result['caller_number']
+      call_record.caller_number =       api_result['caller_number']
       call_record.start_time =          Time.zone.parse(api_result['call_start'])
       call_record.campaign =            api_result['c_name']
       call_record.group_name =          api_result['g_name']

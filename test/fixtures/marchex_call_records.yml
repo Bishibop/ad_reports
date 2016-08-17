@@ -6,7 +6,7 @@ one:
   classification: MyString
   status: MyString
   duration: 1
-  phone_number: MyString
+  caller_number: MyString
   campaign: MyString
   caller_name: MyString
   group: MyString
@@ -17,7 +17,7 @@ two:
   classification: MyString
   status: MyString
   duration: 1
-  phone_number: MyString
+  caller_number: MyString
   campaign: MyString
   caller_name: MyString
   group: MyString
