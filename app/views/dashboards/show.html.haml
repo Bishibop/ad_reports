@@ -302,19 +302,17 @@
     %h3.hr-divider-content.hr-divider-heading Marchex Call Tracking
   .row.marchex-call-tracking
     .col-md-12.m-b-md.p-x-lg
-      .table-full
-        .table-responsive
-          %table.table#marchex_calls{'data-source' => client_marchex_call_records_url(@client)}
-            %thead
-              %th.header Caller Name
-              %th.header Caller Number
-              %th.header Campaign
-              %th.header Ad Group
-              %th.header Time
-              %th.header Duration
-              %th.header Status
-              %th.header.text-xs-center Recording
-            %tbody
+      %table.table.nowrap#marchex_calls{'data-source' => client_marchex_call_records_url(@client)}
+        %thead
+          %th.header Caller Name
+          %th.header Caller Number
+          %th.header Campaign
+          %th.header Ad Group
+          %th.header Time
+          %th.header Duration
+          %th.header Status
+          %th.header.text-xs-center Recording
+        %tbody
 :javascript
   window.Icarus.metrics = #{@metrics.to_json};
   window.Icarus.marchexCalls = #{@marchex_calls.to_json}

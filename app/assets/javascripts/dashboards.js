@@ -15,10 +15,14 @@
     serverSide: true,
     ajax: {
       url: $('#marchex_calls').data('source'),
-      data: function( d ) {
+      data: function(d) {
         d.startDate = marchexCallTable.startDate.format("YYYY-M-D");
         d.endDate = marchexCallTable.endDate.format("YYYY-M-D");
       }
+    },
+    // Make the columns' visibility work correctly with responsive breakpoints
+    drawCallback: function(settings) {
+      this.api().columns.adjust().responsive.recalc();
     },
     deferLoading: 0,
     deferRender: true,
@@ -26,7 +30,8 @@
     pageLength: 10,
     searching: false,
     order: [[4, 'desc']],
-    scrollX: false,
+    // Makes the table display and resize properly. No idea why. Technically, this
+    // shouldn't do anything at all without specifying column specific widths...
     autoWidth: false,
     responsive: {
       details: {
@@ -36,14 +41,13 @@
     language: {
       processing: "Fetching calls...",
       emptyTable: "No call data available.",
-      info: "Showing _START_ to _END_ of _TOTAL_ calls",
-      infoEmpty: "Showing 0 to 0 of 0 calls",
-      infoFiltered: "(filtered from _MAX_ total calls)."
+      info: "Showing _START_ to _END_ of _TOTAL_ calls.",
+      infoEmpty: "Showing 0 to 0 of 0 calls.",
+      infoFiltered: ""
     },
     columnDefs: [
       {
         targets: 0,
-        sClass: 'text-nowrap',
         responsivePriority: 0,
         render: function(data, type, row) {
           if (data) {
@@ -55,7 +59,6 @@
       },
       {
         targets: 1,
-        sClass: 'text-nowrap',
         responsivePriority: 4,
         render: function(data, type, row) {
           if ( type === 'display' ) {
@@ -71,17 +74,14 @@
       },
       {
         targets: 2,
-        sClass: 'text-nowrap',
         responsivePriority: 3,
       },
       {
         targets: 3,
-        sClass: 'text-nowrap',
         responsivePriority: 5,
       },
       {
         targets: 4,
-        sClass: 'text-nowrap',
         responsivePriority: 1,
         render: function(data, type, row) {
           if ( type === 'display' ) {

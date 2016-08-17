@@ -129,9 +129,33 @@
   }
 }
 
-.table-responsive .dataTables_wrapper .dataTables_processing {
-  top: 0%;
-  margin-top: 0px;
-  height: 100%;
-  padding-top: 200px;
+.marchex-call-tracking table.dataTable {
+  // Ordering icons
+  thead {
+    .sorting:after {
+      content: "\EB3E";
+      opacity: 0.2;
+      font-family: 'toolkit-entypo';
+    }
+    .sorting_desc:after {
+      content: "\EA42";
+      /*content: "\EB74";*/
+      color: #1CA8DD;
+      opacity: 1;
+      font-family: 'toolkit-entypo';
+    }
+    .sorting_asc:after {
+      content: "\EA4D";
+      /*content: "\EB77";*/
+      color: #1CA8DD;
+      opacity: 1;
+      font-family: 'toolkit-entypo';
+    }
+  }
+
+  // Styling for ordered column
+  td.sorting_1 {
+    background-color: #f3fcff;
+  }
 }
+

@@ -66,7 +66,7 @@ gem 'oauth2'
 gem 'interactive_editor'
 gem 'auth0'
 gem 'httparty'
-gem 'jquery-datatables-rails'
+#gem 'jquery-datatables-rails'
 gem 'will_paginate'
 
 ruby '2.3.1'
