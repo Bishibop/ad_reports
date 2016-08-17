@@ -1,7 +1,7 @@
 .container
   %h1 API Permissions
 
-  - if @customer.bing_ads_access_token.nil?
+  - if @customer.bing_ads_refresh_token.nil?
     %h4
       Bing Ads:
       =link_to "Grant API Access", @bing_ads_initiate_url
@@ -10,7 +10,7 @@
     %h4
       Bing Ads:
       %span.text-success API ACCESS GRANTED
-  - if @customer.adwords_access_token.nil?
+  - if @customer.adwords_refresh_token.nil?
     %h4
       Google AdWords:
       =link_to "Grant API Access", @adwords_initiate_url
