@@ -5,6 +5,7 @@ class Client < ActiveRecord::Base
   has_many :bingads_reports,  dependent: :destroy
   has_many :adwords_reports, dependent: :destroy
 
+  # Absolute garbage-tier method
   def top_search_metrics(num, date_range)
     kcs, qcs = self.adwords_reports
       .where(date: date_range)
@@ -33,7 +34,7 @@ class Client < ActiveRecord::Base
     bsm = self.bingads_reports
       .where(date: date_range)
       .pluck(:query_clicks)
-      .inject do |memo, hsh|
+      .inject({}) do |memo, hsh|
         memo.merge!(hsh) {|key, oldval, newval| oldval.to_i + newval.to_i}
       end
       .sort_by {|key, value| value.to_i}
