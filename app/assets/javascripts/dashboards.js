@@ -169,8 +169,38 @@
   };
 
   // Setting initial date range and associated sub-metrics
-  var dateRangeInitialStartDate = moment().startOf('month');
-  var dateRangeInitialEndDate = moment();
+  var dateRangeInitialStartDate;
+  var dateRangeInitialEndDate;
+  var defaultDateRangeInitialization = function() {
+    dateRangeInitialStartDate = moment().startOf('month');
+    dateRangeInitialEndDate = moment();
+  };
+  var search = location.search;
+  if (search !== "") {
+    try {
+      var queryParams = _(search.slice(1).split('&')).reduce(function(memo, stringPair) {
+        var pair = stringPair.split('=');
+        memo[pair[0]] = pair[1];
+        return memo;
+      }, {});
+      var unvalidatedStartDate = moment(queryParams.startDate, "MM-DD-YYYY");
+      var unvalidatedEndDate = moment(queryParams.endDate, "MM-DD-YYYY");
+      if (unvalidatedStartDate.isValid() && unvalidatedEndDate.isValid()) {
+        dateRangeInitialStartDate = unvalidatedStartDate;
+        dateRangeInitialEndDate = unvalidatedEndDate;
+      } else {
+        throw {
+          name: 'DateParameterError',
+          message: 'Invalid date query params'
+        };
+      }
+    } catch (e) {
+      console.log(e);
+      defaultDateRangeInitialization();
+    }
+  } else {
+    defaultDateRangeInitialization();
+  }
   var dateRangeInitialMetrics = selectMetricsForDateRange(dateRangeInitialStartDate,
                                                           dateRangeInitialEndDate);
 
@@ -183,9 +213,17 @@
     var periodLabels = generatePeriodLabels(startDate, endDate);
     _(charts).map(function(chart) {
         updateChart(chart, selectedMetrics, periodLabels);
-     });
+    });
     marchexCallTable.startDate = startDate;
     marchexCallTable.endDate = endDate;
+    if (history.pushState) {
+      history.pushState({}, "Dashboard", 'dashboard?' + $.param({
+        startDate: startDate.format("MM-DD-YYYY"),
+        endDate: endDate.format("MM-DD-YYYY")
+      }));
+    } else {
+      // No pushState. Do nothing.
+    }
     // If you call these naked, it stutters the chart animation.
     // This lets that clear before filtering the dates.
     _.delay(function() {
