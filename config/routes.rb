@@ -27,15 +27,14 @@ Rails.application.routes.draw do
   constraints Roles.new(:admin, :customer) do
     resources :clients, except: [:new, :create] do
       get '/dashboard' => "dashboards#show"
-      get '/dashboard/search_metrics' => "dashboards#search_metrics"
-      get '/marchex_call_records' => "marchex_call_records#index"
     end
   end
 
+  get 'clients/:client_id/search_metrics' => "dashboards#search_metrics", as: :search_metrics
+  get 'clients/:client_id/marchex_call_records' => "marchex_call_records#index", as: :marchex_calls
+
   constraints Roles.new(:client) do
     get '/dashboard' => "dashboards#show"
-    get '/dashboard/search_metrics' => "dashboards#search_metrics"
-    get '/marchex_call_records' => "marchex_call_records#index"
   end
 
   get '/dashboard_demo' => "dashboards#demo"

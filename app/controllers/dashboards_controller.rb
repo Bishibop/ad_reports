@@ -3,7 +3,6 @@ class DashboardsController < ApplicationController
   before_action :authenticate, except: :demo
 
   def show
-
     @client = @current_user.client(params)
 
     # Get your ad reports
@@ -112,4 +111,5 @@ class DashboardsController < ApplicationController
     dashboard_date_range = Date.parse(params[:start])..Date.parse(params[:end])
     render json: @client.top_search_metrics(6, dashboard_date_range)
   end
+
 end

@@ -764,17 +764,10 @@
   };
 
   var requestSearchMetrics = function(startDate, endDate) {
-    var base_url = window.location.href;
-    if (base_url.slice(-1) === '/') {
-      base_url = base_url.slice(0, -1);
-    }
-    var resource_url = base_url +
-      "/search_metrics?start=" +
-      startDate.format("YYYY-M-D") +
-      "&end=" +
-      endDate.format("YYYY-M-D");
+    var resourceUrl = Icarus.searchMetricsSource +
+      "?start=" + startDate.format("YYYY-M-D") + "&end=" + endDate.format("YYYY-M-D");
 
-    $.get(resource_url, function(searchMetrics) {
+    $.get(resourceUrl, function(searchMetrics) {
       updateSearchMetrics(searchMetrics.adwordsKeywordConversions,
                           '.adwords-ad-network .keyword-conversions .list-group-item');
       updateSearchMetrics(searchMetrics.adwordsQueryClicks,
