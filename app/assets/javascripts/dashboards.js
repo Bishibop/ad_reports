@@ -183,9 +183,12 @@
         memo[pair[0]] = pair[1];
         return memo;
       }, {});
-      var unvalidatedStartDate = moment(queryParams.startDate, "MM-DD-YYYY");
-      var unvalidatedEndDate = moment(queryParams.endDate, "MM-DD-YYYY");
-      if (unvalidatedStartDate.isValid() && unvalidatedEndDate.isValid()) {
+      var unvalidatedStartDate = moment(queryParams.startDate, "M-D-YYYY");
+      var unvalidatedEndDate = moment(queryParams.endDate, "M-D-YYYY");
+      if (unvalidatedStartDate.isValid() &&
+          unvalidatedEndDate.isValid() &&
+          unvalidatedStartDate.isSameOrBefore(unvalidatedEndDate) &&
+          unvalidatedEndDate.isSameOrBefore(moment())) {
         dateRangeInitialStartDate = unvalidatedStartDate;
         dateRangeInitialEndDate = unvalidatedEndDate;
       } else {
@@ -218,8 +221,8 @@
     marchexCallTable.endDate = endDate;
     if (history.pushState) {
       history.pushState({}, "Dashboard", 'dashboard?' + $.param({
-        startDate: startDate.format("MM-DD-YYYY"),
-        endDate: endDate.format("MM-DD-YYYY")
+        startDate: startDate.format("M-D-YYYY"),
+        endDate: endDate.format("M-D-YYYY")
       }));
     } else {
       // No pushState. Do nothing.
