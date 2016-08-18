@@ -24,11 +24,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # To catch date-linked urls for clients
-  get '/clients/:client_id/dashboard', to: redirect { |params, request|
-    "/dashboard?#{request.query_parameters.to_query}"
-  }, constraints: Roles.new(:client)
-
   constraints Roles.new(:admin, :customer) do
     resources :clients, except: [:new, :create] do
       get '/dashboard' => "dashboards#show"
@@ -40,6 +35,10 @@ Rails.application.routes.draw do
 
   constraints Roles.new(:client) do
     get '/dashboard' => "dashboards#show"
+    # To catch date-linked urls for clients
+    get '/clients/:client_id/dashboard', to: redirect(status: 303) { |params, request|
+      "/dashboard?#{request.query_parameters.to_query}"
+    }
   end
 
   get '/dashboard_demo' => "dashboards#demo"
