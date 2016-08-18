@@ -302,7 +302,7 @@
     %h3.hr-divider-content.hr-divider-heading Marchex Call Tracking
   .row.marchex-call-tracking
     .col-md-12.m-b-md.p-x-lg
-      %table.table.nowrap#marchex_calls{'data-source' => client_marchex_call_records_url(@client)}
+      %table.table.nowrap#marchex_calls
         %thead
           %th.header Caller Name
           %th.header Caller Number
@@ -315,6 +315,7 @@
         %tbody
 :javascript
   window.Icarus.metrics = #{@metrics.to_json};
-  window.Icarus.marchexCalls = #{@marchex_calls.to_json}
+  window.Icarus.marchexCalls = #{@marchex_calls.to_json};
+  window.Icarus.marchexCallsSource = '#{client_marchex_call_records_url(@client)}';
 %link{:href => "https://fonts.googleapis.com/css?family=Roboto:301,400,500,700,400italic", :rel => "stylesheet"}
 = javascript_include_tag 'dashboards'

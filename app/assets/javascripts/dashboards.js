@@ -14,7 +14,7 @@
     //processing: true,
     serverSide: true,
     ajax: {
-      url: $('#marchex_calls').data('source'),
+      url: Icarus.marchexCallsSource,
       data: function(d) {
         d.startDate = marchexCallTable.startDate.format("YYYY-M-D");
         d.endDate = marchexCallTable.endDate.format("YYYY-M-D");
