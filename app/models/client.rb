@@ -5,7 +5,7 @@ class Client < ActiveRecord::Base
   has_many :bingads_reports,  dependent: :destroy
   has_many :adwords_reports, dependent: :destroy
 
-  # Absolute garbage-tier method
+  # Absolute garbage-tier method. Dataflow programming is for spergs.
   def top_search_metrics(num, date_range)
     kcs, qcs = self.adwords_reports
       .where(date: date_range)
@@ -39,7 +39,6 @@ class Client < ActiveRecord::Base
       end
       .sort_by {|key, value| value.to_i}
       .last(num).reverse.map{|(query, clicks)| [query, clicks.to_i]}.to_h
-
 
     { adwordsKeywordConversions: kcs, adwordsQueryClicks: qcs, bingadsQueryClicks: bsm }
 
