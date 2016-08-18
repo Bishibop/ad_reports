@@ -2,13 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.dashhead-toolbar .input-with-icon {
-  // Proper width for the date input
-  width: 215px;
+.dashhead-toolbar {
+  margin-top: 0px;
 
-  // Gets the calendar icons in the datepicker to show up above the inputs
-  .icon {
-    z-index: 4;
+  .input-with-icon  {
+    // Proper width for the date input
+    width: 220px;
+    // Gets the calendar icons in the datepicker to show up above the inputs
+    .icon {
+      z-index: 4;
+    }
   }
 }
 
@@ -68,10 +71,6 @@
 
     img { height: 100%; }
   }
-}
-
-.dashhead-toolbar {
-  margin-top: 0px;
 }
 
 .hr-divider-heading {
