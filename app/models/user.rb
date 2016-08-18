@@ -2,31 +2,30 @@ class User
 
   def initialize(auth0_userinfo)
     @user_info = auth0_userinfo
-  end
-
-  def role
-    @user_info['extra']['raw_info']['role']
+    @client_id = @user_info['extra']['raw_info']['clientId'] || nil
+    @customer_id = @user_info['extra']['raw_info']['customerId'] || nil
+    @role = @user_info['extra']['raw_info']['role']
   end
 
   def admin?
-    self.role == 'admin'
+    @role == 'admin'
   end
 
   def customer?
-    self.role == 'customer'
+    @role == 'customer'
   end
 
   def client?
-    self.role == 'client'
+    @role == 'client'
   end
 
   def authorized_as?(*roles)
-    roles.map(&:to_s).include? self.role
+    roles.map(&:to_s).include? @role
   end
 
   def customer
     if self.customer?
-      Customer.find(@user_info['extra']['raw_info']['customerId'])
+      Customer.find(@customer_id)
     else
       raise 'Access Error'
     end
@@ -38,7 +37,7 @@ class User
     elsif self.customer?
       self.customer.clients.find(params[:client_id])
     elsif self.client?
-      Client.find(@user_info['extra']['raw_info']['clientId'])
+      Client.find(@client_id)
     else
       raise 'Access Error'
     end
