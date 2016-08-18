@@ -28,7 +28,7 @@
     deferRender: true,
     lengthChange: false,
     pageLength: 10,
-    searching: false,
+    searching: true,
     order: [[4, 'desc']],
     // Makes the table display and resize properly. No idea why. Technically, this
     // shouldn't do anything at all without specifying column specific widths...
@@ -83,6 +83,7 @@
       {
         targets: 4,
         responsivePriority: 1,
+        searchable: false,
         render: function(data, type, row) {
           if ( type === 'display' ) {
             return moment(data).format('hh:mm a, MMM Do');
@@ -94,6 +95,7 @@
       {
         targets: 5,
         responsivePriority: 2,
+        searchable: false,
       },
       {
         targets: 6,
@@ -104,6 +106,7 @@
         sClass: 'text-xs-center',
         responsivePriority: 7,
         orderable: false,
+        searchable: false,
         render: function(data, type, row) {
           if (data) {
             return '<audio controls src="'+data+'" type="audio/mp3" preload="none">';
@@ -116,11 +119,11 @@
   });
 
   // Have the call log only search on "enter"
-  //$('#marchex_calls_filter input').unbind().on('keyup', function(e) {
-    //if (e.keyCode === 13) {
-      //marchexCallTable.search(this.value).draw();
-    //}
-  //});
+  $('#marchex_calls_filter input').unbind().on('keyup', function(e) {
+    if (e.keyCode === 13) {
+      marchexCallTable.search(this.value).draw();
+    }
+  });
 
   // -- END CALL TABLE SETUP
 
