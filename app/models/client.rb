@@ -47,7 +47,7 @@ class Client < ActiveRecord::Base
   validates :name, presence: true, length: { minimum: 5 }
   validates :login_domain, presence: true, format: { without: /\s/ }
   validates :adwords_cid, uniqueness: true, allow_nil: true
-  validates :bing_ads_aid, uniqueness: true, allow_nil: true
+  validates :bingads_aid, uniqueness: true, allow_nil: true
   validates :marchex_account_id, uniqueness: true, allow_nil: true
 
 end

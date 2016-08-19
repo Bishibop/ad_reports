@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160817124951) do
+ActiveRecord::Schema.define(version: 20160819202007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,25 +66,25 @@ ActiveRecord::Schema.define(version: 20160817124951) do
     t.integer  "customer_id"
     t.string   "login_domain",       null: false
     t.string   "adwords_cid"
-    t.string   "bing_ads_aid"
+    t.string   "bingads_aid"
     t.string   "marchex_account_id"
   end
 
   add_index "clients", ["customer_id"], name: "index_clients_on_customer_id", using: :btree
 
   create_table "customers", force: :cascade do |t|
-    t.string   "name",                        null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.string   "bing_ads_access_token"
-    t.string   "bing_ads_refresh_token"
+    t.string   "name",                       null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "bingads_access_token"
+    t.string   "bingads_refresh_token"
     t.string   "adwords_access_token"
     t.string   "adwords_refresh_token"
     t.datetime "adwords_issued_at"
     t.integer  "adwords_expires_in_seconds"
-    t.datetime "bing_ads_issued_at"
-    t.integer  "bing_ads_expires_in_seconds"
-    t.string   "login_domain",                null: false
+    t.datetime "bingads_issued_at"
+    t.integer  "bingads_expires_in_seconds"
+    t.string   "login_domain",               null: false
   end
 
   create_table "marchex_call_records", force: :cascade do |t|

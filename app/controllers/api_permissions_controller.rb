@@ -11,11 +11,11 @@ class ApiPermissionsController < ApplicationController
     if @current_user.admin?
       @customer = Customer.find(params[:customer_id])
       @adwords_initiate_url = customer_adwords_initiate_url(@customer)
-      @bing_ads_initiate_url = ENV['BING_API_GRANT_URL'] + '/admin/' + @customer.id.to_s
+      @bingads_initiate_url = ENV['BING_API_GRANT_URL'] + '/admin/' + @customer.id.to_s
     else
       @customer = @current_user.customer
       @adwords_initiate_url = adwords_initiate_url
-      @bing_ads_initiate_url = ENV['BING_API_GRANT_URL'] + '/' + @customer.id.to_s
+      @bingads_initiate_url = ENV['BING_API_GRANT_URL'] + '/' + @customer.id.to_s
     end
 
   end

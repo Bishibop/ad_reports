@@ -1,10 +1,10 @@
 .container
   %h1 API Permissions
 
-  - if @customer.bing_ads_refresh_token.nil?
+  - if @customer.bingads_refresh_token.nil?
     %h4
       Bing Ads:
-      =link_to "Grant API Access", @bing_ads_initiate_url
+      =link_to "Grant API Access", @bingads_initiate_url
     %p (You will be taken to your Bing Ads account to log in and grant authorization. You will then be returned here.)
   - else
     %h4
