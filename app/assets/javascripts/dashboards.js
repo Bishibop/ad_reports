@@ -155,7 +155,7 @@
     });
   };
 
-  var generatePeriodLabels = function(startDate, endDate) {
+  var generateXAxisDateLabels = function(startDate, endDate) {
     return _.map(generateDateRange(startDate, endDate), function(mmnt){
       return mmnt.format('MMM D');
     });
@@ -211,22 +211,15 @@
   marchexCallTable.startDate = dateRangeInitialStartDate;
   marchexCallTable.endDate = dateRangeInitialEndDate;
 
-  var onDatePick = function(startDate, endDate, label) {
+  var onDatePick = function(startDate, endDate, predefinedDatePeriod) {
     var selectedMetrics = selectMetricsForDateRange(startDate, endDate);
-    var periodLabels = generatePeriodLabels(startDate, endDate);
+    var periodLabels = generateXAxisDateLabels(startDate, endDate);
     _(charts).map(function(chart) {
         updateChart(chart, selectedMetrics, periodLabels);
     });
     marchexCallTable.startDate = startDate;
     marchexCallTable.endDate = endDate;
-    if (history.pushState) {
-      history.pushState({}, "Dashboard", 'dashboard?' + $.param({
-        startDate: startDate.format("M-D-YYYY"),
-        endDate: endDate.format("M-D-YYYY")
-      }));
-    } else {
-      // No pushState. Do nothing.
-    }
+    urlManager.pushNewState(startDate, endDate);
     // If you call these naked, it stutters the chart animation.
     // This lets that clear before filtering the dates.
     _.delay(function() {
@@ -234,6 +227,41 @@
       marchexCallTable.ajax.reload();
     }, 500);
   };
+
+  var urlManager = {
+    backToggle: false,
+    pushNewState: function(startDate, endDate) {
+      if (history.pushState && !this.backToggle) {
+        var datePeriodStringMapping = {
+          startDate: startDate.format('M-D-YYYY'),
+          endDate: endDate.format('M-D-YYYY')
+        };
+        history.pushState(
+          datePeriodStringMapping,
+          "Dashboard",
+          'dashboard?' + $.param(datePeriodStringMapping)
+        );
+      } else {
+        this.backToggle = false;
+      }
+    },
+    pop: function() {
+      if (history.state) {
+        var previousStartDate = moment(history.state.startDate, 'M-D-YYYY');
+        var previousEndDate = moment(history.state.endDate, 'M-D-YYYY');
+        var datePicker = $('input.date-picker').data('daterangepicker');
+        datePicker.setStartDate(previousStartDate);
+        datePicker.setEndDate(previousEndDate);
+        this.backToggle = true;
+        onDatePick(previousStartDate, previousEndDate);
+      } else {
+        history.back();
+      }
+    }
+  };
+
+  // Make the back button work
+  $(window).bind('popstate', function(event) { urlManager.pop(); });
 
   $('input.date-picker').daterangepicker({
     locale: {
@@ -295,7 +323,7 @@
 
   var chartDefaults = {
     data: {
-      labels: generatePeriodLabels(dateRangeInitialStartDate, dateRangeInitialEndDate),
+      labels: generateXAxisDateLabels(dateRangeInitialStartDate, dateRangeInitialEndDate),
     },
     options: {
       legend: {
