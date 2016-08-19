@@ -485,7 +485,6 @@
       scales: {
         yAxes: [{
           ticks: {
-            beginAtZero: false,
             userCallback: function(value, index, values) {
               return "$" + value;
             }
