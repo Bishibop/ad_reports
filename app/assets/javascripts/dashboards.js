@@ -16,8 +16,8 @@
     ajax: {
       url: Icarus.marchexCallsSource,
       data: function(d) {
-        d.startDate = marchexCallTable.startDate.format("YYYY-M-D");
-        d.endDate = marchexCallTable.endDate.format("YYYY-M-D");
+        d.startDate = marchexCallTable.startDate.format('YYYY-M-D');
+        d.endDate = marchexCallTable.endDate.format('YYYY-M-D');
       }
     },
     // Make the columns' visibility work correctly with responsive breakpoints
@@ -39,11 +39,11 @@
       }
     },
     language: {
-      processing: "Fetching calls...",
-      emptyTable: "No call data available.",
-      info: "Showing _START_ to _END_ of _TOTAL_ calls.",
-      infoEmpty: "Showing 0 to 0 of 0 calls.",
-      infoFiltered: ""
+      processing: 'Fetching calls...',
+      emptyTable: 'No call data available.',
+      info: 'Showing _START_ to _END_ of _TOTAL_ calls.',
+      infoEmpty: 'Showing 0 to 0 of 0 calls.',
+      infoFiltered: ''
     },
     columnDefs: [
       {
@@ -53,7 +53,7 @@
           if (data) {
             return data;
           } else {
-            return "(No name on file)";
+            return '(No name on file)';
           }
         }
       },
@@ -111,7 +111,7 @@
           if (data) {
             return '<audio controls src="'+data+'" type="audio/mp3" preload="none">';
           } else {
-            return "No Recording";
+            return 'No Recording';
           }
         }
       }
@@ -171,15 +171,15 @@
   var urlManager = {
     backToggle: false,
     initialParse: function() {
-      if (location.search !== "") {
+      if (location.search !== '') {
         try {
           var queryParams = _(location.search.slice(1).split('&')).reduce(function(memo, stringPair) {
             var pair = stringPair.split('=');
             memo[pair[0]] = pair[1];
             return memo;
           }, {});
-          var unvalidatedStartDate = moment(queryParams.startDate, "M-D-YYYY");
-          var unvalidatedEndDate = moment(queryParams.endDate, "M-D-YYYY");
+          var unvalidatedStartDate = moment(queryParams.startDate, 'M-D-YYYY');
+          var unvalidatedEndDate = moment(queryParams.endDate, 'M-D-YYYY');
           if (unvalidatedStartDate.isValid() &&
               unvalidatedEndDate.isValid() &&
               unvalidatedStartDate.isSameOrBefore(unvalidatedEndDate) &&
@@ -208,7 +208,7 @@
         };
         history.pushState(
           datePeriodStringMapping,
-          "Dashboard",
+          'Dashboard',
           'dashboard?' + $.param(datePeriodStringMapping)
         );
       } else {
@@ -271,22 +271,22 @@
     maxDate: moment(),
     opens: 'left',
     ranges: {
-      "Today":          [ moment(), moment() ],
+      'Today':          [ moment(), moment() ],
 
-      "Week to date":   [ moment().startOf('week'), moment() ],
+      'Week to date':   [ moment().startOf('week'), moment() ],
 
-      "Last week":      [ moment().subtract(1, 'week').startOf('week'),
+      'Last week':      [ moment().subtract(1, 'week').startOf('week'),
                           moment().startOf('week').subtract(1, 'day') ],
 
-      "Month to date":  [ moment().startOf('month'), moment() ],
+      'Month to date':  [ moment().startOf('month'), moment() ],
 
-      "Last month":     [ moment().subtract(1, 'month').startOf('month'),
+      'Last month':     [ moment().subtract(1, 'month').startOf('month'),
                           moment().startOf('month').subtract(1, 'day') ],
 
-      "Last 30 days":   [ moment().subtract(30, 'days'),
+      'Last 30 days':   [ moment().subtract(30, 'days'),
                           moment().subtract(1, 'day') ],
 
-      "Year to date":   [ moment().startOf('year'), moment() ]
+      'Year to date':   [ moment().startOf('year'), moment() ]
     }
   }, onDatePick);
 
@@ -338,7 +338,7 @@
           }
         }],
         yAxes: [{
-          type: "linear",
+          type: 'linear',
           ticks: {
             beginAtZero: true,
             fontSize: 14,
@@ -482,7 +482,7 @@
       tooltips: {
         callbacks: {
           label: function(tooltipItem, data) {
-            return data.datasets[0].label + ": $" + tooltipItem.yLabel.toFixed(2);
+            return data.datasets[0].label + ': $' + tooltipItem.yLabel.toFixed(2);
           }
         }
       },
@@ -490,7 +490,7 @@
         yAxes: [{
           ticks: {
             userCallback: function(value, index, values) {
-              return "$" + value;
+              return '$' + value;
             }
           }
         }]
@@ -521,7 +521,7 @@
         yAxes: [{
           ticks: {
             userCallback: function(value, index, values) {
-              return ( value / 1000 ) + "k";
+              return ( value / 1000 ) + 'k';
             }
           }
         }]
@@ -547,7 +547,7 @@
       tooltips: {
         callbacks: {
           label: function(tooltipItem, data) {
-            return data.datasets[0].label + ": " + tooltipItem.yLabel + "%";
+            return data.datasets[0].label + ': ' + tooltipItem.yLabel + '%';
           }
         }
       },
@@ -555,7 +555,7 @@
         yAxes: [{
           ticks: {
             userCallback: function(value, index, values) {
-              return value + "%";
+              return value + '%';
             }
           }
         }]
@@ -566,7 +566,7 @@
       var impressions = sum(dateRangeMetrics.impressions);
       var clickThroughRate = 100 * clicks / impressions;
       $('.click-through-rate-widget .chart-summary-metric')
-        .text(clickThroughRate.toFixed(2) + "%");
+        .text(clickThroughRate.toFixed(2) + '%');
     },
     metricsLabels: 'clickThroughRate'
   });
@@ -600,7 +600,7 @@
       tooltips: {
         callbacks: {
           label: function(tooltipItem, data) {
-            return data.datasets[0].label + ": " + tooltipItem.yLabel + "%";
+            return data.datasets[0].label + ': ' + tooltipItem.yLabel + '%';
           }
         }
       },
@@ -608,7 +608,7 @@
         yAxes: [{
           ticks: {
             userCallback: function(value, index, values) {
-              return value + "%";
+              return value + '%';
             }
           }
         }]
@@ -619,7 +619,7 @@
       var conversions = sum(dateRangeMetrics.conversions);
       var conversionRate = 100 * conversions / clicks;
       $('.conversion-rate-widget .chart-summary-metric')
-        .text(conversionRate.toFixed(2) + "%");
+        .text(conversionRate.toFixed(2) + '%');
     },
     metricsLabels: 'conversionRate'
   });
@@ -689,7 +689,7 @@
       var impressions = sum(dateRangeMetrics.adwordsImpressions);
       var clickThroughRate = 100 * clicks / impressions;
       $('.adwords-ctr-widget .chart-summary-metric')
-        .text(clickThroughRate.toFixed(2) + "%");
+        .text(clickThroughRate.toFixed(2) + '%');
     },
     metricsLabels: 'adwordsClickThroughRate'
   });
@@ -709,7 +709,7 @@
       var formConversions = sum(dateRangeMetrics.adwordsFormConversions);
       var conversionRate = 100 * formConversions / clicks;
       $('.adwords-conversion-rate-widget .chart-summary-metric')
-        .text(conversionRate.toFixed(2) + "%");
+        .text(conversionRate.toFixed(2) + '%');
     },
     metricsLabels: 'adwordsConversionRate'
   });
@@ -779,7 +779,7 @@
       var impressions = sum(dateRangeMetrics.bingadsImpressions);
       var clickThroughRate = 100 * clicks / impressions;
       $('.bingads-ctr-widget .chart-summary-metric')
-        .text(clickThroughRate.toFixed(2) + "%");
+        .text(clickThroughRate.toFixed(2) + '%');
     },
     metricsLabels: 'bingadsClickThroughRate'
   });
@@ -799,9 +799,9 @@
       var formConversions = sum(dateRangeMetrics.bingadsFormConversions);
       var conversionRate = 100 * formConversions / clicks;
       $('.bingads-conversion-rate-widget .chart-summary-metric')
-        .text("----");
+        .text('----');
         // Replaced with dashes because conversion rate is always 0 for Bing
-        //.text(conversionRate.toFixed(2) + "%");
+        //.text(conversionRate.toFixed(2) + '%');
     },
     metricsLabels: 'bingadsConversionRate'
   });
@@ -818,14 +818,14 @@
       var kqStr, count;
       // Accounts for when there are fewer than 6 keyword mappings.
       if (pair[1] !== undefined) {
-        kqStr = index + 1 + ". " + pair[1][0];
+        kqStr = index + 1 + '. ' + pair[1][0];
         count = pair[1][1];
       } else {
         kqStr = '-----';
         count = 0;
       }
       // denominator + 0.1 is to account for 0/0 -> NaN.
-      $($spans[0]).css('width', (100 * count/(countTotal + 0.1)).toFixed(0) + "%");
+      $($spans[0]).css('width', (100 * count/(countTotal + 0.1)).toFixed(0) + '%');
       if (count === 0) {
         $($spans[1]).text('-');
       } else {
@@ -837,7 +837,7 @@
 
   var requestSearchMetrics = function(startDate, endDate) {
     var resourceUrl = Icarus.searchMetricsSource +
-      "?start=" + startDate.format("YYYY-M-D") + "&end=" + endDate.format("YYYY-M-D");
+      '?start=' + startDate.format('YYYY-M-D') + '&end=' + endDate.format('YYYY-M-D');
 
     $.get(resourceUrl, function(searchMetrics) {
       updateSearchMetrics(searchMetrics.adwordsKeywordConversions,
