@@ -168,48 +168,78 @@
     chart.updateSummaryMetrics(dateRangeMetrics);
   };
 
-  // Setting initial date range and associated sub-metrics
-  var dateRangeInitialStartDate;
-  var dateRangeInitialEndDate;
-  var defaultDateRangeInitialization = function() {
-    dateRangeInitialStartDate = moment().startOf('month');
-    dateRangeInitialEndDate = moment();
-  };
-  var search = location.search;
-  if (search !== "") {
-    try {
-      var queryParams = _(search.slice(1).split('&')).reduce(function(memo, stringPair) {
-        var pair = stringPair.split('=');
-        memo[pair[0]] = pair[1];
-        return memo;
-      }, {});
-      var unvalidatedStartDate = moment(queryParams.startDate, "M-D-YYYY");
-      var unvalidatedEndDate = moment(queryParams.endDate, "M-D-YYYY");
-      if (unvalidatedStartDate.isValid() &&
-          unvalidatedEndDate.isValid() &&
-          unvalidatedStartDate.isSameOrBefore(unvalidatedEndDate) &&
-          unvalidatedEndDate.isSameOrBefore(moment())) {
-        dateRangeInitialStartDate = unvalidatedStartDate;
-        dateRangeInitialEndDate = unvalidatedEndDate;
+  var urlManager = {
+    backToggle: false,
+    initialize: function() {
+      if (location.search !== "") {
+        try {
+          var queryParams = _(location.search.slice(1).split('&')).reduce(function(memo, stringPair) {
+            var pair = stringPair.split('=');
+            memo[pair[0]] = pair[1];
+            return memo;
+          }, {});
+          var unvalidatedStartDate = moment(queryParams.startDate, "M-D-YYYY");
+          var unvalidatedEndDate = moment(queryParams.endDate, "M-D-YYYY");
+          if (unvalidatedStartDate.isValid() &&
+              unvalidatedEndDate.isValid() &&
+              unvalidatedStartDate.isSameOrBefore(unvalidatedEndDate) &&
+              unvalidatedEndDate.isSameOrBefore(moment())) {
+            initialStartDate = unvalidatedStartDate;
+            initialEndDate = unvalidatedEndDate;
+          } else {
+            throw {
+              name: 'DateParameterError',
+              message: 'Invalid date query params'
+            };
+          }
+        } catch (e) {
+          console.log(e);
+          // Something went wrong. Do nothing.
+        }
       } else {
-        throw {
-          name: 'DateParameterError',
-          message: 'Invalid date query params'
-        };
+        // No params in URL. Do nothing.
       }
-    } catch (e) {
-      console.log(e);
-      defaultDateRangeInitialization();
+    },
+    pushNewState: function(startDate, endDate) {
+      if (history.pushState && !this.backToggle) {
+        var datePeriodStringMapping = {
+          startDate: startDate.format('M-D-YYYY'),
+          endDate: endDate.format('M-D-YYYY')
+        };
+        history.pushState(
+          datePeriodStringMapping,
+          "Dashboard",
+          'dashboard?' + $.param(datePeriodStringMapping)
+        );
+      } else {
+        this.backToggle = false;
+      }
+    },
+    popOldState: function() {
+      if (history.state) {
+        var previousStartDate = moment(history.state.startDate, 'M-D-YYYY');
+        var previousEndDate = moment(history.state.endDate, 'M-D-YYYY');
+        var datePicker = $('input.date-picker').data('daterangepicker');
+        datePicker.setStartDate(previousStartDate);
+        datePicker.setEndDate(previousEndDate);
+        this.backToggle = true;
+        onDatePick(previousStartDate, previousEndDate);
+      } else {
+        history.back();
+      }
     }
-  } else {
-    defaultDateRangeInitialization();
-  }
-  var dateRangeInitialMetrics = selectMetricsForDateRange(dateRangeInitialStartDate,
-                                                          dateRangeInitialEndDate);
+  };
+
+  // Setting initial date range and associated sub-metrics
+  var initialStartDate = moment().startOf('month');
+  var initialEndDate = moment();
+  urlManager.initialize();
+  var dateRangeInitialMetrics = selectMetricsForDateRange(initialStartDate,
+                                                          initialEndDate);
 
   // Setting initial dates for Marchex Call Table filter function
-  marchexCallTable.startDate = dateRangeInitialStartDate;
-  marchexCallTable.endDate = dateRangeInitialEndDate;
+  marchexCallTable.startDate = initialStartDate;
+  marchexCallTable.endDate = initialEndDate;
 
   var onDatePick = function(startDate, endDate, predefinedDatePeriod) {
     var selectedMetrics = selectMetricsForDateRange(startDate, endDate);
@@ -228,47 +258,15 @@
     }, 500);
   };
 
-  var urlManager = {
-    backToggle: false,
-    pushNewState: function(startDate, endDate) {
-      if (history.pushState && !this.backToggle) {
-        var datePeriodStringMapping = {
-          startDate: startDate.format('M-D-YYYY'),
-          endDate: endDate.format('M-D-YYYY')
-        };
-        history.pushState(
-          datePeriodStringMapping,
-          "Dashboard",
-          'dashboard?' + $.param(datePeriodStringMapping)
-        );
-      } else {
-        this.backToggle = false;
-      }
-    },
-    pop: function() {
-      if (history.state) {
-        var previousStartDate = moment(history.state.startDate, 'M-D-YYYY');
-        var previousEndDate = moment(history.state.endDate, 'M-D-YYYY');
-        var datePicker = $('input.date-picker').data('daterangepicker');
-        datePicker.setStartDate(previousStartDate);
-        datePicker.setEndDate(previousEndDate);
-        this.backToggle = true;
-        onDatePick(previousStartDate, previousEndDate);
-      } else {
-        history.back();
-      }
-    }
-  };
-
   // Make the back button work
-  $(window).bind('popstate', function(event) { urlManager.pop(); });
+  $(window).bind('popstate', function(event) { urlManager.popOldState(); });
 
   $('input.date-picker').daterangepicker({
     locale: {
       format: 'MMM D, YYYY'
     },
-    startDate: dateRangeInitialStartDate,
-    endDate: dateRangeInitialEndDate,
+    startDate: initialStartDate,
+    endDate: initialEndDate,
     minDate: moment().subtract(1, 'years'),
     maxDate: moment(),
     opens: 'left',
@@ -323,7 +321,7 @@
 
   var chartDefaults = {
     data: {
-      labels: generateXAxisDateLabels(dateRangeInitialStartDate, dateRangeInitialEndDate),
+      labels: generateXAxisDateLabels(initialStartDate, initialEndDate),
     },
     options: {
       legend: {
@@ -466,6 +464,12 @@
   var costChart = createChart('.cost-chart', lineDefaults, {
     data: {
       datasets: [
+        {
+          label: 'Previous-Cost',
+          pointRadius: 3,
+          pointHoverRadius: 7,
+          data: []
+        },
         {
           label: 'Cost',
           pointRadius: 3,
@@ -848,6 +852,6 @@
   // -- END AD NETWORK SETUP
 
   // Updates the initialized, but empty charts with the initial, pre-selected date range
-  onDatePick(dateRangeInitialStartDate, dateRangeInitialEndDate);
+  onDatePick(initialStartDate, initialEndDate);
 
 }());
