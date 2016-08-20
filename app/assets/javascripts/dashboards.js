@@ -170,7 +170,7 @@
 
   var urlManager = {
     backToggle: false,
-    initialize: function() {
+    initialParse: function() {
       if (location.search !== "") {
         try {
           var queryParams = _(location.search.slice(1).split('&')).reduce(function(memo, stringPair) {
@@ -184,8 +184,8 @@
               unvalidatedEndDate.isValid() &&
               unvalidatedStartDate.isSameOrBefore(unvalidatedEndDate) &&
               unvalidatedEndDate.isSameOrBefore(moment())) {
-            initialStartDate = unvalidatedStartDate;
-            initialEndDate = unvalidatedEndDate;
+            initializer.startDate = unvalidatedStartDate;
+            initializer.endDate = unvalidatedEndDate;
           } else {
             throw {
               name: 'DateParameterError',
@@ -230,17 +230,6 @@
     }
   };
 
-  // Setting initial date range and associated sub-metrics
-  var initialStartDate = moment().startOf('month');
-  var initialEndDate = moment();
-  urlManager.initialize();
-  var dateRangeInitialMetrics = selectMetricsForDateRange(initialStartDate,
-                                                          initialEndDate);
-
-  // Setting initial dates for Marchex Call Table filter function
-  marchexCallTable.startDate = initialStartDate;
-  marchexCallTable.endDate = initialEndDate;
-
   var onDatePick = function(startDate, endDate, predefinedDatePeriod) {
     var selectedMetrics = selectMetricsForDateRange(startDate, endDate);
     var periodLabels = generateXAxisDateLabels(startDate, endDate);
@@ -258,6 +247,17 @@
     }, 500);
   };
 
+  var initializer = {
+    startDate: moment().startOf('month'),
+    endDate: moment(),
+    init: function() {
+      urlManager.initialParse();
+      marchexCallTable.startDate = this.startDate;
+      marchexCallTable.endDate = this.endDate;
+      onDatePick(initializer.startDate, initializer.endDate);
+    }
+  };
+
   // Make the back button work
   $(window).bind('popstate', function(event) { urlManager.popOldState(); });
 
@@ -265,8 +265,8 @@
     locale: {
       format: 'MMM D, YYYY'
     },
-    startDate: initialStartDate,
-    endDate: initialEndDate,
+    startDate: initializer.startDate,
+    endDate: initializer.endDate,
     minDate: moment().subtract(1, 'years'),
     maxDate: moment(),
     opens: 'left',
@@ -321,7 +321,7 @@
 
   var chartDefaults = {
     data: {
-      labels: generateXAxisDateLabels(initialStartDate, initialEndDate),
+      labels: generateXAxisDateLabels(initializer.startDate, initializer.endDate),
     },
     options: {
       legend: {
@@ -851,7 +851,6 @@
 
   // -- END AD NETWORK SETUP
 
-  // Updates the initialized, but empty charts with the initial, pre-selected date range
-  onDatePick(initialStartDate, initialEndDate);
+  initializer.init();
 
 }());
