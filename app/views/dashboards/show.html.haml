@@ -315,7 +315,6 @@
         %tbody
 :javascript
   window.Icarus.metrics = #{@metrics.to_json};
-  window.Icarus.marchexCalls = #{@marchex_calls.to_json};
   window.Icarus.marchexCallsSource = '#{marchex_calls_url(@client)}';
   window.Icarus.searchMetricsSource = '#{search_metrics_url(@client)}';
 %link{:href => "https://fonts.googleapis.com/css?family=Roboto:301,400,500,700,400italic", :rel => "stylesheet"}
