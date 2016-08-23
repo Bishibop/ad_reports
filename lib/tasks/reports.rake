@@ -8,8 +8,8 @@ namespace :reports do
                               9.days.ago.to_date,
                               Time.zone.today)
     MarchexCallRecord.get_client_records_for_period(mcgeorges,
-                                                    9.days.ago.to_date,
-                                                    Time.zone.today)
+                                                    9.days.ago.beginning_of_day,
+                                                    Time.zone.now)
   end
 
   desc "Get keyword_conversions for all Adwords reports."
