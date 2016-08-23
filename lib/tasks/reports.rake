@@ -5,10 +5,10 @@ namespace :reports do
     puts
     AdwordsReportRequest.call(mcgeorges,
                               [:metrics, :keywords, :queries],
-                              4.days.ago.to_date,
+                              9.days.ago.to_date,
                               Time.zone.today)
     MarchexCallRecord.get_client_records_for_period(mcgeorges,
-                                                    4.days.ago.to_date,
+                                                    9.days.ago.to_date,
                                                     Time.zone.today)
   end
 

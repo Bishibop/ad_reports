@@ -16,7 +16,7 @@ class AdwordsReportRequest
         puts "\tInitialized new report."
       end
 
-      report_attributes = @report_types.inject({}) do |report_attributes, report_type|
+      report_attributes = @report_types.inject({}) do |attributes, report_type|
         puts "\tRequesting #{report_type} report..."
 
         report_definition = self.send(report_type.to_s + "_report_definition", date)
@@ -32,11 +32,11 @@ class AdwordsReportRequest
                        .report_utils(:v201605)
                        .download_report(report_definition, @client.adwords_cid)
 
-        report_attributes.merge(self.send(report_type.to_s + '_csv_handler', csv_report))
+        attributes.merge(self.send(report_type.to_s + '_csv_handler', csv_report))
       end
 
-      report.tap do |report|
-        report.update(report_attributes)
+      report.tap do |r|
+        r.update(report_attributes)
         puts "\tAdwords Reports request for #{date} completed.\n"
       end
     end

@@ -51,8 +51,8 @@ class MarchexCallRecord < ActiveRecord::Base
     HTTParty.post(
       'https://userapi.voicestar.com/api/jsonrpc/1',
       headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' },
-      basic_auth: { username: 'icarusreportingnetsearchdirect@gmail.com',
-                    password: 'ninetofivers72!marchex' },
+      basic_auth: { username: ENV[:marchex_username],
+                    password: ENV[:marchex_password] },
       body: { jsonrpc: '2.0', id: 1, method: method, params: params }.to_json
     )
   end
