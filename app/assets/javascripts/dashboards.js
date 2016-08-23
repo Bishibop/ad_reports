@@ -465,12 +465,6 @@
     data: {
       datasets: [
         {
-          label: 'Previous-Cost',
-          pointRadius: 3,
-          pointHoverRadius: 7,
-          data: []
-        },
-        {
           label: 'Cost',
           pointRadius: 3,
           pointHoverRadius: 7,
