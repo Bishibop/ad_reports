@@ -59,7 +59,7 @@
       },
       {
         targets: 1,
-        responsivePriority: 4,
+        responsivePriority: 5,
         render: function(data, type, row) {
           if ( type === 'display' ) {
             if (data.length === 10) {
@@ -78,7 +78,7 @@
       },
       {
         targets: 3,
-        responsivePriority: 5,
+        responsivePriority: 6,
       },
       {
         targets: 4,
@@ -99,12 +99,12 @@
       },
       {
         targets: 6,
-        responsivePriority: 6,
+        responsivePriority: 7,
       },
       {
         targets: 7,
         sClass: 'text-xs-center',
-        responsivePriority: 7,
+        responsivePriority: 4,
         orderable: false,
         searchable: false,
         render: function(data, type, row) {
