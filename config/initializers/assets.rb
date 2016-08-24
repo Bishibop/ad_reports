@@ -11,7 +11,7 @@ Rails.application.config.assets.version = '1.0'
 # Rails.application.config.assets.precompile += %w( search.js )
 
 # This precompiles js so that I can load them on specific pages and after the page loads.
-Rails.application.config.assets.precompile += %w(login.js dashboards.js)
+Rails.application.config.assets.precompile += %w(login.js dashboards.js demo_dashboard.js)
 # Following method is for if you need js and css
 #%w( login, dashboards ).each do |controller|
   #Rails.application.config.assets.precompile += ["#{controller}.js",

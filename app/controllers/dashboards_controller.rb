@@ -65,51 +65,84 @@ class DashboardsController < ApplicationController
     @metrics[:cost].map! {|cost| cost.round(2)}
 
     # Calculate meta-metrics from base metrics
-    @metrics[:average_cost_per_click] = @metrics[:cost].zip(@metrics[:clicks]).map do |pair|
-      if pair[1].zero?
-        0.00
-      else
-        (pair[0] / pair[1]).round(2)
-      end
-    end
-    @metrics[:cost_per_conversion] = @metrics[:cost].zip(@metrics[:conversions]).map do |pair|
-      if pair[1].zero?
-        0.00
-      else
-        (pair[0] / pair[1]).round(2)
-      end
-    end
-    @metrics[:click_through_rate] = @metrics[:clicks].zip(@metrics[:impressions]).map do |pair|
-      if pair[1].zero?
-        0.00
-      else
-        ((pair[0].to_f / pair[1]) * 100).round(2)
-      end
-    end
-    @metrics[:conversion_rate] = @metrics[:conversions].zip(@metrics[:clicks]).map do |pair|
-      if pair[1].zero?
-        0.00
-      else
-        ((pair[0].to_f / pair[1]) * 100).round(2)
-      end
-    end
+    @metrics[:average_cost_per_click] = self.cost_per(@metrics[:cost], @metrics[:clicks])
+    @metrics[:cost_per_conversion] = self.cost_per(@metrics[:cost], @metrics[:conversions])
+    @metrics[:click_through_rate] = self.rate(@metrics[:clicks], @metrics[:impressions])
+    @metrics[:conversion_rate] = self.rate(@metrics[:conversions], @metrics[:clicks])
 
     # Re-key metrics hash with camelcase for conventional javascript
-    @metrics.keys.each do |key|
-      @metrics[key.to_s.camelize(:lower)] = @metrics[key]
-      @metrics.delete(key)
-    end
+    self.camelize_keys!(@metrics)
   end
 
   def demo
     @client = Client.new({name: "Acme Corp."})
-    render :show
+    @metrics = {}
+    @metrics[:cost] = Array.new(380) { Faker::Number.between(400.0, 500.0).round(2) }
+    @metrics[:impressions] = Array.new(380) { Faker::Number.between(5000, 1500) }
+    @metrics[:clicks] = Array.new(380) { Faker::Number.between(200, 600) }
+    @metrics[:form_conversions] = Array.new(380) { Faker::Number.between(0, 15) }
+    @metrics[:call_conversions] = Array.new(380) { Faker::Number.between(0, 50) }
+    @metrics[:conversions] = @metrics[:form_conversions].zip(@metrics[:call_conversions])
+                                                        .map do |pair|
+                                                          pair[0] + pair[1]
+                                                        end
+    @metrics[:average_cost_per_click] = self.cost_per(@metrics[:cost], @metrics[:clicks])
+    @metrics[:cost_per_conversion] = self.cost_per(@metrics[:cost], @metrics[:conversions])
+    @metrics[:click_through_rate] = self.rate(@metrics[:clicks], @metrics[:impressions])
+    @metrics[:conversion_rate] = self.rate(@metrics[:conversions], @metrics[:clicks])
+    @metrics[:adwords_average_position] = Array.new(380) { Faker::Number.between(1.0, 3.0).round(2) }
+    @metrics[:adwords_average_cost_per_click] = Array.new(380) {Faker::Number.between(1.0, 3.0).round(2)}
+    @metrics[:adwords_clicks] = Array.new(380) { Faker::Number.between(100, 300) }
+    @metrics[:adwords_cost] = Array.new(380) { Faker::Number.between(200.0, 300.0).round(2) }
+    @metrics[:adwords_impressions] = Array.new(380) { Faker::Number.between(2000, 8000) }
+    @metrics[:adwords_form_conversions] = Array.new(380) { Faker::Number.between(0, 7) }
+    @metrics[:adwords_click_through_rate] = Array.new(380) { Faker::Number.between(3.0, 7.0).round(2) }
+    @metrics[:adwords_conversion_rate] = Array.new(380) { Faker::Number.between(1.0, 3.0).round(2) }
+    @metrics[:bingads_average_position] = Array.new(380) { Faker::Number.between(1.0, 3.0).round(2) }
+    @metrics[:bingads_average_cost_per_click] = Array.new(380) {Faker::Number.between(1.0, 3.0).round(2)}
+    @metrics[:bingads_clicks] = Array.new(380) { Faker::Number.between(100, 300) }
+    @metrics[:bingads_cost] = Array.new(380) { Faker::Number.between(200.0, 300.0).round(2) }
+    @metrics[:bingads_impressions] = Array.new(380) { Faker::Number.between(2000, 8000) }
+    @metrics[:bingads_form_conversions] = Array.new(380) { Faker::Number.between(0, 7) }
+    @metrics[:bingads_click_through_rate] = Array.new(380) { Faker::Number.between(3.0, 7.0).round(2) }
+    @metrics[:bingads_conversion_rate] = Array.new(380) { Faker::Number.between(1.0, 3.0).round(2) }
+
+    self.camelize_keys!(@metrics)
   end
 
   def search_metrics
     @client = @current_user.client(params)
     dashboard_date_range = Date.parse(params[:start])..Date.parse(params[:end])
     render json: @client.top_search_metrics(6, dashboard_date_range)
+  end
+
+protected
+
+  def cost_per(cost_array, metric_array)
+    cost_array.zip(metric_array).map do |pair|
+      if pair[1].zero?
+        0.00
+      else
+        (pair[0] / pair[1]).round(2)
+      end
+    end
+  end
+
+  def rate(metric_array, other_metric_array)
+    metric_array.zip(other_metric_array).map do |pair|
+      if pair[1].zero?
+        0.00
+      else
+        ((pair[0].to_f / pair[1]) * 100).round(2)
+      end
+    end
+  end
+
+  def camelize_keys!(snake_case_keyed_hash)
+    snake_case_keyed_hash.keys.each do |key|
+      snake_case_keyed_hash[key.to_s.camelize(:lower)] = snake_case_keyed_hash[key]
+      snake_case_keyed_hash.delete(key)
+    end
   end
 
 end

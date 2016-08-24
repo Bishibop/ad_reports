@@ -1,0 +1,316 @@
+%nav.navbar.navbar-default.navbar-fixed-top
+  .container-fluid.container-fluid-spacious
+    .navbar-header
+      %button.navbar-toggle.collapsed{"aria-controls" => "navbar", "aria-expanded" => "false", "data-target" => "#navbar", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      =link_to image_tag("netsearch-logo-small.png"), "http://www.netsearchdirect.com", :class => "navbar-brand"
+    #navbar.navbar-collapse.collapse
+      %ul.nav.navbar-nav
+        %li.active
+          %a{ :href => "" } PPC Dashboard
+      %ul.nav.navbar-nav.logout
+        %li
+          =button_to 'Log Out', logout_path, method: :delete, class: "btn btn-default-outline"
+.container-fluid.container-fluid-spacious
+  .dashhead.m-t-md
+    .dashhead-titles
+      %h2.dashhead-title
+        =@client.name
+        \- PPC Dashboard
+    .btn-toolbar.dashhead-toolbar
+      .btn-toolbar-item
+        .input-with-icon
+          %input.date-picker.form-control{:type => "text"}
+          %span.icon.icon-calendar
+  .hr-divider.m-t-lg.m-b-md
+    %h3.hr-divider-content.hr-divider-heading Financial Metrics
+  .row.statcards.financial-metrics
+    .col-md-6.m-b-md
+      .statcard.leads-widget
+        .p-a.total-leads
+          %span.statcard-desc Total Leads
+          %h2.statcard-number
+            %span.chart-summary-metric 0
+            -#%small.label.label-success 5%
+        .p-a.forms
+          %span.statcard-desc Forms
+          %h2.statcard-number
+            %span.label &nbsp;
+            %span.chart-summary-metric 0
+        .p-a.calls
+          %span.statcard-desc Calls
+          %h2.statcard-number
+            %span.label &nbsp;
+            %span.chart-summary-metric 0
+        %canvas.dashboard-chart.ex-bar-graph.leads-chart{:width => "378",
+          :height => "94",
+          :style => "width: 189px; height: 47px;"}
+    .col-md-6.m-b-md
+      .statcard.cost-widget
+        .p-a.cost
+          %span.statcard-desc Cost
+          %h2.statcard-number
+            %span.chart-summary-metric $0.00
+            -#%small.label.label-danger 1.3%
+        .p-a.cost-per-lead
+          %span.statcard-desc Cost per Lead
+          %h2.statcard-number.chart-summary-metric $0.00
+        %canvas.dashboard-chart.ex-line-graph.cost-chart{:width => "378",
+          :height => "94",
+          :style => "width: 189px; height: 47px;"}
+  .hr-divider.m-t-lg.m-b-md
+    %h3.hr-divider-content.hr-divider-heading Funnel Metrics
+  .row.statcards.funnel-metrics
+    .col-lg-12
+      .row
+        .col-md-6.m-b-md
+          .statcard.impressions-widget
+            .p-a
+              %span.statcard-desc Impressions
+              %h2.statcard-number.chart-summary-metric 0
+            %canvas.dashboard-chart.ex-line-graph.impressions-chart{:width => "378",
+              :height => "94",
+              :style => "width: 189px; height: 47px;"}
+        .col-md-6.m-b-md
+          .statcard.click-through-rate-widget
+            .p-a
+              %span.statcard-desc Click Through Rate
+              %h2.statcard-number.chart-summary-metric 0.00%
+            %canvas.dashboard-chart.ex-line-graph.click-through-rate-chart{:width => "378",
+              :height => "94",
+              :style => "width: 189px; height: 47px;"}
+    .col-lg-12
+      .row
+        .col-md-6.m-b-md
+          .statcard.clicks-widget
+            .p-a
+              %span.statcard-desc Clicks
+              %h2.statcard-number.chart-summary-metric 0
+            %canvas.dashboard-chart.ex-line-graph.clicks-chart{:width => "378",
+              :height => "94",
+              :style => "width: 189px; height: 47px;"}
+        .col-md-6.m-b-md
+          .statcard.conversion-rate-widget
+            .p-a
+              %span.statcard-desc Conversion Rate
+              %h2.statcard-number.chart-summary-metric 0.00%
+            %canvas.dashboard-chart.ex-line-graph.conversion-rate-chart{:width => "378",
+              :height => "94",
+              :style => "width: 189px; height: 47px;"}
+  .hr-divider.m-t-lg.m-b-md
+    %h3.hr-divider-content.hr-divider-heading Google Ad Network
+  .row.statcards.ad-network-metrics.adwords-ad-network
+    .col-sm-3.m-b-md
+      .statcard.statcard-primary.adwords-clicks-widget
+        .p-a
+          %span.statcard-desc Clicks
+          %h2.statcard-number.chart-summary-metric 1.00
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.adwords-clicks-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+    .col-sm-3.m-b-md
+      .statcard.statcard-primary.adwords-cost-widget
+        .p-a
+          %span.statcard-desc Cost
+          %h2.statcard-number.chart-summary-metric $0.00
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.adwords-cost-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+    .col-sm-3.m-b-md
+      .statcard.statcard-primary.adwords-impressions-widget
+        .p-a
+          %span.statcard-desc Impressions
+          %h2.statcard-number.chart-summary-metric 0
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.adwords-impressions-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+    .col-sm-3.m-b-md
+      .statcard.statcard-primary.adwords-conversions-widget
+        .p-a
+          %span.statcard-desc Conversions
+          %h2.statcard-number.chart-summary-metric 0
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.adwords-conversions-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+  .hr-divider.m-t-lg.m-b-md
+    %h3.hr-divider-content.hr-divider-heading Bing-Yahoo! Ad Network
+  .row.statcards.ad-network-metrics.bingads-ad-network
+    .col-sm-3.m-b-md
+      .statcard.statcard-info.bingads-clicks-widget
+        .p-a
+          %span.statcard-desc Clicks
+          %h2.statcard-number.chart-summary-metric 1.00
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.bingads-clicks-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+    .col-sm-3.m-b-md
+      .statcard.statcard-info.bingads-cost-widget
+        .p-a
+          %span.statcard-desc Cost
+          %h2.statcard-number.chart-summary-metric $0.00
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.bingads-cost-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+    .col-sm-3.m-b-md
+      .statcard.statcard-info.bingads-impressions-widget
+        .p-a
+          %span.statcard-desc Impressions
+          %h2.statcard-number.chart-summary-metric 0
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.bingads-impressions-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+    .col-sm-3.m-b-md
+      .statcard.statcard-info.bingads-conversions-widget
+        .p-a
+          %span.statcard-desc Conversions
+          %h2.statcard-number.chart-summary-metric 0
+          %hr.statcard-hr.m-b-0
+        %canvas.dashboard-chart.sparkline.bingads-conversions-chart{:width => "111",
+          :height => "27",
+          :style => "width: 111px; height: 27px;"}
+  .hr-divider.m-t-lg.m-b-md
+    %h3.hr-divider-content.hr-divider-heading Marchex Call Tracking
+  .row.marchex-call-tracking
+    .col-md-12.m-b-md.p-x-lg
+      %table.table.nowrap#marchex_calls
+        %thead
+          %th.header Caller Name
+          %th.header Caller Number
+          %th.header Campaign
+          %th.header Ad Group
+          %th.header Time
+          %th.header Duration
+          %th.header Status
+          %th.header.text-xs-center Recording
+        %tbody
+          %tr
+            %td John Doe
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 3:04pm
+            %td 00:01:56
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td John Doe
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 3:04pm
+            %td 00:01:56
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td John Doe
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 3:04pm
+            %td 00:01:56
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td John Doe
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 3:04pm
+            %td 00:01:56
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td John Doe
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 3:04pm
+            %td 00:01:56
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td Jane Doe
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 2:14pm
+            %td 00:01:26
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td Sam David
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 4:39pm
+            %td 00:01:42
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td Maggie Simpson
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 1:19pm
+            %td 00:02:59
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td Mike Smith
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 7:09pm
+            %td 00:01:21
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td William Glazer
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 13th 5:04pm
+            %td 00:02:06
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td Thomas Lewis
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 12th 5:14pm
+            %td 00:03:46
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td Lindsay West
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 13th 6:54pm
+            %td 00:00:56
+            %td ANSWER
+            %td.play-button.text-xs-center
+          %tr
+            %td Samantha Hoy
+            %td 555 123-1234
+            %td Search
+            %td RDAPPC - 1.27
+            %td May 13th 6:33pm
+            %td 00:03:28
+            %td ANSWER
+            %td.play-button.text-xs-center
+:javascript
+  window.Icarus.metrics = #{@metrics.to_json};
+%link{:href => "https://fonts.googleapis.com/css?family=Roboto:301,400,500,700,400italic", :rel => "stylesheet"}
+= javascript_include_tag 'demo_dashboard'

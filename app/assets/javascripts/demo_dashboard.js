@@ -11,15 +11,6 @@
   // Sets up Marchex Call Log table
   var marchexCallTable = $('#marchex_calls').DataTable({
     pagingType: 'full_numbers',
-    //processing: true,
-    serverSide: true,
-    ajax: {
-      url: Icarus.marchexCallsSource,
-      data: function(d) {
-        d.startDate = marchexCallTable.startDate.format('YYYY-M-D');
-        d.endDate = marchexCallTable.endDate.format('YYYY-M-D');
-      }
-    },
     // Make the columns' visibility work correctly with responsive breakpoints
     drawCallback: function(settings) {
       this.api().columns.adjust().responsive.recalc();
@@ -83,14 +74,7 @@
       {
         targets: 4,
         responsivePriority: 1,
-        searchable: false,
-        render: function(data, type, row) {
-          if ( type === 'display' ) {
-            return moment(data).format('hh:mm a, MMM Do');
-          } else {
-            return data;
-          }
-        }
+        searchable: false
       },
       {
         targets: 5,
@@ -239,12 +223,6 @@
     marchexCallTable.startDate = startDate;
     marchexCallTable.endDate = endDate;
     urlManager.pushNewState(startDate, endDate);
-    // If you call these naked, it stutters the chart animation.
-    // This lets that clear before filtering the dates.
-    _.delay(function() {
-      requestSearchMetrics(startDate, endDate);
-      marchexCallTable.ajax.reload();
-    }, 500);
   };
 
   var initializer = {
@@ -618,11 +596,11 @@
     metricsLabels: 'conversionRate'
   });
 
-  var adwordsAdPositionChart = createChart('.adwords-ad-position-chart', sparkLineDefaults, {
+  var adwordsClicksChart = createChart('.adwords-clicks-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Average Ad Position',
+          label: 'Clicks',
           data: []
         }
       ]
@@ -631,88 +609,71 @@
       scales: {
         yAxes: [{
           ticks: {
-            suggestedMax: 2,
-            min: 1
           }
         }]
       }
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var impressions = dateRangeMetrics.adwordsImpressions;
-      var averagePositions = dateRangeMetrics.adwordsAveragePosition;
-      var scaledImpressions = _.zip(impressions, averagePositions).map(function(pair) {
-        return pair[0] * pair[1];
-      });
-      var averagePosition = sum(scaledImpressions) / sum(impressions);
-      $('.adwords-ad-position-widget .chart-summary-metric')
-        .text(averagePosition.toFixed(2));
+      $('.adwords-clicks-widget .chart-summary-metric')
+        .text(sum(dateRangeMetrics.adwordsClicks));
     },
-    metricsLabels: 'adwordsAveragePosition'
+    metricsLabels: 'adwordsClicks'
   });
 
-  var adwordsCostPerClickChart = createChart('.adwords-cpc-chart', sparkLineDefaults, {
+  var adwordsCost = createChart('.adwords-cost-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Cost per Click',
+          label: 'Cost',
           data: []
         }
       ]
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var clicks = sum(dateRangeMetrics.adwordsClicks);
-      var cost = sum(dateRangeMetrics.adwordsCost);
-      var costPerClick = cost / clicks;
-      $('.adwords-cpc-widget .chart-summary-metric')
-        .text('$' + costPerClick.toFixed(2));
+      $('.adwords-cost-widget .chart-summary-metric')
+        .text('$' + sum(dateRangeMetrics.adwordsCost).toFixed(2));
     },
-    metricsLabels: 'adwordsAverageCostPerClick'
+    metricsLabels: 'adwordsCost'
   });
 
-  var adwordsClickThroughRateChart = createChart('.adwords-ctr-chart', sparkLineDefaults, {
+  var adwordsImpressions = createChart('.adwords-impressions-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Click Through Rate',
+          label: 'Impressions',
           data: []
         }
       ]
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var clicks = sum(dateRangeMetrics.adwordsClicks);
-      var impressions = sum(dateRangeMetrics.adwordsImpressions);
-      var clickThroughRate = 100 * clicks / impressions;
-      $('.adwords-ctr-widget .chart-summary-metric')
-        .text(clickThroughRate.toFixed(2) + '%');
+      $('.adwords-impressions-widget .chart-summary-metric')
+        .text(sum(dateRangeMetrics.adwordsImpressions));
     },
-    metricsLabels: 'adwordsClickThroughRate'
+    metricsLabels: 'adwordsImpressions'
   });
 
-  var adwordsConversionRateChart = createChart('.adwords-conversion-rate-chart',
+  var adwordsConversions = createChart('.adwords-conversions-chart',
                                                sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Conversion Rate',
+          label: 'Conversions',
           data: []
         }
       ]
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var clicks = sum(dateRangeMetrics.adwordsClicks);
-      var formConversions = sum(dateRangeMetrics.adwordsFormConversions);
-      var conversionRate = 100 * formConversions / clicks;
-      $('.adwords-conversion-rate-widget .chart-summary-metric')
-        .text(conversionRate.toFixed(2) + '%');
+      $('.adwords-conversions-widget .chart-summary-metric')
+        .text(sum(dateRangeMetrics.adwordsFormConversions));
     },
     metricsLabels: 'adwordsConversionRate'
   });
 
-  var bingadsAdPositionChart = createChart('.bingads-ad-position-chart', sparkLineDefaults, {
+  var bingadsClicksChart = createChart('.bingads-clicks-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Ad Position',
+          label: 'Clicks',
           data: []
         }
       ]
@@ -721,129 +682,67 @@
       scales: {
         yAxes: [{
           ticks: {
-            suggestedMax: 2,
-            min: 1
           }
         }]
       }
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var impressions = dateRangeMetrics.bingadsImpressions;
-      var averagePositions = dateRangeMetrics.bingadsAveragePosition;
-      var scaledImpressions = _.zip(impressions, averagePositions).map(function(pair) {
-        return pair[0] * pair[1];
-      });
-      var averagePosition = sum(scaledImpressions) / sum(impressions);
-      $('.bingads-ad-position-widget .chart-summary-metric')
-        .text(averagePosition.toFixed(2));
+      $('.bingads-clicks-widget .chart-summary-metric')
+        .text(sum(dateRangeMetrics.bingadsClicks));
     },
-    metricsLabels: 'bingadsAveragePosition'
+    metricsLabels: 'bingadsClicks'
   });
 
-  var bingadsCostPerClickChart = createChart('.bingads-cpc-chart', sparkLineDefaults, {
+  var bingadsCost = createChart('.bingads-cost-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Cost per Click',
+          label: 'Cost',
           data: []
         }
       ]
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var clicks = sum(dateRangeMetrics.bingadsClicks);
-      var cost = sum(dateRangeMetrics.bingadsCost);
-      var costPerClick = cost / clicks;
-      $('.bingads-cpc-widget .chart-summary-metric')
-        .text('$' + costPerClick.toFixed(2));
+      $('.bingads-cost-widget .chart-summary-metric')
+        .text('$' + sum(dateRangeMetrics.bingadsCost).toFixed(2));
     },
-    metricsLabels: 'bingadsAverageCostPerClick'
+    metricsLabels: 'bingadsCost'
   });
 
-  var bingadsClickThroughRateChart = createChart('.bingads-ctr-chart', sparkLineDefaults, {
+  var bingadsImpressions = createChart('.bingads-impressions-chart', sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Cost per Click',
+          label: 'Impressions',
           data: []
         }
       ]
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var clicks = sum(dateRangeMetrics.bingadsClicks);
-      var impressions = sum(dateRangeMetrics.bingadsImpressions);
-      var clickThroughRate = 100 * clicks / impressions;
-      $('.bingads-ctr-widget .chart-summary-metric')
-        .text(clickThroughRate.toFixed(2) + '%');
+      $('.bingads-impressions-widget .chart-summary-metric')
+        .text(sum(dateRangeMetrics.bingadsImpressions));
     },
-    metricsLabels: 'bingadsClickThroughRate'
+    metricsLabels: 'bingadsImpressions'
   });
 
-  var bingadsConversionRateChart = createChart('.bingads-conversion-rate-chart',
+  var bingadsConversions = createChart('.bingads-conversions-chart',
                                                sparkLineDefaults, {
     data: {
       datasets: [
         {
-          label: 'Conversion Rate',
+          label: 'Conversions',
           data: []
         }
       ]
     },
     updateSummaryMetrics: function(dateRangeMetrics) {
-      var clicks = sum(dateRangeMetrics.bingadsClicks);
-      var formConversions = sum(dateRangeMetrics.bingadsFormConversions);
-      var conversionRate = 100 * formConversions / clicks;
-      $('.bingads-conversion-rate-widget .chart-summary-metric')
-        .text('----');
-        // Replaced with dashes because conversion rate is always 0 for Bing
-        //.text(conversionRate.toFixed(2) + '%');
+      $('.bingads-conversions-widget .chart-summary-metric')
+        .text(sum(dateRangeMetrics.bingadsFormConversions));
     },
     metricsLabels: 'bingadsConversionRate'
   });
 
   // -- END CHARTS SETUP
-
-
-  // -- BEGIN AD NETWORK SETUP
-
-  var updateSearchMetrics = function(searchMappings, selector) {
-    var countTotal = sum(_.values(searchMappings));
-    _($(selector)).zip(_.pairs(searchMappings)).map(function(pair, index) {
-      var $spans = $(pair[0]).find('span');
-      var kqStr, count;
-      // Accounts for when there are fewer than 6 keyword mappings.
-      if (pair[1] !== undefined) {
-        kqStr = index + 1 + '. ' + pair[1][0];
-        count = pair[1][1];
-      } else {
-        kqStr = '-----';
-        count = 0;
-      }
-      // denominator + 0.1 is to account for 0/0 -> NaN.
-      $($spans[0]).css('width', (100 * count/(countTotal + 0.1)).toFixed(0) + '%');
-      if (count === 0) {
-        $($spans[1]).text('-');
-      } else {
-        $($spans[1]).text(count);
-      }
-      $($spans[2]).text(kqStr);
-    });
-  };
-
-  var requestSearchMetrics = function(startDate, endDate) {
-    var resourceUrl = Icarus.searchMetricsSource +
-      '?start=' + startDate.format('YYYY-M-D') + '&end=' + endDate.format('YYYY-M-D');
-
-    $.get(resourceUrl, function(searchMetrics) {
-      updateSearchMetrics(searchMetrics.adwordsKeywordConversions,
-                          '.adwords-ad-network .keyword-conversions .list-group-item');
-      updateSearchMetrics(searchMetrics.adwordsQueryClicks,
-                          '.adwords-ad-network .query-clicks .list-group-item');
-      updateSearchMetrics(searchMetrics.bingadsQueryClicks,
-                          '.bingads-ad-network .query-clicks .list-group-item');
-    });
-  };
-
-  // -- END AD NETWORK SETUP
 
   initializer.init();
 

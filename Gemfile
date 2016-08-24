@@ -68,5 +68,6 @@ gem 'auth0'
 gem 'httparty'
 #gem 'jquery-datatables-rails'
 gem 'will_paginate'
+gem 'faker'
 
 ruby '2.3.1'
