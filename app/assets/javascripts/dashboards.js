@@ -74,7 +74,7 @@
       },
       {
         targets: 2,
-        responsivePriority: 3,
+        responsivePriority: 4,
       },
       {
         targets: 3,
@@ -104,7 +104,7 @@
       {
         targets: 7,
         sClass: 'text-xs-center',
-        responsivePriority: 4,
+        responsivePriority: 3,
         orderable: false,
         searchable: false,
         render: function(data, type, row) {
