@@ -209,7 +209,7 @@
         history.pushState(
           datePeriodStringMapping,
           'Dashboard',
-          location.pathname.slice(1) + '?' + $.param(datePeriodStringMapping)
+          _(location.pathname.slice(1).split('/')).last() + '?' + $.param(datePeriodStringMapping)
         );
       } else {
         this.backToggle = false;
