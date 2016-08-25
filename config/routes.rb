@@ -45,7 +45,7 @@ Rails.application.routes.draw do
 
   get '/dashboard_demo' => "dashboards#demo"
 
-  #get '/' => "customers#index", constraints: Roles.new(:admin)
+  get '/' => "customers#index", constraints: Roles.new(:admin)
   get '/' => "clients#index", constraints: Roles.new(:customer)
   root 'static#homepage'
 
