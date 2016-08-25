@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'static/homepage'
-
   get '/login' => "login#show"
   delete '/logout' => "auth0#logout"
 
@@ -45,8 +43,8 @@ Rails.application.routes.draw do
 
   get '/dashboard_demo' => "dashboards#demo"
 
-  get '/' => "customers#index", constraints: Roles.new(:admin)
-  get '/' => "clients#index", constraints: Roles.new(:customer)
+  get '/' => "customers#index", constraints: Roles.new(:admin, match_logged_out: false)
+  get '/' => "clients#index", constraints: Roles.new(:customer, match_logged_out: false)
   root 'static#homepage'
 
 end
