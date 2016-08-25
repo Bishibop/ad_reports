@@ -10,7 +10,7 @@ class Roles
     if @match_logged_out
       user.nil? || user.authorized_as?(*@roles)
     else
-      user.present? && user.authorized_for?(*@roles)
+      user.present? && user.authorized_as?(*@roles)
     end
   end
 
