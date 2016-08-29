@@ -186,6 +186,7 @@
               unvalidatedEndDate.isSameOrBefore(moment())) {
             initializer.startDate = unvalidatedStartDate;
             initializer.endDate = unvalidatedEndDate;
+            this.setDatePickerDates(unvalidatedStartDate, unvalidatedEndDate);
           } else {
             throw {
               name: 'DateParameterError',
@@ -219,14 +220,17 @@
       if (history.state) {
         var previousStartDate = moment(history.state.startDate, 'M-D-YYYY');
         var previousEndDate = moment(history.state.endDate, 'M-D-YYYY');
-        var datePicker = $('input.date-picker').data('daterangepicker');
-        datePicker.setStartDate(previousStartDate);
-        datePicker.setEndDate(previousEndDate);
+        this.setDatePickerDates(previousStartDate, previousEndDate);
         this.backToggle = true;
         onDatePick(previousStartDate, previousEndDate);
       } else {
         history.back();
       }
+    },
+    setDatePickerDates: function(startDate, endDate) {
+      var datePicker = $('input.date-picker').data('daterangepicker');
+      datePicker.setStartDate(startDate);
+      datePicker.setEndDate(endDate);
     }
   };
 
