@@ -1,7 +1,5 @@
 # Ad Reporting Dashboard
 
-## Description
-
 A Ruby on Rails and Python Flask SPA for displaying results of Google, Bing, and Marchex PPC campaigns
 * Displays total and network specific metrics: impressions, clicks, leads, cost and cost per lead
 * Implements fast, searchable call logs
