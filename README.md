@@ -11,4 +11,4 @@ A Ruby on Rails and Python Flask SPA for displaying results of Google, Bing, and
 ## Technologies
 * Ruby on Rails as the primary backend application
 * Python Flash application to integrate with Bing Ads
-* Vanilla JavaScript, chart.js, and SaaS to build the frontend
+* Vanilla JavaScript, [chart.js](https://www.chartjs.org/), and SaaS to build the frontend
